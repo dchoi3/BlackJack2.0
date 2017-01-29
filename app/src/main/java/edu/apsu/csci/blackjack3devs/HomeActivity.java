@@ -18,7 +18,7 @@ public class HomeActivity extends AppCompatActivity {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent startIntent = new Intent(getApplicationContext(), BlackJackActivity.class);
                 startActivity(startIntent);
             }});
 
