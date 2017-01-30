@@ -21,7 +21,8 @@ public class BlackJackActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_black_jack);
 
-        int[] buttonsID = {R.id.chip10, R.id.chip25, R.id.chip75, R.id.chip100, R.id.clearBet,R.id.hitButton, R.id.standButton, R.id.doubleButton,R.id.dealButton};
+        int[] buttonsID = {R.id.chip10, R.id.chip25, R.id.chip75, R.id.chip100, R.id.clearBet,
+            R.id.hitButton, R.id.standButton, R.id.doubleButton,R.id.dealButton};
 
         clearBoard();
         loadCards();
@@ -48,7 +49,7 @@ public class BlackJackActivity extends AppCompatActivity
         }else if(v.getId()==R.id.clearBet){
             Toast.makeText(getApplicationContext(),"Clear Bet",Toast.LENGTH_SHORT).show();
         }else if(v.getId()==R.id.dealButton){
-           // Toast.makeText(getApplicationContext(),"DEAL!",Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getApplicationContext(),"DEAL!",Toast.LENGTH_SHORT).show();
             deal();
         }else if(v.getId()==R.id.hitButton){
             Toast.makeText(getApplicationContext(),"HIT!",Toast.LENGTH_SHORT).show();
@@ -119,6 +120,10 @@ public class BlackJackActivity extends AppCompatActivity
         ImageView pC2 = (ImageView) findViewById(R.id.playerC2);
         pC2.setVisibility(View.VISIBLE);
         pC2.setImageResource(R.drawable.h10);
+
+        ImageView pC3 = (ImageView) findViewById(R.id.playerC3);
+        pC3.setVisibility(View.VISIBLE);
+        pC3.setImageResource(R.drawable.h8);
 
         updateCardTotal();
     }
