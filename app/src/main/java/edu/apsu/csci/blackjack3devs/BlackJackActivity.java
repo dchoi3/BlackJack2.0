@@ -25,7 +25,7 @@ public class BlackJackActivity extends AppCompatActivity
             R.id.hitButton, R.id.standButton, R.id.doubleButton,R.id.dealButton};
 
         clearBoard();
-        loadCards();
+        shuffleCards();
 
         for(int id : buttonsID){
             ImageButton ib = (ImageButton) findViewById(id);
@@ -89,7 +89,7 @@ public class BlackJackActivity extends AppCompatActivity
         tv.setText("");
     }
 
-    public void loadCards(){
+    public void shuffleCards(){
 
     }
     public void deal(){
