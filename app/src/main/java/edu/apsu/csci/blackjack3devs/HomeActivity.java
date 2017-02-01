@@ -1,5 +1,12 @@
 package edu.apsu.csci.blackjack3devs;
 
+/**
+ * Application: Blackjack
+ * Course: CSCI4020 Spring 2017
+ * Team Name: TBD
+ * Developers: John Schmitt, Daniel Choi, Charles Fannin
+ */
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
