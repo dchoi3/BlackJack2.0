@@ -1,2 +1,3 @@
-# Blackjack3Devs
-Developer John Schmitt Master
+# Blackjack
+Developer: John Schmitt, Daniel Choi, Charles Fannin
+
