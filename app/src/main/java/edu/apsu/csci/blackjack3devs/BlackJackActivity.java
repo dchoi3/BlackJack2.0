@@ -186,9 +186,9 @@ public class BlackJackActivity extends AppCompatActivity
         return randomCardGenerator.nextInt(51);
     }
 
-    public void deal(){
+    public void deal() {
         //Check to make sure there is a bet value before executing hitShow & standShow
-        if(CurrentBetAmt > 0) {
+        if (CurrentBetAmt > 0) {
             ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
             dealClear.setVisibility(View.INVISIBLE);
             //Can set betTextView to say "Place bet" or something.
@@ -221,7 +221,7 @@ public class BlackJackActivity extends AppCompatActivity
             }
             updateCardTotal();
         }
-    }
+    }//Here is the Brace that was missing I know that I needed
     public void hit(){
 
     }
