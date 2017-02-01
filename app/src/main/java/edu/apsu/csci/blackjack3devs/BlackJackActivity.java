@@ -179,41 +179,42 @@ public class BlackJackActivity extends AppCompatActivity
         return randomCardGenerator.nextInt(51);
     }
 
-    public void deal(){
+    public void deal() {
         //Check to make sure there is a bet value before executing hitShow & standShow
-        if(CurrentBetAmt > 0) {
-        ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
-        dealClear.setVisibility(View.INVISIBLE);
-        //Can set betTextView to say "Place bet" or something.
-        ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
-        hitShow.setVisibility(View.VISIBLE);
+        if (CurrentBetAmt > 0) {
+            ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
+            dealClear.setVisibility(View.INVISIBLE);
+            //Can set betTextView to say "Place bet" or something.
+            ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
+            hitShow.setVisibility(View.VISIBLE);
 
-        ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
-        standShow.setVisibility(View.VISIBLE);
+            ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
+            standShow.setVisibility(View.VISIBLE);
 
-        // Place two cards for player and dealer.
-        for (int i = 0; i < 2; i++) {
+            // Place two cards for player and dealer.
+            for (int i = 0; i < 2; i++) {
 
-            // Player card.
-            int playerCardIndex = shuffleCards();
-            int playerCardValue = cardsArray[playerCardIndex][1];
-            ImageView playerCard = (ImageView) findViewById(playerCardsID[i]);
-            playerCard.setVisibility(View.VISIBLE);
-            playerCard.setImageResource(cardsArray[playerCardIndex][0]);
+                // Player card.
+                int playerCardIndex = shuffleCards();
+                int playerCardValue = cardsArray[playerCardIndex][1];
+                ImageView playerCard = (ImageView) findViewById(playerCardsID[i]);
+                playerCard.setVisibility(View.VISIBLE);
+                playerCard.setImageResource(cardsArray[playerCardIndex][0]);
 
-            // House card.
-            int houseCardIndex = shuffleCards();
-            int houseCardValue = cardsArray[houseCardIndex][1];
-            ImageView houseCard = (ImageView) findViewById(houseCardsID[i]);
-            houseCard.setVisibility(View.VISIBLE);
-            if (i == 0) {
-                houseCard.setImageResource(R.drawable.facedown);
-            } else {
-                houseCard.setImageResource(cardsArray[houseCardIndex][0]);
+                // House card.
+                int houseCardIndex = shuffleCards();
+                int houseCardValue = cardsArray[houseCardIndex][1];
+                ImageView houseCard = (ImageView) findViewById(houseCardsID[i]);
+                houseCard.setVisibility(View.VISIBLE);
+                if (i == 0) {
+                    houseCard.setImageResource(R.drawable.facedown);
+                } else {
+                    houseCard.setImageResource(cardsArray[houseCardIndex][0]);
+                }
             }
+            updateCardTotal();
         }
-        updateCardTotal();
-    }
+    }//Here is the Brace that was missing I know that I needed
     public void hit(){
 
     }
