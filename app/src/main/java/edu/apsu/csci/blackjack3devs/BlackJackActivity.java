@@ -15,13 +15,16 @@ import static android.R.attr.id;
 
 public class BlackJackActivity extends AppCompatActivity
         implements View.OnClickListener{
+    // Variable to hold bet amount
+    int CurrentBetAmt = 0;
+    int walletAmt = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_black_jack);
 
-        int[] buttonsID = {R.id.chip10, R.id.chip25, R.id.chip75, R.id.chip100, R.id.clearBet,
+        int[] buttonsID = {R.id.chip10, R.id.chip25, R.id.chip50, R.id.chip75, R.id.chip100, R.id.clearBet,
             R.id.hitButton, R.id.standButton, R.id.doubleButton,R.id.dealButton};
 
         clearBoard();
@@ -36,18 +39,61 @@ public class BlackJackActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
+        TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
+        TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
+
         if(v.getId()==R.id.chip10){
-            Toast.makeText(getApplicationContext(),"Bet 10",Toast.LENGTH_SHORT).show();
+            if(walletAmt >= 10){
+                CurrentBetAmt += 10;
+                walletAmt -= 10;
+                String newBet = Integer.toString(CurrentBetAmt);
+                String newWallet =  Integer.toString(walletAmt);
+                betAmtTV.setText("$" + newBet);
+                WalletAmtTV.setText("Wallet: $" + newWallet);
+            }
         }else if(v.getId()==R.id.chip25){
-            Toast.makeText(getApplicationContext(),"Bet 25",Toast.LENGTH_SHORT).show();
+            if(walletAmt >= 25){
+                CurrentBetAmt += 25;
+                walletAmt -= 25;
+                String newBet = Integer.toString(CurrentBetAmt);
+                String newWallet =  Integer.toString(walletAmt);
+                betAmtTV.setText("$" + newBet);
+                WalletAmtTV.setText("Wallet: $" + newWallet);
+            }
         }else if(v.getId()==R.id.chip50){
-            Toast.makeText(getApplicationContext(),"Bet 50",Toast.LENGTH_SHORT).show();
+            if(walletAmt >= 50){
+                CurrentBetAmt += 50;
+                walletAmt -= 50;
+                String newBet = Integer.toString(CurrentBetAmt);
+                String newWallet =  Integer.toString(walletAmt);
+                betAmtTV.setText("$" + newBet);
+                WalletAmtTV.setText("Wallet: $" + newWallet);
+            }
         }else if(v.getId()==R.id.chip75){
-            Toast.makeText(getApplicationContext(),"Bet 75",Toast.LENGTH_SHORT).show();
+            if(walletAmt >= 75){
+                CurrentBetAmt += 70;
+                walletAmt -= 70;
+                String newBet = Integer.toString(CurrentBetAmt);
+                String newWallet =  Integer.toString(walletAmt);
+                betAmtTV.setText("$" + newBet);
+                WalletAmtTV.setText("Wallet: $" + newWallet);
+            }
         }else if(v.getId()==R.id.chip100){
-            Toast.makeText(getApplicationContext(),"Bet 100",Toast.LENGTH_SHORT).show();
+            if(walletAmt >= 100){
+                CurrentBetAmt += 100;
+                walletAmt -= 100;
+                String newBet = Integer.toString(CurrentBetAmt);
+                String newWallet =  Integer.toString(walletAmt);
+                betAmtTV.setText("$" + newBet);
+                WalletAmtTV.setText("Wallet: $" + newWallet);
+            }
         }else if(v.getId()==R.id.clearBet){
-            Toast.makeText(getApplicationContext(),"Clear Bet",Toast.LENGTH_SHORT).show();
+            walletAmt+=CurrentBetAmt;
+            CurrentBetAmt=0;
+            String newBet = Integer.toString(CurrentBetAmt);
+            String newWallet =  Integer.toString(walletAmt);
+            betAmtTV.setText("$" + newBet);
+            WalletAmtTV.setText("Wallet: $" + newWallet);
         }else if(v.getId()==R.id.dealButton){
             // Toast.makeText(getApplicationContext(),"DEAL!",Toast.LENGTH_SHORT).show();
             deal();
@@ -86,46 +132,47 @@ public class BlackJackActivity extends AppCompatActivity
         }
 
         TextView tv = (TextView) findViewById(R.id.betTextView);
-        tv.setText("");
+        tv.setText("$0");
     }
 
     public void shuffleCards(){
 
     }
     public void deal(){
-        ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
-        dealClear.setVisibility(View.INVISIBLE);
-
         //Check to make sure there is a bet value before executing hitShow & standShow
-        //Can set betTextView to say "Place bet" or something.
-        ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
-        hitShow.setVisibility(View.VISIBLE);
+        if(CurrentBetAmt > 0) {
+            ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
+            dealClear.setVisibility(View.INVISIBLE);
+            //Can set betTextView to say "Place bet" or something.
+            ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
+            hitShow.setVisibility(View.VISIBLE);
 
-        ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
-        standShow.setVisibility(View.VISIBLE);
+            ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
+            standShow.setVisibility(View.VISIBLE);
 
-        //This would have to be different to show shuffled cards
-        ImageView hC1 = (ImageView) findViewById(R.id.houseC1);
-        hC1.setVisibility(View.VISIBLE);
-        hC1.setImageResource(R.drawable.facedown);
+            //This would have to be different to show shuffled cards
+            ImageView hC1 = (ImageView) findViewById(R.id.houseC1);
+            hC1.setVisibility(View.VISIBLE);
+            hC1.setImageResource(R.drawable.facedown);
 
-        ImageView hC2 = (ImageView) findViewById(R.id.houseC2);
-        hC2.setVisibility(View.VISIBLE);
-        hC2.setImageResource(R.drawable.sa);
+            ImageView hC2 = (ImageView) findViewById(R.id.houseC2);
+            hC2.setVisibility(View.VISIBLE);
+            hC2.setImageResource(R.drawable.sa);
 
-        ImageView pC1 = (ImageView) findViewById(R.id.playerC1);
-        pC1.setVisibility(View.VISIBLE);
-        pC1.setImageResource(R.drawable.c5);
+            ImageView pC1 = (ImageView) findViewById(R.id.playerC1);
+            pC1.setVisibility(View.VISIBLE);
+            pC1.setImageResource(R.drawable.c5);
 
-        ImageView pC2 = (ImageView) findViewById(R.id.playerC2);
-        pC2.setVisibility(View.VISIBLE);
-        pC2.setImageResource(R.drawable.h10);
+            ImageView pC2 = (ImageView) findViewById(R.id.playerC2);
+            pC2.setVisibility(View.VISIBLE);
+            pC2.setImageResource(R.drawable.h10);
 
-        ImageView pC3 = (ImageView) findViewById(R.id.playerC3);
-        pC3.setVisibility(View.VISIBLE);
-        pC3.setImageResource(R.drawable.h8);
+            ImageView pC3 = (ImageView) findViewById(R.id.playerC3);
+            pC3.setVisibility(View.VISIBLE);
+            pC3.setImageResource(R.drawable.h8);
 
-        updateCardTotal();
+            updateCardTotal();
+        }
     }
     public void hit(){
 
