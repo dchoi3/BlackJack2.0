@@ -1,4 +1,4 @@
-# Blackjack3Devs
+# Blackjack
 Developers:
 John Schmitt
 Daniel Choi
