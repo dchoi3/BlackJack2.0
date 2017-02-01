@@ -69,7 +69,9 @@ public class BlackJackActivity extends AppCompatActivity
 
     public void clearBoard(){
 
-        int [] cardsID = {R.id.houseC1,R.id.houseC2,R.id.houseC3,R.id.houseC4,R.id.houseC5,R.id.houseC6,R.id.houseC7,R.id.houseC8,R.id.houseC9,R.id.playerC1,R.id.playerC2,R.id.playerC3,R.id.playerC4,R.id.playerC5,R.id.playerC6,R.id.playerC7,R.id.playerC8,R.id.playerC9,};
+        int [] cardsID = {R.id.houseC1,R.id.houseC2,R.id.houseC3,R.id.houseC4,R.id.houseC5,R.id.houseC6,
+            R.id.houseC7,R.id.houseC8,R.id.houseC9,R.id.playerC1,R.id.playerC2,R.id.playerC3,
+            R.id.playerC4,R.id.playerC5,R.id.playerC6,R.id.playerC7,R.id.playerC8,R.id.playerC9,};
         for(int id : cardsID){
             ImageView iv = (ImageView) findViewById(id);
             iv.setVisibility(View.INVISIBLE);
@@ -92,6 +94,7 @@ public class BlackJackActivity extends AppCompatActivity
     public void shuffleCards(){
 
     }
+
     public void deal(){
         ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
         dealClear.setVisibility(View.INVISIBLE);
@@ -113,6 +116,34 @@ public class BlackJackActivity extends AppCompatActivity
         hC2.setVisibility(View.VISIBLE);
         hC2.setImageResource(R.drawable.sa);
 
+        ImageView hC3 = (ImageView) findViewById(R.id.houseC3);
+        hC3.setVisibility(View.VISIBLE);
+        hC3.setImageResource(R.drawable.sa);
+
+        ImageView hC4 = (ImageView) findViewById(R.id.houseC4);
+        hC4.setVisibility(View.VISIBLE);
+        hC4.setImageResource(R.drawable.sa);
+
+        ImageView hC5 = (ImageView) findViewById(R.id.houseC5);
+        hC5.setVisibility(View.VISIBLE);
+        hC5.setImageResource(R.drawable.sa);
+
+        ImageView hC6 = (ImageView) findViewById(R.id.houseC6);
+        hC6.setVisibility(View.VISIBLE);
+        hC6.setImageResource(R.drawable.sa);
+
+        ImageView hC7 = (ImageView) findViewById(R.id.houseC7);
+        hC7.setVisibility(View.VISIBLE);
+        hC7.setImageResource(R.drawable.sa);
+
+        ImageView hC8 = (ImageView) findViewById(R.id.houseC8);
+        hC8.setVisibility(View.VISIBLE);
+        hC8.setImageResource(R.drawable.sa);
+
+        ImageView hC9 = (ImageView) findViewById(R.id.houseC9);
+        hC9.setVisibility(View.VISIBLE);
+        hC9.setImageResource(R.drawable.sa);
+
         ImageView pC1 = (ImageView) findViewById(R.id.playerC1);
         pC1.setVisibility(View.VISIBLE);
         pC1.setImageResource(R.drawable.c5);
@@ -124,6 +155,30 @@ public class BlackJackActivity extends AppCompatActivity
         ImageView pC3 = (ImageView) findViewById(R.id.playerC3);
         pC3.setVisibility(View.VISIBLE);
         pC3.setImageResource(R.drawable.h8);
+
+        ImageView pC4 = (ImageView) findViewById(R.id.playerC4);
+        pC4.setVisibility(View.VISIBLE);
+        pC4.setImageResource(R.drawable.h4);
+
+        ImageView pC5 = (ImageView) findViewById(R.id.playerC5);
+        pC5.setVisibility(View.VISIBLE);
+        pC5.setImageResource(R.drawable.h5);
+
+        ImageView pC6 = (ImageView) findViewById(R.id.playerC6);
+        pC6.setVisibility(View.VISIBLE);
+        pC6.setImageResource(R.drawable.h6);
+
+        ImageView pC7 = (ImageView) findViewById(R.id.playerC7);
+        pC7.setVisibility(View.VISIBLE);
+        pC7.setImageResource(R.drawable.h8);
+
+        ImageView pC8 = (ImageView) findViewById(R.id.playerC8);
+        pC8.setVisibility(View.VISIBLE);
+        pC8.setImageResource(R.drawable.h8);
+
+        ImageView pC9 = (ImageView) findViewById(R.id.playerC9);
+        pC9.setVisibility(View.VISIBLE);
+        pC9.setImageResource(R.drawable.h9);
 
         updateCardTotal();
     }
