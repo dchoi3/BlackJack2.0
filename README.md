@@ -1,5 +1,5 @@
 # Blackjack
 Developers:
-John Schmitt
-Daniel Choi
+John Schmitt,
+Daniel Choi,
 Charles Fannin
