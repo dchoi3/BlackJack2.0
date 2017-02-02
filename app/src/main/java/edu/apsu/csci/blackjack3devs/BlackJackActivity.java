@@ -178,7 +178,8 @@ public class BlackJackActivity extends AppCompatActivity
             TextView tv = (TextView) findViewById(id);
             tv.setText("");
         }
-
+        ImageButton iv2 = (ImageButton) findViewById(R.id.dealButton);
+            iv2.setVisibility(View.VISIBLE);
         TextView tv = (TextView) findViewById(R.id.betTextView);
         tv.setText("$0");
     }
