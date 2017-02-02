@@ -29,6 +29,7 @@ public class BlackJackActivity extends AppCompatActivity
     // Variable to hold bet amount
     int CurrentBetAmt = 0;
     int walletAmt = 2000;
+    boolean cardsDealt = false;
 
     // Initialize Card drawable/value array.
     private int[][] cardsArray = {
@@ -80,61 +81,68 @@ public class BlackJackActivity extends AppCompatActivity
         TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
         TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
 
-        if(v.getId()==R.id.chip10){
-            if(walletAmt >= 10){
-                CurrentBetAmt += 10;
-                walletAmt -= 10;
+        // Allow betting only before Cards are dealt.
+        if(!cardsDealt) {
+            if (v.getId() == R.id.chip10) {
+                if (walletAmt >= 10) {
+                    CurrentBetAmt += 10;
+                    walletAmt -= 10;
+                    String newBet = Integer.toString(CurrentBetAmt);
+                    String newWallet = Integer.toString(walletAmt);
+                    betAmtTV.setText("$" + newBet);
+                    WalletAmtTV.setText("Wallet: $" + newWallet);
+                }
+            } else if (v.getId() == R.id.chip25) {
+                if (walletAmt >= 25) {
+                    CurrentBetAmt += 25;
+                    walletAmt -= 25;
+                    String newBet = Integer.toString(CurrentBetAmt);
+                    String newWallet = Integer.toString(walletAmt);
+                    betAmtTV.setText("$" + newBet);
+                    WalletAmtTV.setText("Wallet: $" + newWallet);
+                }
+            } else if (v.getId() == R.id.chip50) {
+                if (walletAmt >= 50) {
+                    CurrentBetAmt += 50;
+                    walletAmt -= 50;
+                    String newBet = Integer.toString(CurrentBetAmt);
+                    String newWallet = Integer.toString(walletAmt);
+                    betAmtTV.setText("$" + newBet);
+                    WalletAmtTV.setText("Wallet: $" + newWallet);
+                }
+            } else if (v.getId() == R.id.chip75) {
+                if (walletAmt >= 75) {
+                    CurrentBetAmt += 70;
+                    walletAmt -= 70;
+                    String newBet = Integer.toString(CurrentBetAmt);
+                    String newWallet = Integer.toString(walletAmt);
+                    betAmtTV.setText("$" + newBet);
+                    WalletAmtTV.setText("Wallet: $" + newWallet);
+                }
+            } else if (v.getId() == R.id.chip100) {
+                if (walletAmt >= 100) {
+                    CurrentBetAmt += 100;
+                    walletAmt -= 100;
+                    String newBet = Integer.toString(CurrentBetAmt);
+                    String newWallet = Integer.toString(walletAmt);
+                    betAmtTV.setText("$" + newBet);
+                    WalletAmtTV.setText("Wallet: $" + newWallet);
+                }
+            } else if (v.getId() == R.id.clearBet) {
+                walletAmt += CurrentBetAmt;
+                CurrentBetAmt = 0;
                 String newBet = Integer.toString(CurrentBetAmt);
-                String newWallet =  Integer.toString(walletAmt);
+                String newWallet = Integer.toString(walletAmt);
                 betAmtTV.setText("$" + newBet);
                 WalletAmtTV.setText("Wallet: $" + newWallet);
             }
-        }else if(v.getId()==R.id.chip25){
-            if(walletAmt >= 25){
-                CurrentBetAmt += 25;
-                walletAmt -= 25;
-                String newBet = Integer.toString(CurrentBetAmt);
-                String newWallet =  Integer.toString(walletAmt);
-                betAmtTV.setText("$" + newBet);
-                WalletAmtTV.setText("Wallet: $" + newWallet);
-            }
-        }else if(v.getId()==R.id.chip50){
-            if(walletAmt >= 50){
-                CurrentBetAmt += 50;
-                walletAmt -= 50;
-                String newBet = Integer.toString(CurrentBetAmt);
-                String newWallet =  Integer.toString(walletAmt);
-                betAmtTV.setText("$" + newBet);
-                WalletAmtTV.setText("Wallet: $" + newWallet);
-            }
-        }else if(v.getId()==R.id.chip75){
-            if(walletAmt >= 75){
-                CurrentBetAmt += 70;
-                walletAmt -= 70;
-                String newBet = Integer.toString(CurrentBetAmt);
-                String newWallet =  Integer.toString(walletAmt);
-                betAmtTV.setText("$" + newBet);
-                WalletAmtTV.setText("Wallet: $" + newWallet);
-            }
-        }else if(v.getId()==R.id.chip100){
-            if(walletAmt >= 100){
-                CurrentBetAmt += 100;
-                walletAmt -= 100;
-                String newBet = Integer.toString(CurrentBetAmt);
-                String newWallet =  Integer.toString(walletAmt);
-                betAmtTV.setText("$" + newBet);
-                WalletAmtTV.setText("Wallet: $" + newWallet);
-            }
-        }else if(v.getId()==R.id.clearBet){
-            walletAmt+=CurrentBetAmt;
-            CurrentBetAmt=0;
-            String newBet = Integer.toString(CurrentBetAmt);
-            String newWallet =  Integer.toString(walletAmt);
-            betAmtTV.setText("$" + newBet);
-            WalletAmtTV.setText("Wallet: $" + newWallet);
-        }else if(v.getId()==R.id.dealButton){
+        }
+        if(v.getId()==R.id.dealButton){
             // Toast.makeText(getApplicationContext(),"DEAL!",Toast.LENGTH_SHORT).show();
-            deal();
+            if(CurrentBetAmt > 0) {
+                cardsDealt = true;
+                deal();
+            }
         }else if(v.getId()==R.id.hitButton){
             Toast.makeText(getApplicationContext(),"HIT!",Toast.LENGTH_SHORT).show();
             hit();
@@ -239,5 +247,11 @@ public class BlackJackActivity extends AppCompatActivity
         TextView pScore = (TextView) findViewById(R.id.playerScore);
         pScore.setText("15");
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        cardsDealt = false;
+        clearBoard();
     }
 }
