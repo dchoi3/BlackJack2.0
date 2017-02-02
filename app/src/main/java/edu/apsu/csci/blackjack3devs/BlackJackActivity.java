@@ -113,8 +113,8 @@ public class BlackJackActivity extends AppCompatActivity
             }
         }else if(v.getId()==R.id.chip75){
             if(walletAmt >= 75){
-                CurrentBetAmt += 70;
-                walletAmt -= 70;
+                CurrentBetAmt += 75;
+                walletAmt -= 75;
                 String newBet = Integer.toString(CurrentBetAmt);
                 String newWallet =  Integer.toString(walletAmt);
                 betAmtTV.setText("$" + newBet);
