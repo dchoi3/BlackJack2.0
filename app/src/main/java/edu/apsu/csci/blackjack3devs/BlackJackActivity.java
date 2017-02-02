@@ -182,6 +182,7 @@ public class BlackJackActivity extends AppCompatActivity
         TextView tv = (TextView) findViewById(R.id.betTextView);
         tv.setText("$0");
         CurrentBetAmt = 0;
+        playerStands = false;
     }
 
     /**
