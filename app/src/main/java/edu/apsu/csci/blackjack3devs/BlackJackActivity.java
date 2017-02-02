@@ -207,14 +207,18 @@ public class BlackJackActivity extends AppCompatActivity
 
                 // Player card.
                 int playerCardIndex = shuffleCards();
+                Log.i("pIndex: ", "" + playerCardIndex);
                 playerCardValue = cardsArray[playerCardIndex][1];
+                Log.i("pVal: ", "" + playerCardValue);
                 ImageView playerCard = (ImageView) findViewById(playerCardsID[i]);
                 playerCard.setVisibility(View.VISIBLE);
                 playerCard.setImageResource(cardsArray[playerCardIndex][0]);
 
                 // House card.
                 int houseCardIndex = shuffleCards();
+                Log.i("hIndex: ", "" + houseCardIndex);
                 houseCardValue = cardsArray[houseCardIndex][1];
+                Log.i("hVal: ", "" + houseCardValue);
                 ImageView houseCard = (ImageView) findViewById(houseCardsID[i]);
                 houseCard.setVisibility(View.VISIBLE);
                 if (i == 0) {
@@ -222,10 +226,10 @@ public class BlackJackActivity extends AppCompatActivity
                 } else {
                     houseCard.setImageResource(cardsArray[houseCardIndex][0]);
                 }
+                updateCardTotal(playerCardValue, houseCardValue);
             }
-            updateCardTotal(playerCardValue, houseCardValue);
         }
-    }//Here is the Brace that was missing I know that I needed
+    }
     public void hit(){
 
     }
@@ -238,12 +242,12 @@ public class BlackJackActivity extends AppCompatActivity
     public void updateCardTotal(int playerVal, int houseVal){
         // Accumulate player and house card values.
         playerVal += playerVal;
-        TextView hScore = (TextView) findViewById(R.id.houseScore);
-        hScore.setText(String.valueOf(playerVal));
+        TextView pScore = (TextView) findViewById(R.id.playerScore);
+        pScore.setText(String.valueOf(playerVal));
 
         houseVal += houseVal;
-        TextView pScore = (TextView) findViewById(R.id.playerScore);
-        pScore.setText(String.valueOf(houseVal));
+        TextView hScore = (TextView) findViewById(R.id.houseScore);
+        hScore.setText(String.valueOf(houseVal));
 
     }
 }
