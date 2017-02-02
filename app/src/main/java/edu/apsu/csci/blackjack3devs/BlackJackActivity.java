@@ -82,63 +82,38 @@ public class BlackJackActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
-        TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
-
         // Allow betting only before Cards are dealt.
         if(!cardsDealt) {
             if (v.getId() == R.id.chip10) {
                 if (walletAmt >= 10) {
-                    CurrentBetAmt += 10;
-                    walletAmt -= 10;
-                    String newBet = Integer.toString(CurrentBetAmt);
-                    String newWallet = Integer.toString(walletAmt);
-                    betAmtTV.setText("$" + newBet);
-                    WalletAmtTV.setText("Wallet: $" + newWallet);
+                    updateWalletAndBet(10);
                 }
             } else if (v.getId() == R.id.chip25) {
                 if (walletAmt >= 25) {
-                    CurrentBetAmt += 25;
-                    walletAmt -= 25;
-                    String newBet = Integer.toString(CurrentBetAmt);
-                    String newWallet = Integer.toString(walletAmt);
-                    betAmtTV.setText("$" + newBet);
-                    WalletAmtTV.setText("Wallet: $" + newWallet);
+                    updateWalletAndBet(25);
                 }
             } else if (v.getId() == R.id.chip50) {
                 if (walletAmt >= 50) {
-                    CurrentBetAmt += 50;
-                    walletAmt -= 50;
-                    String newBet = Integer.toString(CurrentBetAmt);
-                    String newWallet = Integer.toString(walletAmt);
-                    betAmtTV.setText("$" + newBet);
-                    WalletAmtTV.setText("Wallet: $" + newWallet);
+                    updateWalletAndBet(50);
                 }
             } else if (v.getId() == R.id.chip75) {
                 if (walletAmt >= 75) {
-                    CurrentBetAmt += 75;
-                    walletAmt -= 75;
-                    String newBet = Integer.toString(CurrentBetAmt);
-                    String newWallet = Integer.toString(walletAmt);
-                    betAmtTV.setText("$" + newBet);
-                    WalletAmtTV.setText("Wallet: $" + newWallet);
+                        updateWalletAndBet(75);
                 }
             } else if (v.getId() == R.id.chip100) {
                 if (walletAmt >= 100) {
-                    CurrentBetAmt += 100;
-                    walletAmt -= 100;
-                    String newBet = Integer.toString(CurrentBetAmt);
-                    String newWallet = Integer.toString(walletAmt);
-                    betAmtTV.setText("$" + newBet);
-                    WalletAmtTV.setText("Wallet: $" + newWallet);
+                        updateWalletAndBet(100);
                 }
             } else if (v.getId() == R.id.clearBet) {
                 walletAmt += (CurrentBetAmt*2);
                 CurrentBetAmt = 0;
+                TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
+                TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
                 String newBet = Integer.toString(CurrentBetAmt);
                 String newWallet = Integer.toString(walletAmt);
                 betAmtTV.setText("$" + newBet);
                 WalletAmtTV.setText("Wallet: $" + newWallet);
+
             }
         }
         if(v.getId()==R.id.dealButton){
@@ -157,7 +132,6 @@ public class BlackJackActivity extends AppCompatActivity
                 clearBoard();
             }
         }else if(v.getId()==R.id.hitButton){
-
             hit();
 
         }else if(v.getId()==R.id.standButton){
@@ -169,6 +143,19 @@ public class BlackJackActivity extends AppCompatActivity
 
             doubleBet();
         }
+
+    }
+
+    public void updateWalletAndBet(int m){
+        //Updates the wallet and bet textviews. Just to reduce the code a little bit.
+        TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
+        TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
+        CurrentBetAmt += m;
+        walletAmt -= m;
+        String newBet = Integer.toString(CurrentBetAmt);
+        String newWallet = Integer.toString(walletAmt);
+        betAmtTV.setText("$" + newBet);
+        WalletAmtTV.setText("Wallet: $" + newWallet);
 
     }
 
@@ -213,7 +200,7 @@ public class BlackJackActivity extends AppCompatActivity
         if (CurrentBetAmt > 0) {
             ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
             dealClear.setVisibility(View.INVISIBLE);
-            //Can set betTextView to say "Place bet" or something.
+
             ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
             hitShow.setVisibility(View.VISIBLE);
 
@@ -227,9 +214,8 @@ public class BlackJackActivity extends AppCompatActivity
                 int playerCardIndex = shuffleCards();
                 int playerCardValue = cardsArray[playerCardIndex][1];
                 ImageView playerCard = (ImageView) findViewById(playerCardsID[i]);
-                playerCard.setVisibility(View.VISIBLE);
                 playerCard.setImageResource(cardsArray[playerCardIndex][0]);
-
+                playerCard.setVisibility(View.VISIBLE);
                 // House card.
                 int houseCardIndex = shuffleCards();
                 int houseCardValue = cardsArray[houseCardIndex][1];
