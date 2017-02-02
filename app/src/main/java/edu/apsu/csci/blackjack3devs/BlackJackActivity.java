@@ -230,7 +230,7 @@ public class BlackJackActivity extends AppCompatActivity
             }
             updateCardTotal();
         }
-    }//Here is the Brace that was missing I know that I needed
+    }
     public void hit(){
 
     }
