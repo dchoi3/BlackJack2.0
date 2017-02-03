@@ -5,8 +5,10 @@ package edu.apsu.csci.blackjack3devs;
  * Course: CSCI4020 Spring 2017
  * Team Name: TBD
  * Developers: John Schmitt, Daniel Choi, Charles Fannin
+ * project 1
  */
 
+import android.content.Intent;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.annotation.DrawableRes;
@@ -127,8 +129,8 @@ public class BlackJackActivity extends AppCompatActivity
                 CurrentBetAmt = 0;
                 String newBet = Integer.toString(CurrentBetAmt);
                 String newWallet = Integer.toString(walletAmt);
-                betAmtTV.setText("$" + newBet);
-                WalletAmtTV.setText("Wallet: $" + newWallet);
+                betAmtTV.setText(String.valueOf("$" + newBet));
+                WalletAmtTV.setText(String.valueOf("Wallet: $" + newWallet));
             }
             if (v.getId() == R.id.dealButton) {
                 if (buttonID == R.drawable.deal) {
@@ -180,12 +182,13 @@ public class BlackJackActivity extends AppCompatActivity
 
         if(item.getItemId() == R.id.actionRestart){
             clearBoard();
+            walletAmt = 2000;
             return true;
 
         }else if(item.getItemId() == R.id.actionQuit){
-
+            Intent in = new Intent(getApplicationContext(), HomeActivity.class);
+            startActivity(in);
         }
-
         return false;
     }
 
@@ -197,8 +200,8 @@ public class BlackJackActivity extends AppCompatActivity
         walletAmt -= m;
         String newBet = Integer.toString(CurrentBetAmt);
         String newWallet = Integer.toString(walletAmt);
-        betAmtTV.setText("$" + newBet);
-        WalletAmtTV.setText("Wallet: $" + newWallet);
+        betAmtTV.setText(String.valueOf("$" + newBet));
+        WalletAmtTV.setText(String.valueOf("Wallet: $" + newWallet));
 
     }
 
@@ -346,16 +349,16 @@ public class BlackJackActivity extends AppCompatActivity
             }
             if (whoWon.equals(PlayerString)) {
                 walletAmt += (CurrentBetAmt * 2);
-                walletTV2.setText("Wallet: " + walletAmt);
+                walletTV2.setText(String.valueOf("Wallet: " + walletAmt));
                 buttonID = R.drawable.refresh;
                 clearBoard();
-                message.setText("You Won!");
+                message.setText(String.valueOf("You Won!"));
             } else if (whoWon.equals(HouseString)) {
                 Toast.makeText(getApplicationContext(),"Dealer won game",Toast.LENGTH_SHORT).show();
-                walletTV2.setText("Wallet: " + walletAmt);
+                walletTV2.setText(String.valueOf("Wallet: " + walletAmt));
                 buttonID = R.drawable.refresh;
                 clearBoard();
-                message.setText("You Lost!");
+                message.setText(String.valueOf("You Lost!"));
             } else {
                 buttonID = R.drawable.deal;
             }
@@ -393,7 +396,7 @@ public class BlackJackActivity extends AppCompatActivity
     /**
      * setPlayerCardValue accumulates the value of the player's cards.
      *
-     * @param pCardVal
+     * "@param pCardVal"
      */
     public void setPlayerCardValue(int pCardVal) {
         playerCardValue += pCardVal;
@@ -402,7 +405,7 @@ public class BlackJackActivity extends AppCompatActivity
     /**
      * setHouseCardValue accumulates the value of the house's cards.
      *
-     * @param hCardVal
+     * "@param hCardVal"
      */
     public void setHouseCardValue(int hCardVal) {
         houseCardValue += hCardVal;
