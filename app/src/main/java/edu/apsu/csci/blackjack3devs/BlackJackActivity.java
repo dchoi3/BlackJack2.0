@@ -30,11 +30,21 @@ public class BlackJackActivity extends AppCompatActivity
     // Variable to hold bet amount
     int CurrentBetAmt = 0;
     int walletAmt = 2000;
+
+    // Vars for card values dealt to player and house.
+    int playerCardValue = 0;
+    int houseCardValue = 0;
+
+    // Vars for tracking iteration of card positions.
+    int playerCardPosition = 0;
+    int houseCardPosition = 0;
+    
     boolean cardsDealt = false;
     boolean playerStands = false;
     int dealerCardTotal = 0;
     int playerCardTotal = 0;
     int buttonID = R.drawable.deal; // ID for Deal Button and ClearBet(TEMP)
+    
     // Initialize Card drawable/value array.
     private int[][] cardsArray = {
         {R.drawable.c2,2},{R.drawable.h2,2},{R.drawable.d2,2},{R.drawable.s2,2},
@@ -71,7 +81,6 @@ public class BlackJackActivity extends AppCompatActivity
             R.id.hitButton, R.id.standButton, R.id.doubleButton,R.id.dealButton};
 
         clearBoard();
-        // shuffleCards(); I don't think we need this here.
 
         for(int id : buttonsID){
             ImageButton ib = (ImageButton) findViewById(id);
@@ -114,35 +123,35 @@ public class BlackJackActivity extends AppCompatActivity
                 betAmtTV.setText("$" + newBet);
                 WalletAmtTV.setText("Wallet: $" + newWallet);
             }
-        }
-        if(v.getId()==R.id.dealButton){
-            // Toast.makeText(getApplicationContext(),"DEAL!",Toast.LENGTH_SHORT).show();
-            if(buttonID==R.drawable.deal){
-                if(CurrentBetAmt > 0){
-                    cardsDealt = true;
-                    deal();
+            if (v.getId() == R.id.dealButton) {
+                if (buttonID == R.drawable.deal) {
+                    if (CurrentBetAmt > 0) {
+                        cardsDealt = true;
+                        deal();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Place a bet.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                if (buttonID == R.drawable.clearbet) {
+                    buttonID = R.drawable.deal;
+                    ImageButton ib = (ImageButton) findViewById(R.id.dealButton);
+                    ib.setImageResource(R.drawable.deal);
+                    cardsDealt = false;
+                    clearBoard();
                 }
             }
-            if(buttonID==R.drawable.clearbet){
-                buttonID=R.drawable.deal;
-                ImageButton ib = (ImageButton) findViewById(R.id.dealButton);
-                ib.setImageResource(R.drawable.deal);
-                cardsDealt = false;
-                clearBoard();
-            }
-        }else if(v.getId()==R.id.hitButton){
+        }
+        if (v.getId() == R.id.hitButton) {
             hit();
-
-        }else if(v.getId()==R.id.standButton){
-            Toast.makeText(getApplicationContext(),"STAND!",Toast.LENGTH_SHORT).show();
-
+        }
+        if (v.getId() == R.id.standButton) {
+            Toast.makeText(getApplicationContext(), "STAND!", Toast.LENGTH_SHORT).show();
             stand();
-        }else if(v.getId()==R.id.doubleButton){
-            Toast.makeText(getApplicationContext(),"DOUBLE!",Toast.LENGTH_SHORT).show();
-
+        }
+        if (v.getId() == R.id.doubleButton) {
+            Toast.makeText(getApplicationContext(), "DOUBLE!", Toast.LENGTH_SHORT).show();
             doubleBet();
         }
-
     }
 
     public void updateWalletAndBet(int m){
@@ -192,50 +201,60 @@ public class BlackJackActivity extends AppCompatActivity
      */
     public int shuffleCards() {
         Random randomCardGenerator = new Random();
-        // We know there are 52 cards, so 51 is hardcoded for the index of 0-51.
-        return randomCardGenerator.nextInt(51);
+        return randomCardGenerator.nextInt(cardsArray.length - 1);
     }
 
+    /**
+     * deal supplies two initial cards to the player and the house to begin the game.
+     */
     public void deal() {
-        //Check to make sure there is a bet value before executing hitShow & standShow
-        if (CurrentBetAmt > 0) {
-            ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
-            dealClear.setVisibility(View.INVISIBLE);
+        ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
+        dealClear.setVisibility(View.INVISIBLE);
 
-            ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
-            hitShow.setVisibility(View.VISIBLE);
+        ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
+        hitShow.setVisibility(View.VISIBLE);
 
-            ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
-            standShow.setVisibility(View.VISIBLE);
+        ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
+        standShow.setVisibility(View.VISIBLE);
 
-            // Place two cards for player and dealer.
-            for (int i = 0; i < 2; i++) {
+        // Place two cards for player and dealer.
+        for (int i = 0; i < 2; i++) {
 
-                // Player card.
-                int playerCardIndex = shuffleCards();
-                int playerCardValue = cardsArray[playerCardIndex][1];
-                ImageView playerCard = (ImageView) findViewById(playerCardsID[i]);
-                playerCard.setImageResource(cardsArray[playerCardIndex][0]);
-                playerCard.setVisibility(View.VISIBLE);
-                // House card.
-                int houseCardIndex = shuffleCards();
-                int houseCardValue = cardsArray[houseCardIndex][1];
-                ImageView houseCard = (ImageView) findViewById(houseCardsID[i]);
-                houseCard.setVisibility(View.VISIBLE);
-                if (i == 0) {
-                    houseCard.setImageResource(R.drawable.facedown);
-                } else {
-                    houseCard.setImageResource(cardsArray[houseCardIndex][0]);
-                }
-            }
-            updateCardTotal();
+            // Deal cards; Pass iterator so method knows what card we are on.
+            dealPlayerCard(i);
+            dealHouseCard(i);
         }
+        // Update display of card values.
+        updateCardTotal();
     }
+
+    public void dealPlayerCard(int i){
+        int playerCardIndex = shuffleCards();
+        setPlayerCardValue(cardsArray[playerCardIndex][1]);
+        ImageView playerCard = (ImageView) findViewById(playerCardsID[i]);
+        playerCard.setImageResource(cardsArray[playerCardIndex][0]);
+        playerCard.setVisibility(View.VISIBLE);
+        playerCardPosition++;
+    }
+
+    public void dealHouseCard(int i){
+        int houseCardIndex = shuffleCards();
+        setHouseCardValue(cardsArray[houseCardIndex][1]);
+        ImageView houseCard = (ImageView) findViewById(houseCardsID[i]);
+        houseCard.setVisibility(View.VISIBLE);
+        if (i == 0) {
+            houseCard.setImageResource(R.drawable.facedown);
+        } else {
+            houseCard.setImageResource(cardsArray[houseCardIndex][0]);
+        }
+        houseCardPosition++;
+    }
+
     public void hit() {
         TextView walletTV2 = (TextView) findViewById(R.id.walletTextView);
-        updateCardTotal();// Temp to check Player winning bet;
-        if (playerStands == true) {
-            if (dealerCardTotal > 21 && playerCardTotal <= 21) {
+        // Now using get methods to retrieve house and card totals for comparison.
+        if (playerStands) {
+            if (getHouseCardValue() > 21 && getPlayerCardValue() <= 21) {
                 walletAmt += (CurrentBetAmt*2);
                 walletTV2.setText("Wallet: "+ walletAmt);
                 buttonID = R.drawable.clearbet;
@@ -246,12 +265,15 @@ public class BlackJackActivity extends AppCompatActivity
             ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
             dealClear.setVisibility(View.VISIBLE);
             dealClear.setImageResource(buttonID);
-            //Can set betTextView to say "Place bet" or something.
+
             ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
             hitShow.setVisibility(View.INVISIBLE);
 
             ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
             standShow.setVisibility(View.INVISIBLE);
+        } else {
+            dealPlayerCard(playerCardPosition);
+            updateCardTotal();
         }
     }
     public void stand(){
@@ -260,15 +282,49 @@ public class BlackJackActivity extends AppCompatActivity
     public void doubleBet(){
 
     }
-    public void updateCardTotal(){
-        //Temp hardcode
-        TextView hScore = (TextView) findViewById(R.id.houseScore);
-        hScore.setText("22");
-        dealerCardTotal = Integer.parseInt(hScore.getText().toString());
-        TextView pScore = (TextView) findViewById(R.id.playerScore);
-        pScore.setText("15");
-        playerCardTotal = Integer.parseInt(pScore.getText().toString());
 
+    /**
+     * setPlayerCardValue accumulates the value of the player's cards.
+     * @param pCardVal
+     */
+    public void setPlayerCardValue(int pCardVal) {
+        playerCardValue += pCardVal;
+    }
+
+    /**
+     * setHouseCardValue accumulates the value of the house's cards.
+     * @param hCardVal
+     */
+    public void setHouseCardValue(int hCardVal) {
+        houseCardValue += hCardVal;
+    }
+
+    /**
+     * getPlayerCardValue returns the value of the player's card.
+     * @return The value of the player's card.
+     */
+    public int getPlayerCardValue() {
+        return playerCardValue;
+    }
+
+    /**
+     * getHouseCardValue returns the value of the house's card.
+     * @return The value of the house's card.
+     */
+    public int getHouseCardValue() {
+        return houseCardValue;
+    }
+
+    /**
+     * updateCardTotal updates the UI with the player's and house's card totals.
+     */
+    public void updateCardTotal(){
+        // Display player and house card values.
+        TextView pScore = (TextView) findViewById(R.id.playerScore);
+        pScore.setText(String.valueOf(getPlayerCardValue()));
+
+        TextView hScore = (TextView) findViewById(R.id.houseScore);
+        hScore.setText(String.valueOf(getHouseCardValue()));
     }
 
     @Override
