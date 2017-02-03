@@ -44,6 +44,9 @@ public class BlackJackActivity extends AppCompatActivity
     int dealerCardTotal = 0;
     int playerCardTotal = 0;
     int buttonID = R.drawable.deal; // ID for Deal Button and ClearBet(TEMP)
+    String Player = "Player";
+    String House = "House";
+    String NoWinner = "None";
     
     // Initialize Card drawable/value array.
     private int[][] cardsArray = {
@@ -136,7 +139,6 @@ public class BlackJackActivity extends AppCompatActivity
                     buttonID = R.drawable.deal;
                     ImageButton ib = (ImageButton) findViewById(R.id.dealButton);
                     ib.setImageResource(R.drawable.deal);
-                    cardsDealt = false;
                     clearBoard();
                 }
             }
@@ -192,6 +194,9 @@ public class BlackJackActivity extends AppCompatActivity
         tv.setText("$0");
         CurrentBetAmt = 0;
         playerStands = false;
+        cardsDealt = false;
+        setHouseCardValue(0);
+        setPlayerCardValue(0);
     }
 
     /**
@@ -249,35 +254,61 @@ public class BlackJackActivity extends AppCompatActivity
         }
         houseCardPosition++;
     }
-
+    public String CheckForWinner(boolean PlayerStands){
+        String Winner = "Dealer Won";
+        if(getHouseCardValue() > 21 && getPlayerCardValue() <= 21 && PlayerStands){
+            Winner = Player;
+            Toast.makeText(getApplicationContext(), "Player won the bet", Toast.LENGTH_SHORT).show();
+        }else if(getHouseCardValue() == 21){
+            Winner = House;
+        }
+        else if(getHouseCardValue() > getPlayerCardValue() && getHouseCardValue() <= 21){
+            Winner = House;
+            Toast.makeText(getApplicationContext(), "Player Lost the bet", Toast.LENGTH_SHORT).show();
+        }else{
+            Winner = NoWinner;
+        }
+        return Winner;
+    }
     public void hit() {
         TextView walletTV2 = (TextView) findViewById(R.id.walletTextView);
         // Now using get methods to retrieve house and card totals for comparison.
         if (playerStands) {
-            if (getHouseCardValue() > 21 && getPlayerCardValue() <= 21) {
-                walletAmt += (CurrentBetAmt*2);
-                walletTV2.setText("Wallet: "+ walletAmt);
+            dealHouseCard(houseCardPosition);
+            updateCardTotal();
+            String whoWon = CheckForWinner(true);
+            if (whoWon.equals(Player)) {
+                walletAmt += (CurrentBetAmt * 2);
+                walletTV2.setText("Wallet: " + walletAmt);
                 buttonID = R.drawable.clearbet;
-                Toast.makeText(getApplicationContext(), "Player won from Stand", Toast.LENGTH_SHORT).show();
+                clearBoard();
+            } else if (whoWon.equals(House)) {
+                walletTV2.setText("Wallet: " + walletAmt);
+                buttonID = R.drawable.clearbet;
+                clearBoard();
             } else {
-                Toast.makeText(getApplicationContext(), "Player Lost", Toast.LENGTH_SHORT).show();
+                if(whoWon.equals(Player) || whoWon.equals(House)) {
+                    ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
+                    dealClear.setVisibility(View.VISIBLE);
+                    dealClear.setImageResource(buttonID);
+
+                    ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
+                    hitShow.setVisibility(View.INVISIBLE);
+
+                    ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
+                    standShow.setVisibility(View.INVISIBLE);
+                }
             }
-            ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
-            dealClear.setVisibility(View.VISIBLE);
-            dealClear.setImageResource(buttonID);
-
-            ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
-            hitShow.setVisibility(View.INVISIBLE);
-
-            ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
-            standShow.setVisibility(View.INVISIBLE);
-        } else {
+        }else{
             dealPlayerCard(playerCardPosition);
             updateCardTotal();
         }
+
     }
     public void stand(){
         playerStands = true;
+        ImageButton ib1 = (ImageButton) findViewById(R.id.standButton);
+        ib1.setVisibility(View.INVISIBLE);
     }
     public void doubleBet(){
 
