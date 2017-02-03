@@ -261,7 +261,7 @@ public class BlackJackActivity extends AppCompatActivity
         }else if(getHouseCardValue() == 21){
             Winner = House;
         }
-        else if(getHouseCardValue() > getPlayerCardValue() && getHouseCardValue() <= 21){
+        else if(getHouseCardValue() >= getPlayerCardValue() && getHouseCardValue() <= 21){
             Winner = House;
             Toast.makeText(getApplicationContext(), "Player Lost the bet", Toast.LENGTH_SHORT).show();
         }else{
@@ -273,8 +273,10 @@ public class BlackJackActivity extends AppCompatActivity
         TextView walletTV2 = (TextView) findViewById(R.id.walletTextView);
         // Now using get methods to retrieve house and card totals for comparison.
         if (playerStands) {
-            dealHouseCard(houseCardPosition);
-            updateCardTotal();
+            if(houseCardPosition < 9) {
+                dealHouseCard(houseCardPosition);
+                updateCardTotal();
+            }
             String whoWon = CheckForWinner(true);
             if (whoWon.equals(Player)) {
                 walletAmt += (CurrentBetAmt * 2);
@@ -299,8 +301,10 @@ public class BlackJackActivity extends AppCompatActivity
                 }
             }
         }else{
-            dealPlayerCard(playerCardPosition);
-            updateCardTotal();
+            if(playerCardPosition < 9) {
+                dealPlayerCard(playerCardPosition);
+                updateCardTotal();
+            }
         }
 
     }
@@ -351,10 +355,10 @@ public class BlackJackActivity extends AppCompatActivity
     public void updateCardTotal(){
         // Display player and house card values.
         TextView pScore = (TextView) findViewById(R.id.playerScore);
-        pScore.setText(String.valueOf(getPlayerCardValue()));
+        pScore.setText(String.valueOf(playerCardValue));
 
         TextView hScore = (TextView) findViewById(R.id.houseScore);
-        hScore.setText(String.valueOf(getHouseCardValue()));
+        hScore.setText(String.valueOf(houseCardValue));
     }
 
     @Override
