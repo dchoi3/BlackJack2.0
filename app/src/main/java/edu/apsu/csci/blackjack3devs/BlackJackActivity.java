@@ -43,6 +43,8 @@ public class BlackJackActivity extends AppCompatActivity
     boolean cardsDealt = false;
     boolean playerStands = false;
     int buttonID = R.drawable.deal; // ID for Deal Button and ClearBet(TEMP)
+
+    // Vars for Who wins
     String PlayerString = "Player";
     String HouseString = "House";
     String NoWinner = "None";
@@ -92,6 +94,8 @@ public class BlackJackActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
+        TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
+        TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
         // Allow betting only before Cards are dealt.
         if (!cardsDealt) {
             if (v.getId() == R.id.chip5) {
@@ -121,8 +125,6 @@ public class BlackJackActivity extends AppCompatActivity
             } else if (v.getId() == R.id.clearBet) {
                 walletAmt += CurrentBetAmt;
                 CurrentBetAmt = 0;
-                TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
-                TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
                 String newBet = Integer.toString(CurrentBetAmt);
                 String newWallet = Integer.toString(walletAmt);
                 betAmtTV.setText("$" + newBet);
@@ -137,10 +139,11 @@ public class BlackJackActivity extends AppCompatActivity
                         Toast.makeText(getApplicationContext(), "Place a bet.", Toast.LENGTH_SHORT).show();
                     }
                 }
-                if (buttonID == R.drawable.clearbet) {
+                if (buttonID == R.drawable.refresh) {
                     buttonID = R.drawable.deal;
                     ImageButton ib = (ImageButton) findViewById(R.id.dealButton);
                     ib.setImageResource(R.drawable.deal);
+                    clearBoard();
                 }
             }
         }
@@ -215,7 +218,6 @@ public class BlackJackActivity extends AppCompatActivity
         TextView tv = (TextView) findViewById(R.id.betTextView);
         tv.setText("$0");
         CurrentBetAmt = 0;
-        walletAmt = 2000;
         playerStands = false;
         cardsDealt = false;
         setHouseCardValue(0);
@@ -286,52 +288,53 @@ public class BlackJackActivity extends AppCompatActivity
     }
 
     public String CheckForWinner(boolean PlayerStands) {
-        String Winner = "Dealer Won";
-        if (getHouseCardValue() > 21 && getPlayerCardValue() <= 21 && PlayerStands) {
-            Winner = PlayerString;
-            Toast.makeText(getApplicationContext(), "Player won the bet", Toast.LENGTH_SHORT).show();
-        } else if (getHouseCardValue() == 21) {
-            Winner = HouseString;
-
-        } else if (getHouseCardValue() >= getPlayerCardValue() && getHouseCardValue() <= 21) {
-            Winner = HouseString;
-            Toast.makeText(getApplicationContext(), "Player Lost the bet", Toast.LENGTH_SHORT).show();
-        } else {
-            Winner = NoWinner;
+        String Winner = NoWinner;
+        if(PlayerStands) {
+            if (getHouseCardValue() > 21 && getPlayerCardValue() <= 21) {
+                Winner = PlayerString;
+                Toast.makeText(getApplicationContext(), "Player won the bet", Toast.LENGTH_SHORT).show();
+            } else if (getHouseCardValue() == 21) {
+                Winner = HouseString;
+            } else if (getHouseCardValue() >= getPlayerCardValue() && getHouseCardValue() <= 21) {
+                Winner = HouseString;
+                Toast.makeText(getApplicationContext(), "Player Lost the bet", Toast.LENGTH_SHORT).show();
+            } else {
+                Winner = NoWinner;
+            }
+        }else{
+            if(getHouseCardValue() == 21){
+                Winner = HouseString;
+            }
         }
         return Winner;
     }
 
     public void hit() {
         TextView walletTV2 = (TextView) findViewById(R.id.walletTextView);
+        TextView message = (TextView) findViewById(R.id.betTextView);
         // Now using get methods to retrieve house and card totals for comparison.
+        // Check for winner before dealing another card
+        String whoWon = "";
         if (playerStands) {
+            whoWon = CheckForWinner(true);
             if (houseCardPosition < 9) {
                 dealHouseCard(houseCardPosition);
                 updateCardTotal();
             }
-            String whoWon = CheckForWinner(true);
             if (whoWon.equals(PlayerString)) {
                 walletAmt += (CurrentBetAmt * 2);
                 walletTV2.setText("Wallet: " + walletAmt);
-                buttonID = R.drawable.clearbet;
+                buttonID = R.drawable.refresh;
                 clearBoard();
+                message.setText("You Won!");
             } else if (whoWon.equals(HouseString)) {
+                Toast.makeText(getApplicationContext(),"Dealer won game",Toast.LENGTH_SHORT).show();
                 walletTV2.setText("Wallet: " + walletAmt);
-                buttonID = R.drawable.clearbet;
+                buttonID = R.drawable.refresh;
                 clearBoard();
+                message.setText("You Lost!");
             } else {
-                if (whoWon.equals(PlayerString) || whoWon.equals(HouseString)) {
-                    ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
-                    dealClear.setVisibility(View.VISIBLE);
-                    dealClear.setImageResource(buttonID);
-
-                    ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
-                    hitShow.setVisibility(View.INVISIBLE);
-
-                    ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
-                    standShow.setVisibility(View.INVISIBLE);
-                }
+                buttonID = R.drawable.deal;
             }
         } else {
             CheckForWinner(false); //Added by Daniel.. It should be checked even if you do not stand.
@@ -340,7 +343,17 @@ public class BlackJackActivity extends AppCompatActivity
                 updateCardTotal();
             }
         }
+        if (whoWon.equals(PlayerString) || whoWon.equals(HouseString)) {
+            ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
+            dealClear.setVisibility(View.VISIBLE);
+            dealClear.setImageResource(buttonID);
 
+            ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
+            hitShow.setVisibility(View.INVISIBLE);
+
+            ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
+            standShow.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void stand() {
