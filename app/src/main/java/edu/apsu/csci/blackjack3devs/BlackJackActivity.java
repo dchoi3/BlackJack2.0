@@ -143,7 +143,6 @@ public class BlackJackActivity extends AppCompatActivity
             }
         }
         if (v.getId() == R.id.hitButton) {
-            Toast.makeText(getApplicationContext(), "HIT!", Toast.LENGTH_SHORT).show();
             hit();
         }
         if (v.getId() == R.id.standButton) {
@@ -251,30 +250,30 @@ public class BlackJackActivity extends AppCompatActivity
     }
 
     public void hit() {
-//        TextView walletTV2 = (TextView) findViewById(R.id.walletTextView);
-//        // Now using get methods to retrieve house and card totals for comparison.
-//        if (playerStands) {
-//            if (getHouseCardValue() > 21 && getPlayerCardValue() <= 21) {
-//                walletAmt += (CurrentBetAmt*2);
-//                walletTV2.setText("Wallet: "+ walletAmt);
-//                buttonID = R.drawable.clearbet;
-//                Toast.makeText(getApplicationContext(), "Player won from Stand", Toast.LENGTH_SHORT).show();
-//            } else {
-//                Toast.makeText(getApplicationContext(), "Player Lost", Toast.LENGTH_SHORT).show();
-//            }
-//            ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
-//            dealClear.setVisibility(View.VISIBLE);
-//            dealClear.setImageResource(buttonID);
-//
-//            ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
-//            hitShow.setVisibility(View.INVISIBLE);
-//
-//            ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
-//            standShow.setVisibility(View.INVISIBLE);
-//        } else {
+        TextView walletTV2 = (TextView) findViewById(R.id.walletTextView);
+        // Now using get methods to retrieve house and card totals for comparison.
+        if (playerStands) {
+            if (getHouseCardValue() > 21 && getPlayerCardValue() <= 21) {
+                walletAmt += (CurrentBetAmt*2);
+                walletTV2.setText("Wallet: "+ walletAmt);
+                buttonID = R.drawable.clearbet;
+                Toast.makeText(getApplicationContext(), "Player won from Stand", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Player Lost", Toast.LENGTH_SHORT).show();
+            }
+            ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
+            dealClear.setVisibility(View.VISIBLE);
+            dealClear.setImageResource(buttonID);
+
+            ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
+            hitShow.setVisibility(View.INVISIBLE);
+
+            ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
+            standShow.setVisibility(View.INVISIBLE);
+        } else {
             Log.i("hit", "");
             dealPlayerCard(playerCardPosition);
-//        }
+        }
     }
     public void stand(){
         playerStands = true;
