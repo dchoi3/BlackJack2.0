@@ -139,7 +139,6 @@ public class BlackJackActivity extends AppCompatActivity
                     buttonID = R.drawable.deal;
                     ImageButton ib = (ImageButton) findViewById(R.id.dealButton);
                     ib.setImageResource(R.drawable.deal);
-                    clearBoard();
                 }
             }
         }
