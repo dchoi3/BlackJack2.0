@@ -314,9 +314,25 @@ public class BlackJackActivity extends AppCompatActivity
         TextView message = (TextView) findViewById(R.id.betTextView);
         // Now using get methods to retrieve house and card totals for comparison.
         // Check for winner before dealing another card
-        String whoWon = "";
-        if (playerStands) {
-            whoWon = CheckForWinner(true);
+        String whoWon ="";
+        Boolean blackJack; // If dealer has 21
+        Boolean playerBust; // If Player hits over 21
+        if(getHouseCardValue() == 21){
+            blackJack = true;
+        }else{
+            blackJack = false;
+        }
+        if(playerCardValue > 21){
+            playerBust = true;
+        }else{
+            playerBust = false;
+        }
+        if (playerStands || blackJack || playerBust) {
+            if(playerBust){
+                whoWon = HouseString;
+            }else {
+                whoWon = CheckForWinner(true);
+            }
             if (houseCardPosition < 9) {
                 dealHouseCard(houseCardPosition);
                 updateCardTotal();
