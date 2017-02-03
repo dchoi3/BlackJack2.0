@@ -114,7 +114,7 @@ public class BlackJackActivity extends AppCompatActivity
                         updateWalletAndBet(100);
                 }
             } else if (v.getId() == R.id.clearBet) {
-                walletAmt += (CurrentBetAmt*2);
+                walletAmt += CurrentBetAmt;
                 CurrentBetAmt = 0;
                 TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
                 TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
@@ -122,7 +122,6 @@ public class BlackJackActivity extends AppCompatActivity
                 String newWallet = Integer.toString(walletAmt);
                 betAmtTV.setText("$" + newBet);
                 WalletAmtTV.setText("Wallet: $" + newWallet);
-
             }
             if (v.getId() == R.id.dealButton) {
                 if (buttonID == R.drawable.deal) {
@@ -191,6 +190,8 @@ public class BlackJackActivity extends AppCompatActivity
             iv2.setVisibility(View.VISIBLE);
         TextView tv = (TextView) findViewById(R.id.betTextView);
         tv.setText("$0");
+        CurrentBetAmt = 0;
+        playerStands = false;
     }
 
     /**
@@ -330,7 +331,6 @@ public class BlackJackActivity extends AppCompatActivity
     public void onBackPressed() {
         cardsDealt = false;
         playerStands = false;
-        CurrentBetAmt = 0;
         clearBoard();
     }
 }
