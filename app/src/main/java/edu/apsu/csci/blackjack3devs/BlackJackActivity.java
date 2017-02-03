@@ -81,7 +81,6 @@ public class BlackJackActivity extends AppCompatActivity
             R.id.hitButton, R.id.standButton, R.id.doubleButton,R.id.dealButton};
 
         clearBoard();
-        // shuffleCards(); I don't think we need this here.
 
         for(int id : buttonsID){
             ImageButton ib = (ImageButton) findViewById(id);
@@ -142,6 +141,8 @@ public class BlackJackActivity extends AppCompatActivity
                     clearBoard();
                 }
             } else if (v.getId() == R.id.hitButton) {
+                Toast.makeText(getApplicationContext(), "HIT!", Toast.LENGTH_SHORT).show();
+
                 hit();
 
             } else if (v.getId() == R.id.standButton) {
@@ -253,8 +254,8 @@ public class BlackJackActivity extends AppCompatActivity
 
     public void hit() {
         TextView walletTV2 = (TextView) findViewById(R.id.walletTextView);
-        // Using get methods to retrieve house and card totals for comparison.
-        if (playerStands == true) {
+        // Now using get methods to retrieve house and card totals for comparison.
+        if (playerStands) {
             if (getHouseCardValue() > 21 && getPlayerCardValue() <= 21) {
                 walletAmt += (CurrentBetAmt*2);
                 walletTV2.setText("Wallet: "+ walletAmt);
@@ -273,6 +274,7 @@ public class BlackJackActivity extends AppCompatActivity
             ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
             standShow.setVisibility(View.INVISIBLE);
         } else {
+            Log.i("hit", "");
             dealPlayerCard(playerCardPosition);
         }
     }
@@ -325,8 +327,6 @@ public class BlackJackActivity extends AppCompatActivity
 
         TextView hScore = (TextView) findViewById(R.id.houseScore);
         hScore.setText(String.valueOf(getHouseCardValue()));
-
-        Log.i("TOTAL ", getPlayerCardValue() + " " + getHouseCardValue());
     }
 
     @Override
