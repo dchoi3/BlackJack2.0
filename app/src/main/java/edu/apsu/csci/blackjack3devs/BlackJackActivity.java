@@ -121,41 +121,33 @@ public class BlackJackActivity extends AppCompatActivity
                 WalletAmtTV.setText("Wallet: $" + newWallet);
 
             }
-        }else if(v.getId()==R.id.chip75){
-            if(walletAmt >= 75){
-                CurrentBetAmt += 75;
-                walletAmt -= 75;
-                String newBet = Integer.toString(CurrentBetAmt);
-                String newWallet =  Integer.toString(walletAmt);
-                betAmtTV.setText("$" + newBet);
-                WalletAmtTV.setText("Wallet: $" + newWallet);
-        }
-        if(v.getId()==R.id.dealButton){
-            // Toast.makeText(getApplicationContext(),"DEAL!",Toast.LENGTH_SHORT).show();
-            if(buttonID==R.drawable.deal){
-                if(CurrentBetAmt > 0){
-                    cardsDealt = true;
-                    deal();
+            if (v.getId() == R.id.dealButton) {
+                // Toast.makeText(getApplicationContext(),"DEAL!",Toast.LENGTH_SHORT).show();
+                if (buttonID == R.drawable.deal) {
+                    if (CurrentBetAmt > 0) {
+                        cardsDealt = true;
+                        deal();
+                    }
                 }
+                if (buttonID == R.drawable.clearbet) {
+                    buttonID = R.drawable.deal;
+                    ImageButton ib = (ImageButton) findViewById(R.id.dealButton);
+                    ib.setImageResource(R.drawable.deal);
+                    cardsDealt = false;
+                    clearBoard();
+                }
+            } else if (v.getId() == R.id.hitButton) {
+                hit();
+
+            } else if (v.getId() == R.id.standButton) {
+                Toast.makeText(getApplicationContext(), "STAND!", Toast.LENGTH_SHORT).show();
+
+                stand();
+            } else if (v.getId() == R.id.doubleButton) {
+                Toast.makeText(getApplicationContext(), "DOUBLE!", Toast.LENGTH_SHORT).show();
+
+                doubleBet();
             }
-            if(buttonID==R.drawable.clearbet){
-                buttonID=R.drawable.deal;
-                ImageButton ib = (ImageButton) findViewById(R.id.dealButton);
-                ib.setImageResource(R.drawable.deal);
-                cardsDealt = false;
-                clearBoard();
-            }
-        }else if(v.getId()==R.id.hitButton){
-            hit();
-
-        }else if(v.getId()==R.id.standButton){
-            Toast.makeText(getApplicationContext(),"STAND!",Toast.LENGTH_SHORT).show();
-
-            stand();
-        }else if(v.getId()==R.id.doubleButton){
-            Toast.makeText(getApplicationContext(),"DOUBLE!",Toast.LENGTH_SHORT).show();
-
-            doubleBet();
         }
 
     }
@@ -205,10 +197,12 @@ public class BlackJackActivity extends AppCompatActivity
      */
     public int shuffleCards() {
         Random randomCardGenerator = new Random();
-        // We know there are 52 cards, so 51 is hardcoded for the index of 0-51.
-        return randomCardGenerator.nextInt(51);
+        return randomCardGenerator.nextInt(cardsArray.length - 1);
     }
 
+    /**
+     * deal supplies two initial cards to the player and the house to begin the game.
+     */
     public void deal() {
         //Check to make sure there is a bet value before executing hitShow & standShow
         if (CurrentBetAmt > 0) {
@@ -226,31 +220,33 @@ public class BlackJackActivity extends AppCompatActivity
 
                 // Player card.
                 int playerCardIndex = shuffleCards();
-                Log.i("pIndex: ", "" + playerCardIndex);
-                playerCardValue = cardsArray[playerCardIndex][1];
-                Log.i("pVal: ", "" + playerCardValue);
+                setPlayerCardValue(cardsArray[playerCardIndex][1]);
                 ImageView playerCard = (ImageView) findViewById(playerCardsID[i]);
                 playerCard.setImageResource(cardsArray[playerCardIndex][0]);
                 playerCard.setVisibility(View.VISIBLE);
+                Log.i(" pIndex: ", playerCardIndex + " pVal: " + cardsArray[playerCardIndex][1]);
+
                 // House card.
                 int houseCardIndex = shuffleCards();
-                Log.i("hIndex: ", "" + houseCardIndex);
-                houseCardValue = cardsArray[houseCardIndex][1];
-                Log.i("hVal: ", "" + houseCardValue);
+                setHouseCardValue(cardsArray[houseCardIndex][1]);
                 ImageView houseCard = (ImageView) findViewById(houseCardsID[i]);
                 houseCard.setVisibility(View.VISIBLE);
+                Log.i(" hIndex: ", houseCardIndex + " hVal: " + cardsArray[houseCardIndex][1]);
                 if (i == 0) {
                     houseCard.setImageResource(R.drawable.facedown);
                 } else {
                     houseCard.setImageResource(cardsArray[houseCardIndex][0]);
                 }
-                updateCardTotal(playerCardValue, houseCardValue);
+
+                // Update display of card values.
+                updateCardTotal();
             }
         }
     }
     public void hit() {
         TextView walletTV2 = (TextView) findViewById(R.id.walletTextView);
-        updateCardTotal();// Temp to check Player winning bet;
+        // Commenting this out until we figure out how to use it here.
+        // updateCardTotal(); // Temp to check Player winning bet;
         if (playerStands == true) {
             if (dealerCardTotal > 21 && playerCardTotal <= 21) {
                 walletAmt += (CurrentBetAmt*2);
@@ -277,15 +273,51 @@ public class BlackJackActivity extends AppCompatActivity
     public void doubleBet(){
 
     }
-    public void updateCardTotal(int playerVal, int houseVal){
-        // Accumulate player and house card values.
-        playerVal += playerVal;
-        TextView pScore = (TextView) findViewById(R.id.playerScore);
-        pScore.setText(String.valueOf(playerVal));
 
-        houseVal += houseVal;
+    /**
+     * setPlayerCardValue accumulates the value of the player's cards.
+     * @param pCardVal
+     */
+    public void setPlayerCardValue(int pCardVal) {
+        playerCardValue += pCardVal;
+    }
+
+    /**
+     * setHouseCardValue accumulates the value of the house's cards.
+     * @param hCardVal
+     */
+    public void setHouseCardValue(int hCardVal) {
+        houseCardValue += hCardVal;
+    }
+
+    /**
+     * getPlayerCardValue returns the value of the player's card.
+     * @return The value of the player's card.
+     */
+    public int getPlayerCardValue() {
+        return playerCardValue;
+    }
+
+    /**
+     * getHouseCardValue returns the value of the house's card.
+     * @return The value of the house's card.
+     */
+    public int getHouseCardValue() {
+        return houseCardValue;
+    }
+
+    /**
+     * updateCardTotal updates the UI with the player's and house's card totals.
+     */
+    public void updateCardTotal(){
+        // Display player and house card values.
+        TextView pScore = (TextView) findViewById(R.id.playerScore);
+        pScore.setText(String.valueOf(getPlayerCardValue()));
+
         TextView hScore = (TextView) findViewById(R.id.houseScore);
-        hScore.setText(String.valueOf(houseVal));
+        hScore.setText(String.valueOf(getHouseCardValue()));
+
+        Log.i("TOTAL ", getPlayerCardValue() + " " + getHouseCardValue());
     }
 
     @Override
