@@ -158,6 +158,13 @@ public class BlackJackActivity extends AppCompatActivity
             Toast.makeText(getApplicationContext(), "DOUBLE!", Toast.LENGTH_SHORT).show();
             doubleBet();
         }
+        if(v.getId() == R.id.dealButton && buttonID == R.drawable.refresh){
+            cardsDealt = true;
+            buttonID = R.drawable.deal;
+            ImageButton ib = (ImageButton) findViewById(R.id.dealButton);
+            ib.setImageResource(R.drawable.deal);
+            clearBoard();
+        }
     }
 
     public void popupMenu(View v) {
@@ -360,6 +367,7 @@ public class BlackJackActivity extends AppCompatActivity
             }
         }
         if (whoWon.equals(PlayerString) || whoWon.equals(HouseString)) {
+            cardsDealt = true;
             ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
             dealClear.setVisibility(View.VISIBLE);
             dealClear.setImageResource(buttonID);
