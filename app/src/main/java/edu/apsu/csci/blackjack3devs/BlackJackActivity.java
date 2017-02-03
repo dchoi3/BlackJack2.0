@@ -151,7 +151,7 @@ public class BlackJackActivity extends AppCompatActivity
             hit();
         }
         if (v.getId() == R.id.standButton) {
-            Toast.makeText(getApplicationContext(), "STAND!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "STAND!", Toast.LENGTH_SHORT).show();
             stand();
         }
         if (v.getId() == R.id.doubleButton) {
@@ -342,9 +342,9 @@ public class BlackJackActivity extends AppCompatActivity
                 walletTV2.setText("Wallet: " + walletAmt);
                 buttonID = R.drawable.refresh;
                 clearBoard();
-                message.setText("You Won!");
+                message.setText("You Win!");
             } else if (whoWon.equals(HouseString)) {
-                Toast.makeText(getApplicationContext(),"Dealer won game",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),"Dealer won game",Toast.LENGTH_SHORT).show();
                 walletTV2.setText("Wallet: " + walletAmt);
                 buttonID = R.drawable.refresh;
                 clearBoard();
