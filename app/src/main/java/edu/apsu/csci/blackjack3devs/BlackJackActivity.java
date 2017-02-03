@@ -34,6 +34,10 @@ public class BlackJackActivity extends AppCompatActivity
     // Vars for card values dealt to player and house.
     int playerCardValue = 0;
     int houseCardValue = 0;
+
+    // Vars for tracking iteration of card positions.
+    int playerCardPosition = 0;
+    int houseCardPosition = 0;
     
     boolean cardsDealt = false;
     boolean playerStands = false;
@@ -122,11 +126,12 @@ public class BlackJackActivity extends AppCompatActivity
 
             }
             if (v.getId() == R.id.dealButton) {
-                // Toast.makeText(getApplicationContext(),"DEAL!",Toast.LENGTH_SHORT).show();
                 if (buttonID == R.drawable.deal) {
                     if (CurrentBetAmt > 0) {
                         cardsDealt = true;
                         deal();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Place a bet.", Toast.LENGTH_SHORT).show();
                     }
                 }
                 if (buttonID == R.drawable.clearbet) {
@@ -218,37 +223,42 @@ public class BlackJackActivity extends AppCompatActivity
             // Place two cards for player and dealer.
             for (int i = 0; i < 2; i++) {
 
-                // Player card.
-                int playerCardIndex = shuffleCards();
-                setPlayerCardValue(cardsArray[playerCardIndex][1]);
-                ImageView playerCard = (ImageView) findViewById(playerCardsID[i]);
-                playerCard.setImageResource(cardsArray[playerCardIndex][0]);
-                playerCard.setVisibility(View.VISIBLE);
-                Log.i(" pIndex: ", playerCardIndex + " pVal: " + cardsArray[playerCardIndex][1]);
-
-                // House card.
-                int houseCardIndex = shuffleCards();
-                setHouseCardValue(cardsArray[houseCardIndex][1]);
-                ImageView houseCard = (ImageView) findViewById(houseCardsID[i]);
-                houseCard.setVisibility(View.VISIBLE);
-                Log.i(" hIndex: ", houseCardIndex + " hVal: " + cardsArray[houseCardIndex][1]);
-                if (i == 0) {
-                    houseCard.setImageResource(R.drawable.facedown);
-                } else {
-                    houseCard.setImageResource(cardsArray[houseCardIndex][0]);
-                }
-
-                // Update display of card values.
-                updateCardTotal();
+                // Deal cards; Pass iterator so method knows what card we are on.
+                dealPlayerCard(i);
+                dealHouseCard(i);
             }
+            // Update display of card values.
+            updateCardTotal();
         }
     }
+
+    public void dealPlayerCard(int i){
+        int playerCardIndex = shuffleCards();
+        setPlayerCardValue(cardsArray[playerCardIndex][1]);
+        ImageView playerCard = (ImageView) findViewById(playerCardsID[i]);
+        playerCard.setImageResource(cardsArray[playerCardIndex][0]);
+        playerCard.setVisibility(View.VISIBLE);
+        playerCardPosition++;
+    }
+
+    public void dealHouseCard(int i){
+        int houseCardIndex = shuffleCards();
+        setHouseCardValue(cardsArray[houseCardIndex][1]);
+        ImageView houseCard = (ImageView) findViewById(houseCardsID[i]);
+        houseCard.setVisibility(View.VISIBLE);
+        if (i == 0) {
+            houseCard.setImageResource(R.drawable.facedown);
+        } else {
+            houseCard.setImageResource(cardsArray[houseCardIndex][0]);
+        }
+        houseCardPosition++;
+    }
+
     public void hit() {
         TextView walletTV2 = (TextView) findViewById(R.id.walletTextView);
-        // Commenting this out until we figure out how to use it here.
-        // updateCardTotal(); // Temp to check Player winning bet;
+        // Using get methods to retrieve house and card totals for comparison.
         if (playerStands == true) {
-            if (dealerCardTotal > 21 && playerCardTotal <= 21) {
+            if (getHouseCardValue() > 21 && getPlayerCardValue() <= 21) {
                 walletAmt += (CurrentBetAmt*2);
                 walletTV2.setText("Wallet: "+ walletAmt);
                 buttonID = R.drawable.clearbet;
@@ -259,12 +269,14 @@ public class BlackJackActivity extends AppCompatActivity
             ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
             dealClear.setVisibility(View.VISIBLE);
             dealClear.setImageResource(buttonID);
-            //Can set betTextView to say "Place bet" or something.
+
             ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
             hitShow.setVisibility(View.INVISIBLE);
 
             ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
             standShow.setVisibility(View.INVISIBLE);
+        } else {
+            dealPlayerCard(playerCardPosition);
         }
     }
     public void stand(){
