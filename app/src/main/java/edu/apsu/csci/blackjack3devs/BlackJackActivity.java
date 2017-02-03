@@ -271,8 +271,8 @@ public class BlackJackActivity extends AppCompatActivity
             ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
             standShow.setVisibility(View.INVISIBLE);
         } else {
-            Log.i("hit", "");
             dealPlayerCard(playerCardPosition);
+            updateCardTotal();
         }
     }
     public void stand(){
