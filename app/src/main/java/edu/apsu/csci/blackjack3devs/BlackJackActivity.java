@@ -30,11 +30,17 @@ public class BlackJackActivity extends AppCompatActivity
     // Variable to hold bet amount
     int CurrentBetAmt = 0;
     int walletAmt = 2000;
+
+    // Vars for card values dealt to player and house.
+    int playerCardValue = 0;
+    int houseCardValue = 0;
+    
     boolean cardsDealt = false;
     boolean playerStands = false;
     int dealerCardTotal = 0;
     int playerCardTotal = 0;
     int buttonID = R.drawable.deal; // ID for Deal Button and ClearBet(TEMP)
+    
     // Initialize Card drawable/value array.
     private int[][] cardsArray = {
         {R.drawable.c2,2},{R.drawable.h2,2},{R.drawable.d2,2},{R.drawable.s2,2},
@@ -115,6 +121,14 @@ public class BlackJackActivity extends AppCompatActivity
                 WalletAmtTV.setText("Wallet: $" + newWallet);
 
             }
+        }else if(v.getId()==R.id.chip75){
+            if(walletAmt >= 75){
+                CurrentBetAmt += 75;
+                walletAmt -= 75;
+                String newBet = Integer.toString(CurrentBetAmt);
+                String newWallet =  Integer.toString(walletAmt);
+                betAmtTV.setText("$" + newBet);
+                WalletAmtTV.setText("Wallet: $" + newWallet);
         }
         if(v.getId()==R.id.dealButton){
             // Toast.makeText(getApplicationContext(),"DEAL!",Toast.LENGTH_SHORT).show();
@@ -212,13 +226,17 @@ public class BlackJackActivity extends AppCompatActivity
 
                 // Player card.
                 int playerCardIndex = shuffleCards();
-                int playerCardValue = cardsArray[playerCardIndex][1];
+                Log.i("pIndex: ", "" + playerCardIndex);
+                playerCardValue = cardsArray[playerCardIndex][1];
+                Log.i("pVal: ", "" + playerCardValue);
                 ImageView playerCard = (ImageView) findViewById(playerCardsID[i]);
                 playerCard.setImageResource(cardsArray[playerCardIndex][0]);
                 playerCard.setVisibility(View.VISIBLE);
                 // House card.
                 int houseCardIndex = shuffleCards();
-                int houseCardValue = cardsArray[houseCardIndex][1];
+                Log.i("hIndex: ", "" + houseCardIndex);
+                houseCardValue = cardsArray[houseCardIndex][1];
+                Log.i("hVal: ", "" + houseCardValue);
                 ImageView houseCard = (ImageView) findViewById(houseCardsID[i]);
                 houseCard.setVisibility(View.VISIBLE);
                 if (i == 0) {
@@ -226,8 +244,8 @@ public class BlackJackActivity extends AppCompatActivity
                 } else {
                     houseCard.setImageResource(cardsArray[houseCardIndex][0]);
                 }
+                updateCardTotal(playerCardValue, houseCardValue);
             }
-            updateCardTotal();
         }
     }
     public void hit() {
@@ -259,15 +277,15 @@ public class BlackJackActivity extends AppCompatActivity
     public void doubleBet(){
 
     }
-    public void updateCardTotal(){
-        //Temp hardcode
-        TextView hScore = (TextView) findViewById(R.id.houseScore);
-        hScore.setText("22");
-        dealerCardTotal = Integer.parseInt(hScore.getText().toString());
+    public void updateCardTotal(int playerVal, int houseVal){
+        // Accumulate player and house card values.
+        playerVal += playerVal;
         TextView pScore = (TextView) findViewById(R.id.playerScore);
-        pScore.setText("15");
-        playerCardTotal = Integer.parseInt(pScore.getText().toString());
+        pScore.setText(String.valueOf(playerVal));
 
+        houseVal += houseVal;
+        TextView hScore = (TextView) findViewById(R.id.houseScore);
+        hScore.setText(String.valueOf(houseVal));
     }
 
     @Override
