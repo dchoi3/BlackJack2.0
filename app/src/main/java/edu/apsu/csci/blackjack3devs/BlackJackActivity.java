@@ -209,27 +209,24 @@ public class BlackJackActivity extends AppCompatActivity
      * deal supplies two initial cards to the player and the house to begin the game.
      */
     public void deal() {
-        //Check to make sure there is a bet value before executing hitShow & standShow
-        if (CurrentBetAmt > 0) {
-            ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
-            dealClear.setVisibility(View.INVISIBLE);
+        ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
+        dealClear.setVisibility(View.INVISIBLE);
 
-            ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
-            hitShow.setVisibility(View.VISIBLE);
+        ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
+        hitShow.setVisibility(View.VISIBLE);
 
-            ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
-            standShow.setVisibility(View.VISIBLE);
+        ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
+        standShow.setVisibility(View.VISIBLE);
 
-            // Place two cards for player and dealer.
-            for (int i = 0; i < 2; i++) {
+        // Place two cards for player and dealer.
+        for (int i = 0; i < 2; i++) {
 
-                // Deal cards; Pass iterator so method knows what card we are on.
-                dealPlayerCard(i);
-                dealHouseCard(i);
-            }
-            // Update display of card values.
-            updateCardTotal();
+            // Deal cards; Pass iterator so method knows what card we are on.
+            dealPlayerCard(i);
+            dealHouseCard(i);
         }
+        // Update display of card values.
+        updateCardTotal();
     }
 
     public void dealPlayerCard(int i){
