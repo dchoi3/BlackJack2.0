@@ -7,18 +7,15 @@ package edu.apsu.csci.blackjack3devs;
  * Developers: John Schmitt, Daniel Choi, Charles Fannin
  */
 
-import android.net.Uri;
-import android.provider.ContactsContract;
-import android.support.annotation.DrawableRes;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -136,7 +133,9 @@ public class BlackJackActivity extends AppCompatActivity
                         cardsDealt = true;
                         deal();
                     } else {
-                        Toast.makeText(getApplicationContext(), "Place a bet.", Toast.LENGTH_SHORT).show();
+                        Toast toast = Toast.makeText(getApplicationContext(), "Place a bet!", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.TOP, 0, 0);
+                        toast.show();
                     }
                 }
                 if (buttonID == R.drawable.refresh) {
@@ -176,7 +175,9 @@ public class BlackJackActivity extends AppCompatActivity
             return true;
 
         }else if(item.getItemId() == R.id.actionQuit){
-
+            Intent aboutIntent = new Intent(this, HomeActivity.class);
+            startActivity(aboutIntent);
+            return true;
         }
 
         return false;
@@ -432,9 +433,11 @@ public class BlackJackActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        cardsDealt = false;
-        playerStands = false;
-        clearBoard(); // Is this temp?
+        //This shouldn't clear the board. It should go back to home screen but save the data first to a file.
+        //cardsDealt = false;
+        //playerStands = false;
+        //clearBoard();
+        super.onBackPressed();
     }
 
 
