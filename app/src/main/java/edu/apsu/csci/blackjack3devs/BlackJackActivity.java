@@ -157,6 +157,14 @@ public class BlackJackActivity extends AppCompatActivity
             Toast.makeText(getApplicationContext(), "DOUBLE!", Toast.LENGTH_SHORT).show();
             doubleBet();
         }
+        // Has to be here so you cant bet until refresh button clicked this is 1 of 2 requirements
+        if(v.getId() == R.id.dealButton && buttonID == R.drawable.refresh){
+            cardsDealt = true;
+            buttonID = R.drawable.deal;
+            ImageButton ib = (ImageButton) findViewById(R.id.dealButton);
+            ib.setImageResource(R.drawable.deal);
+            clearBoard();
+         }
     }
 
     public void popupMenu(View v) {
@@ -293,12 +301,12 @@ public class BlackJackActivity extends AppCompatActivity
         if(PlayerStands) {
             if (getHouseCardValue() > 21 && getPlayerCardValue() <= 21) {
                 Winner = PlayerString;
-                Toast.makeText(getApplicationContext(), "Player won the bet", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Player won the bet", Toast.LENGTH_SHORT).show();
             } else if (getHouseCardValue() == 21) {
                 Winner = HouseString;
             } else if (getHouseCardValue() >= getPlayerCardValue() && getHouseCardValue() <= 21) {
                 Winner = HouseString;
-                Toast.makeText(getApplicationContext(), "Player Lost the bet", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Player Lost the bet", Toast.LENGTH_SHORT).show();
             } else {
                 Winner = NoWinner;
             }
@@ -361,6 +369,7 @@ public class BlackJackActivity extends AppCompatActivity
             }
         }
         if (whoWon.equals(PlayerString) || whoWon.equals(HouseString)) {
+            cardsDealt = true;// Has to be here so you cant bet until refresh button clicked this is 2 of 2 requirements
             ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
             dealClear.setVisibility(View.VISIBLE);
             dealClear.setImageResource(buttonID);
