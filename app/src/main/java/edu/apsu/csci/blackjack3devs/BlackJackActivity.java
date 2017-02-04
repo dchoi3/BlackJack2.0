@@ -285,13 +285,19 @@ public class BlackJackActivity extends AppCompatActivity
 
     public void dealHouseCard(int i) {
         int houseCardIndex = shuffleCards();
-        setHouseCardValue(cardsArray[houseCardIndex][1]);
+        // removed to correct house value on facedown card setHouseCardValue(cardsArray[houseCardIndex][1]);
         ImageView houseCard = (ImageView) findViewById(houseCardsID[i]);
         houseCard.setVisibility(View.VISIBLE);
         if (i == 0) {
             houseCard.setImageResource(R.drawable.facedown);
+            if(getHouseCardValue() == 0) {
+                setHouseCardValue(0);
+            }else{
+                setHouseCardValue(cardsArray[houseCardIndex][1]);
+            }
         } else {
             houseCard.setImageResource(cardsArray[houseCardIndex][0]);
+            setHouseCardValue(cardsArray[houseCardIndex][1]);
         }
         houseCardPosition++;
     }
