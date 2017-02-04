@@ -5,22 +5,17 @@ package edu.apsu.csci.blackjack3devs;
  * Course: CSCI4020 Spring 2017
  * Team Name: TBD
  * Developers: John Schmitt, Daniel Choi, Charles Fannin
- * project 1
  */
 
 import android.content.Intent;
-import android.net.Uri;
-import android.provider.ContactsContract;
-import android.support.annotation.DrawableRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -129,8 +124,8 @@ public class BlackJackActivity extends AppCompatActivity
                 CurrentBetAmt = 0;
                 String newBet = Integer.toString(CurrentBetAmt);
                 String newWallet = Integer.toString(walletAmt);
-                betAmtTV.setText(String.valueOf("$" + newBet));
-                WalletAmtTV.setText(String.valueOf("Wallet: $" + newWallet));
+                betAmtTV.setText("$" + newBet);
+                WalletAmtTV.setText("Wallet: $" + newWallet);
             }
             if (v.getId() == R.id.dealButton) {
                 if (buttonID == R.drawable.deal) {
@@ -138,7 +133,9 @@ public class BlackJackActivity extends AppCompatActivity
                         cardsDealt = true;
                         deal();
                     } else {
-                        Toast.makeText(getApplicationContext(), "Place a bet.", Toast.LENGTH_SHORT).show();
+                        Toast toast = Toast.makeText(getApplicationContext(), "Place a bet!", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.TOP, 0, 0);
+                        toast.show();
                     }
                 }
                 if (buttonID == R.drawable.refresh) {
@@ -160,13 +157,6 @@ public class BlackJackActivity extends AppCompatActivity
             Toast.makeText(getApplicationContext(), "DOUBLE!", Toast.LENGTH_SHORT).show();
             doubleBet();
         }
-        if(v.getId() == R.id.dealButton && buttonID == R.drawable.refresh){
-            cardsDealt = true;
-            buttonID = R.drawable.deal;
-            ImageButton ib = (ImageButton) findViewById(R.id.dealButton);
-            ib.setImageResource(R.drawable.deal);
-            clearBoard();
-        }
     }
 
     public void popupMenu(View v) {
@@ -182,13 +172,14 @@ public class BlackJackActivity extends AppCompatActivity
 
         if(item.getItemId() == R.id.actionRestart){
             clearBoard();
-            walletAmt = 2000;
             return true;
 
         }else if(item.getItemId() == R.id.actionQuit){
-            Intent in = new Intent(getApplicationContext(), HomeActivity.class);
-            startActivity(in);
+            Intent aboutIntent = new Intent(this, HomeActivity.class);
+            startActivity(aboutIntent);
+            return true;
         }
+
         return false;
     }
 
@@ -200,8 +191,8 @@ public class BlackJackActivity extends AppCompatActivity
         walletAmt -= m;
         String newBet = Integer.toString(CurrentBetAmt);
         String newWallet = Integer.toString(walletAmt);
-        betAmtTV.setText(String.valueOf("$" + newBet));
-        WalletAmtTV.setText(String.valueOf("Wallet: $" + newWallet));
+        betAmtTV.setText("$" + newBet);
+        WalletAmtTV.setText("Wallet: $" + newWallet);
 
     }
 
@@ -349,18 +340,16 @@ public class BlackJackActivity extends AppCompatActivity
             }
             if (whoWon.equals(PlayerString)) {
                 walletAmt += (CurrentBetAmt * 2);
-                walletTV2.setText(String.valueOf("Wallet: " + walletAmt));
+                walletTV2.setText("Wallet: " + walletAmt);
                 buttonID = R.drawable.refresh;
                 clearBoard();
-
-                message.setText(String.valueOf("You Won!"));
+                message.setText("You Win!");
             } else if (whoWon.equals(HouseString)) {
-                Toast.makeText(getApplicationContext(),"Dealer won game",Toast.LENGTH_SHORT).show();
-                walletTV2.setText(String.valueOf("Wallet: " + walletAmt));
-
+                //Toast.makeText(getApplicationContext(),"Dealer won game",Toast.LENGTH_SHORT).show();
+                walletTV2.setText("Wallet: " + walletAmt);
                 buttonID = R.drawable.refresh;
                 clearBoard();
-                message.setText(String.valueOf("You Lost!"));
+                message.setText("You Lost!");
             } else {
                 buttonID = R.drawable.deal;
             }
@@ -372,7 +361,6 @@ public class BlackJackActivity extends AppCompatActivity
             }
         }
         if (whoWon.equals(PlayerString) || whoWon.equals(HouseString)) {
-            cardsDealt = true;
             ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
             dealClear.setVisibility(View.VISIBLE);
             dealClear.setImageResource(buttonID);
@@ -398,7 +386,7 @@ public class BlackJackActivity extends AppCompatActivity
     /**
      * setPlayerCardValue accumulates the value of the player's cards.
      *
-     * "@param pCardVal"
+     * @param pCardVal
      */
     public void setPlayerCardValue(int pCardVal) {
         playerCardValue += pCardVal;
@@ -407,7 +395,7 @@ public class BlackJackActivity extends AppCompatActivity
     /**
      * setHouseCardValue accumulates the value of the house's cards.
      *
-     * "@param hCardVal"
+     * @param hCardVal
      */
     public void setHouseCardValue(int hCardVal) {
         houseCardValue += hCardVal;
@@ -445,9 +433,11 @@ public class BlackJackActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        cardsDealt = false;
-        playerStands = false;
-        clearBoard(); // Is this temp?
+        //This shouldn't clear the board. It should go back to home screen but save the data first to a file.
+        //cardsDealt = false;
+        //playerStands = false;
+        //clearBoard();
+        super.onBackPressed();
     }
 
 
