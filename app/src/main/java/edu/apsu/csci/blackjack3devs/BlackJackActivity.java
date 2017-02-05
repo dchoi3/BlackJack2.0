@@ -36,6 +36,10 @@ public class BlackJackActivity extends AppCompatActivity
     // Vars for tracking iteration of card positions.
     int playerCardPosition = 0;
     int houseCardPosition = 0;
+    int deckCardPosition = 0;
+
+    //Remembering facedown card
+    int faceDownIndex;
 
     // How many cards have been dealt
     int numHouseCardsDealt = 0;
@@ -86,21 +90,20 @@ public class BlackJackActivity extends AppCompatActivity
             R.id.playerC6, R.id.playerC7, R.id.playerC8, R.id.playerC9,
     };
 
+    private int[] buttonsID = {R.id.chip5, R.id.chip10, R.id.chip25, R.id.chip50, R.id.chip75, R.id.chip100, R.id.clearBet,
+            R.id.hitButton, R.id.standButton, R.id.doubleButton, R.id.dealButton};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_black_jack);
 
-        int[] buttonsID = {R.id.chip5, R.id.chip10, R.id.chip25, R.id.chip50, R.id.chip75, R.id.chip100, R.id.clearBet,
-                R.id.hitButton, R.id.standButton, R.id.doubleButton, R.id.dealButton};
-
         clearBoard();
-
         for (int id : buttonsID) {
             ImageButton ib = (ImageButton) findViewById(id);
             ib.setOnClickListener(this);
         }
-    }
+    }//OnCreate
 
     @Override
     public void onClick(View v) {
@@ -182,7 +185,7 @@ public class BlackJackActivity extends AppCompatActivity
             ib.setImageResource(R.drawable.deal);
             clearBoard();
          }
-    }
+    }//OnClick
 
     public void popupMenu(View v) {
         PopupMenu popup = new PopupMenu(this, v);
@@ -190,7 +193,7 @@ public class BlackJackActivity extends AppCompatActivity
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.popupmenu, popup.getMenu());
         popup.show();
-    }
+    }//PopUpMenu
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
@@ -198,15 +201,13 @@ public class BlackJackActivity extends AppCompatActivity
         if(item.getItemId() == R.id.actionRestart){
             clearBoard();
             return true;
-
         }else if(item.getItemId() == R.id.actionQuit){
             Intent aboutIntent = new Intent(this, HomeActivity.class);
             startActivity(aboutIntent);
             return true;
         }
-
         return false;
-    }
+    }//Menu Item Click
 
     public void updateWalletAndBet(int m) {
         //Updates the wallet and bet textviews. Just to reduce the code a little bit.
@@ -219,30 +220,33 @@ public class BlackJackActivity extends AppCompatActivity
         betAmtTV.setText("$" + newBet);
         WalletAmtTV.setText("Wallet: $" + newWallet);
 
-    }
+    }//Update Wallet and Bet
 
     public void clearBoard() {
 
-        int[] cardsID = {R.id.houseC1, R.id.houseC2, R.id.houseC3, R.id.houseC4, R.id.houseC5, R.id.houseC6,
+        int[] allCardsID = {R.id.houseC1, R.id.houseC2, R.id.houseC3, R.id.houseC4, R.id.houseC5, R.id.houseC6,
                 R.id.houseC7, R.id.houseC8, R.id.houseC9, R.id.playerC1, R.id.playerC2, R.id.playerC3,
                 R.id.playerC4, R.id.playerC5, R.id.playerC6, R.id.playerC7, R.id.playerC8, R.id.playerC9,};
-        for (int id : cardsID) {
+        int[] buttonsID = {R.id.doubleButton, R.id.hitButton, R.id.standButton};
+        int[] textID = {R.id.houseScore, R.id.playerScore};
+        TextView betTv = (TextView) findViewById(R.id.betTextView);
+
+        for (int id : allCardsID) {
             ImageView iv = (ImageView) findViewById(id);
             iv.setVisibility(View.INVISIBLE);
         }
-        int[] buttonsID = {R.id.doubleButton, R.id.hitButton, R.id.standButton};
         for (int id : buttonsID) {
             ImageButton iv = (ImageButton) findViewById(id);
             iv.setVisibility(View.INVISIBLE);
         }
-        int[] textID = {R.id.houseScore, R.id.playerScore};
         for (int id : textID) {
             TextView tv = (TextView) findViewById(id);
             tv.setText("");
         }
         findViewById(R.id.dealButton).setVisibility(View.VISIBLE);
-        TextView tv = (TextView) findViewById(R.id.betTextView);
-        tv.setText("$0");
+
+        shuffleCards();
+        betTv.setText("$0");
         CurrentBetAmt = 0;
         playerStands = false;
         cardsDealt = false;
@@ -256,7 +260,7 @@ public class BlackJackActivity extends AppCompatActivity
         houseCardValue = 0;
         numHouseCardsDealt = 0;
         numPlayerCardsDealt =0;
-    }
+    }//Clear Board
 
     /**
      * shuffleCards uses multidimensional array to set a
@@ -264,10 +268,30 @@ public class BlackJackActivity extends AppCompatActivity
      *
      * @return Returns the index of a single random card.
      */
-    public int shuffleCards() {
-        Random randomCardGenerator = new Random();
-        return randomCardGenerator.nextInt(cardsArray.length - 1);
-    }
+    public void shuffleCards() {
+
+        //Log.i("=========","Inside shuffle");
+        Random randCard = new Random();
+        for(int x = cardsArray.length - 1; x > 0; x--){
+
+            int index = randCard.nextInt(x+1);
+            //Store random number location between (0 to x) to temp variable
+            int a = cardsArray[index][0];
+            int b = cardsArray[index][1];
+            //Store last card location to random number location
+            cardsArray[index][0] = cardsArray[x][0];
+            cardsArray[index][1] = cardsArray[x][1];
+            //Store random number location to last card location so it is stored.
+            cardsArray[x][0] = a;
+            cardsArray[x][1] = b;
+
+
+
+        }
+
+        //Random randomCardGenerator = new Random();
+       // return randomCardGenerator.nextInt(cardsArray.length-1);
+    }//Shuffle Cards
 
     /**
      * deal supplies two initial cards to the player and the house to begin the game.
@@ -284,16 +308,15 @@ public class BlackJackActivity extends AppCompatActivity
 
         // Place two cards for player and dealer.
         for (int i = 0; i < 2; i++) {
-
             // Deal cards; Pass iterator so method knows what card we are on.
             dealPlayerCard(i);
             dealHouseCard(i);
         }
-        // Update display of card values.
-        updateCardTotal();
-    }
+        updateCardTotal(); // Update display of card values.
+    }//Deal cards
 
     public void dealPlayerCard(int i) {
+        /*
         int playerCardIndex = shuffleCards();
         setPlayerCardValue(cardsArray[playerCardIndex][1]);
         ImageView playerCard = (ImageView) findViewById(playerCardsID[i]);
@@ -302,20 +325,35 @@ public class BlackJackActivity extends AppCompatActivity
         playerCardPosition++;
         numPlayerCardsDealt++;
         playerCardImgId[numPlayerCardsDealt][0] = cardsArray[playerCardIndex][0];
-        //Log.i("=====", "playercdID =    " + cardsArray[playerCardIndex][0]);
-        //Log.i("=====", "PlayercdImgId = " + playerCardImgId[numPlayerCardsDealt][0]);
+
+        Log.i("=====", "playercdID =    " + cardsArray[playerCardIndex][0]);
+        Log.i("=====", "PlayercdImgId = " + playerCardImgId[numPlayerCardsDealt][0]);
+        */
+
+        ImageView playerCard = (ImageView) findViewById(playerCardsID[i]);
+        playerCard.setImageResource(cardsArray[deckCardPosition][0]);
+        playerCard.setVisibility(View.VISIBLE);
+        setPlayerCardValue(cardsArray[deckCardPosition][1]);
+        playerCardImgId[numPlayerCardsDealt][0] = cardsArray[deckCardPosition][0];
+        playerCardPosition++;
+        numPlayerCardsDealt++;
+        deckCardPosition++;
+        //check for reshuffle
+
+
     }
 
     public void dealHouseCard(int i) {
+    /*
         int houseCardIndex = shuffleCards();
-        // removed to correct house value on facedown card setHouseCardValue(cardsArray[houseCardIndex][1]);
+        //removed to correct house value on facedown card setHouseCardValue(cardsArray[houseCardIndex][1]);
         ImageView houseCard = (ImageView) findViewById(houseCardsID[i]);
         houseCard.setVisibility(View.VISIBLE);
         if (i == 0) {
             houseCard.setImageResource(R.drawable.facedown);
-            if(getHouseCardValue() == 0) {
+             if(getHouseCardValue() == 0) {
                 setHouseCardValue(0);
-            }else{
+             }else{
                 setHouseCardValue(cardsArray[houseCardIndex][1]);
             }
         } else {
@@ -325,7 +363,25 @@ public class BlackJackActivity extends AppCompatActivity
             houseCardImgId[numHouseCardsDealt][0] = cardsArray[houseCardIndex][0];
         }
         houseCardPosition++;
-    }
+    */
+
+        ImageView houseCard = (ImageView) findViewById(houseCardsID[i]);
+        if(i==0){
+            houseCard.setImageResource(R.drawable.facedown);
+            faceDownIndex = deckCardPosition;
+        }else{
+            houseCard.setImageResource(cardsArray[deckCardPosition][0]);
+            setHouseCardValue(cardsArray[deckCardPosition][1]);
+
+            houseCardImgId[numHouseCardsDealt][0] = cardsArray[deckCardPosition][0];
+        }
+
+        deckCardPosition++;
+        numHouseCardsDealt++;
+        houseCard.setVisibility(View.VISIBLE);
+
+
+    }//dealHouseCard
 
     public String CheckForWinner(boolean PlayerStands) {
         String Winner = NoWinner;
@@ -350,6 +406,7 @@ public class BlackJackActivity extends AppCompatActivity
     }
 
     public void hit() {
+        Log.i("====", "hit");
         TextView walletTV2 = (TextView) findViewById(R.id.walletTextView);
         TextView message = (TextView) findViewById(R.id.betTextView);
         // Now using get methods to retrieve house and card totals for comparison.
@@ -428,7 +485,7 @@ public class BlackJackActivity extends AppCompatActivity
                 buttonID = R.drawable.deal;
             }
         } else {
-            CheckForWinner(false); //Added by Daniel.. It should be checked even if you do not stand.
+            CheckForWinner(false);
             if (playerCardPosition < 9) {
                 dealPlayerCard(playerCardPosition);
                 updateCardTotal();
@@ -490,49 +547,16 @@ public class BlackJackActivity extends AppCompatActivity
         ib1.setVisibility(View.INVISIBLE);
     }
 
-    public void doubleBet() {
+    public void doubleBet() {}
 
-    }
+    public void setPlayerCardValue(int pCardVal) {playerCardValue += pCardVal;}//Set player card value
 
-    /**
-     * setPlayerCardValue accumulates the value of the player's cards.
-     *
-     * @param pCardVal
-     */
-    public void setPlayerCardValue(int pCardVal) {
-        playerCardValue += pCardVal;
-    }
+    public void setHouseCardValue(int hCardVal) {houseCardValue += hCardVal;}//Set house player value
 
-    /**
-     * setHouseCardValue accumulates the value of the house's cards.
-     *
-     * @param hCardVal
-     */
-    public void setHouseCardValue(int hCardVal) {
-        houseCardValue += hCardVal;
-    }
+    public int getPlayerCardValue() {return playerCardValue;}//Get player card value
 
-    /**
-     * getPlayerCardValue returns the value of the player's card.
-     *
-     * @return The value of the player's card.
-     */
-    public int getPlayerCardValue() {
-        return playerCardValue;
-    }
+    public int getHouseCardValue() {return houseCardValue;}//Get house card Value
 
-    /**
-     * getHouseCardValue returns the value of the house's card.
-     *
-     * @return The value of the house's card.
-     */
-    public int getHouseCardValue() {
-        return houseCardValue;
-    }
-
-    /**
-     * updateCardTotal updates the UI with the player's and house's card totals.
-     */
     public void updateCardTotal() {
         // Display player and house card values.
         TextView pScore = (TextView) findViewById(R.id.playerScore);
@@ -540,7 +564,7 @@ public class BlackJackActivity extends AppCompatActivity
 
         TextView hScore = (TextView) findViewById(R.id.houseScore);
         hScore.setText(String.valueOf(houseCardValue));
-    }
+    }//Update card total display
 
     @Override
     public void onBackPressed() {
@@ -549,7 +573,7 @@ public class BlackJackActivity extends AppCompatActivity
         //playerStands = false;
         //clearBoard();
         super.onBackPressed();
-    }
+    }//On back pressed
 
 
 
