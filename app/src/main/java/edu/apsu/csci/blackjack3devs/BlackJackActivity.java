@@ -37,6 +37,19 @@ public class BlackJackActivity extends AppCompatActivity
     int playerCardPosition = 0;
     int houseCardPosition = 0;
 
+    // How many cards have been dealt
+    int numHouseCardsDealt = 0;
+    int numPlayerCardsDealt = 0;
+    int[][] houseCardImgId = new int[9][1];
+    int[][] playerCardImgId = new int[9][1];
+
+    // Position of Aces (-1 is not drawn)
+    int clubAcePos = -1;
+    int spadeAcePos = -1;
+    int heartAcePos = -1;
+    int diamondAcePos = -1;
+
+    // Boolean Vars
     boolean cardsDealt = false;
     boolean playerStands = false;
     int buttonID = R.drawable.deal; // ID for Deal Button and ClearBet(TEMP)
@@ -143,6 +156,10 @@ public class BlackJackActivity extends AppCompatActivity
                     ImageButton ib = (ImageButton) findViewById(R.id.dealButton);
                     ib.setImageResource(R.drawable.deal);
                     clearBoard();
+                    clubAcePos = -1;
+                    spadeAcePos = -1;
+                    heartAcePos = -1;
+                    diamondAcePos = -1;
                 }
             }
         }
@@ -237,6 +254,8 @@ public class BlackJackActivity extends AppCompatActivity
         playerStands = false;
         playerCardValue = 0;
         houseCardValue = 0;
+        numHouseCardsDealt = 0;
+        numPlayerCardsDealt =0;
     }
 
     /**
@@ -281,6 +300,10 @@ public class BlackJackActivity extends AppCompatActivity
         playerCard.setImageResource(cardsArray[playerCardIndex][0]);
         playerCard.setVisibility(View.VISIBLE);
         playerCardPosition++;
+        numPlayerCardsDealt++;
+        playerCardImgId[numPlayerCardsDealt][0] = cardsArray[playerCardIndex][0];
+        //Log.i("=====", "playercdID =    " + cardsArray[playerCardIndex][0]);
+        //Log.i("=====", "PlayercdImgId = " + playerCardImgId[numPlayerCardsDealt][0]);
     }
 
     public void dealHouseCard(int i) {
@@ -298,6 +321,8 @@ public class BlackJackActivity extends AppCompatActivity
         } else {
             houseCard.setImageResource(cardsArray[houseCardIndex][0]);
             setHouseCardValue(cardsArray[houseCardIndex][1]);
+            numHouseCardsDealt++;
+            houseCardImgId[numHouseCardsDealt][0] = cardsArray[houseCardIndex][0];
         }
         houseCardPosition++;
     }
@@ -329,6 +354,8 @@ public class BlackJackActivity extends AppCompatActivity
         TextView message = (TextView) findViewById(R.id.betTextView);
         // Now using get methods to retrieve house and card totals for comparison.
         // Check for winner before dealing another card
+        // Convert Aces to 1 point if over 21
+
         String whoWon ="";
         Boolean blackJack; // If dealer has 21
         Boolean playerBust; // If Player hits over 21
@@ -351,6 +378,39 @@ public class BlackJackActivity extends AppCompatActivity
             if (houseCardPosition < 9) {
                 dealHouseCard(houseCardPosition);
                 updateCardTotal();
+                if(houseCardValue > 21) {
+                        int[] aces = {R.drawable.ca, R.drawable.ha, R.drawable.da, R.drawable.sa, 11};
+                        for (int i = 0; i < numHouseCardsDealt; i++) {
+                            for(int j=0; j<aces.length; j++) {
+                                Log.i("////", "Drawn Ace id = " + houseCardImgId[i][0]);
+                                Log.i("////", "My Ace id = " + aces[i]);
+                                if (houseCardImgId[i][0] == aces[j]){
+                                    if(aces[j] == aces[0]){
+                                        clubAcePos = i;
+                                    }else if(aces[j] == aces[1]){
+                                        heartAcePos = i;
+                                    }else if(aces[j] == aces[2]){
+                                        diamondAcePos = i;
+                                    }else{
+                                        spadeAcePos =i;
+                                    }
+                                }
+                            }
+                        if(clubAcePos > 0 && houseCardValue > 21){
+                            houseCardValue -= 10;
+                        }
+                        if(heartAcePos > 0 && houseCardValue > 21){
+                            houseCardValue -= 10;
+                        }
+                        if(diamondAcePos > 0 && houseCardValue > 21){
+                            houseCardValue -= 10;
+                        }
+                        if(spadeAcePos > 0 && houseCardValue > 21){
+                            houseCardValue -=10;
+                        }
+                    }
+                    updateCardTotal();
+                }
             }
             if (whoWon.equals(PlayerString)) {
                 walletAmt += (CurrentBetAmt * 2);
@@ -371,6 +431,42 @@ public class BlackJackActivity extends AppCompatActivity
             CheckForWinner(false); //Added by Daniel.. It should be checked even if you do not stand.
             if (playerCardPosition < 9) {
                 dealPlayerCard(playerCardPosition);
+                updateCardTotal();
+                if(playerCardValue > 21) {
+                    Log.i("--------","Player Card > 21");
+                    int[] aces = {R.drawable.ca, R.drawable.ha, R.drawable.da, R.drawable.sa, 11};
+                    for (int i = 0; i < numPlayerCardsDealt; i++) {
+                        Log.i("=====","player card position "+i);
+                        ImageView playerCard = (ImageView) findViewById(playerCardsID[i]);
+                        for(int j=0; j<aces.length; j++) {
+                            Log.i("////", "Drawn Ace id = " + playerCardImgId[i][0]);
+                            Log.i("////", "My Ace id = " + aces[i]);
+                            if (playerCardImgId[i][0] == aces[j]){
+                                if(aces[j] == aces[0]){
+                                    clubAcePos = i;
+                                }else if(aces[j] == aces[1]){
+                                    heartAcePos = i;
+                                }else if(aces[j] == aces[2]){
+                                    diamondAcePos = i;
+                                }else{
+                                    spadeAcePos =i;
+                                }
+                            }
+                        }
+                        if(clubAcePos > 0 && playerCardValue > 21){
+                            playerCardValue -= 10;
+                        }
+                        if(heartAcePos > 0 && playerCardValue > 21){
+                            playerCardValue -= 10;
+                        }
+                        if(diamondAcePos > 0 && playerCardValue > 21){
+                            playerCardValue -= 10;
+                        }
+                        if(spadeAcePos > 0 && playerCardValue > 21){
+                            playerCardValue -=10;
+                        }
+                    }
+                }
                 updateCardTotal();
             }
         }
