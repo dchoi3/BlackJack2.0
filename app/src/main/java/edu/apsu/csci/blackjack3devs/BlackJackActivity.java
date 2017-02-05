@@ -49,7 +49,11 @@ public class BlackJackActivity extends AppCompatActivity
     int heartAcePos = -1;
     int diamondAcePos = -1;
 
-    // Boolean Vars
+    // Boolean Vars to track if Ace has been played
+    boolean clubAcePlayed = false;
+    boolean spadeAcePlayed = false;
+    boolean diamondAcePlayed = false;
+    boolean heartAcePlayed = false;
     boolean cardsDealt = false;
     boolean playerStands = false;
     int buttonID = R.drawable.deal; // ID for Deal Button and ClearBet(TEMP)
@@ -256,6 +260,10 @@ public class BlackJackActivity extends AppCompatActivity
         houseCardValue = 0;
         numHouseCardsDealt = 0;
         numPlayerCardsDealt =0;
+        clubAcePlayed = false;
+        spadeAcePlayed = false;
+        diamondAcePlayed = false;
+        heartAcePlayed = false;
     }
 
     /**
@@ -348,7 +356,51 @@ public class BlackJackActivity extends AppCompatActivity
         }
         return Winner;
     }
-
+    public boolean ifPlayerHasAces(){
+        boolean checkedAces = false;
+        //Log.i("--------","Player Card > 21");
+        int[] aces = {R.drawable.ca, R.drawable.ha, R.drawable.da, R.drawable.sa};
+        for (int i = 0; i < numPlayerCardsDealt; i++) {
+           // Log.i("=====","player card position "+i);
+            for(int j=0; j<aces.length; j++) {
+                // Out of bounds exception
+                if (playerCardImgId[i][0] == aces[j]){
+                    if(aces[j] == aces[0]){
+                        clubAcePos = i;
+                    }else if(aces[j] == aces[1]){
+                        heartAcePos = i;
+                    }else if(aces[j] == aces[2]){
+                        diamondAcePos = i;
+                    }else{
+                        spadeAcePos = i;
+                    }
+                }
+            }
+            if(clubAcePos > 0 && playerCardValue > 21 && !clubAcePlayed){
+                playerCardValue -= 10;
+                clubAcePlayed = true;
+                checkedAces = true;
+            }
+            if(heartAcePos > 0 && playerCardValue > 21 && !heartAcePlayed){
+                playerCardValue -= 10;
+                heartAcePlayed= true;
+                checkedAces = true;
+            }
+            if(diamondAcePos > 0 && playerCardValue > 21 && !diamondAcePlayed){
+                playerCardValue -= 10;
+                diamondAcePlayed = true;
+                checkedAces = true;
+            }
+            if(spadeAcePos > 0 && playerCardValue > 21 && !spadeAcePlayed){
+                playerCardValue -=10;
+                spadeAcePlayed = true;
+                checkedAces = true;
+            }
+        }
+        CheckForWinner(false);
+        updateCardTotal();
+        return checkedAces;
+    }
     public void hit() {
         TextView walletTV2 = (TextView) findViewById(R.id.walletTextView);
         TextView message = (TextView) findViewById(R.id.betTextView);
@@ -364,12 +416,19 @@ public class BlackJackActivity extends AppCompatActivity
         }else{
             blackJack = false;
         }
-        if(playerCardValue > 21){
-            playerBust = true;
+        if(playerCardValue > 21) {
+            boolean hasAces = ifPlayerHasAces();
+
+            if (!hasAces) {
+                playerBust = true;
+            } else {
+                playerBust = false;
+            }
         }else{
             playerBust = false;
         }
         if (playerStands || blackJack || playerBust) {
+            Log.i("------", "Player has busted");
             if(playerBust){
                 whoWon = HouseString;
             }else {
@@ -379,11 +438,10 @@ public class BlackJackActivity extends AppCompatActivity
                 dealHouseCard(houseCardPosition);
                 updateCardTotal();
                 if(houseCardValue > 21) {
-                        int[] aces = {R.drawable.ca, R.drawable.ha, R.drawable.da, R.drawable.sa, 11};
+                        int[] aces = {R.drawable.ca, R.drawable.ha, R.drawable.da, R.drawable.sa};
                         for (int i = 0; i < numHouseCardsDealt; i++) {
                             for(int j=0; j<aces.length; j++) {
-                                Log.i("////", "Drawn Ace id = " + houseCardImgId[i][0]);
-                                Log.i("////", "My Ace id = " + aces[i]);
+                               // Out of bounds Exception
                                 if (houseCardImgId[i][0] == aces[j]){
                                     if(aces[j] == aces[0]){
                                         clubAcePos = i;
@@ -396,18 +454,22 @@ public class BlackJackActivity extends AppCompatActivity
                                     }
                                 }
                             }
-                        if(clubAcePos > 0 && houseCardValue > 21){
-                            houseCardValue -= 10;
-                        }
-                        if(heartAcePos > 0 && houseCardValue > 21){
-                            houseCardValue -= 10;
-                        }
-                        if(diamondAcePos > 0 && houseCardValue > 21){
-                            houseCardValue -= 10;
-                        }
-                        if(spadeAcePos > 0 && houseCardValue > 21){
-                            houseCardValue -=10;
-                        }
+                            if(clubAcePos > 0 && houseCardValue > 21 && !clubAcePlayed){
+                                houseCardValue -= 10;
+                                clubAcePlayed = true;
+                            }
+                            if(heartAcePos > 0 && houseCardValue > 21 && !heartAcePlayed){
+                                houseCardValue -= 10;
+                                heartAcePlayed= true;
+                            }
+                            if(diamondAcePos > 0 && houseCardValue > 21 && !diamondAcePlayed){
+                                houseCardValue -= 10;
+                                diamondAcePlayed = true;
+                            }
+                            if(spadeAcePos > 0 && houseCardValue > 21 && !spadeAcePlayed){
+                                houseCardValue -=10;
+                                spadeAcePlayed = true;
+                            }
                     }
                     updateCardTotal();
                 }
@@ -433,39 +495,7 @@ public class BlackJackActivity extends AppCompatActivity
                 dealPlayerCard(playerCardPosition);
                 updateCardTotal();
                 if(playerCardValue > 21) {
-                    Log.i("--------","Player Card > 21");
-                    int[] aces = {R.drawable.ca, R.drawable.ha, R.drawable.da, R.drawable.sa, 11};
-                    for (int i = 0; i < numPlayerCardsDealt; i++) {
-                        Log.i("=====","player card position "+i);
-                        ImageView playerCard = (ImageView) findViewById(playerCardsID[i]);
-                        for(int j=0; j<aces.length; j++) {
-                            Log.i("////", "Drawn Ace id = " + playerCardImgId[i][0]);
-                            Log.i("////", "My Ace id = " + aces[i]);
-                            if (playerCardImgId[i][0] == aces[j]){
-                                if(aces[j] == aces[0]){
-                                    clubAcePos = i;
-                                }else if(aces[j] == aces[1]){
-                                    heartAcePos = i;
-                                }else if(aces[j] == aces[2]){
-                                    diamondAcePos = i;
-                                }else{
-                                    spadeAcePos =i;
-                                }
-                            }
-                        }
-                        if(clubAcePos > 0 && playerCardValue > 21){
-                            playerCardValue -= 10;
-                        }
-                        if(heartAcePos > 0 && playerCardValue > 21){
-                            playerCardValue -= 10;
-                        }
-                        if(diamondAcePos > 0 && playerCardValue > 21){
-                            playerCardValue -= 10;
-                        }
-                        if(spadeAcePos > 0 && playerCardValue > 21){
-                            playerCardValue -=10;
-                        }
-                    }
+
                 }
                 updateCardTotal();
             }
@@ -482,6 +512,7 @@ public class BlackJackActivity extends AppCompatActivity
             ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
             standShow.setVisibility(View.INVISIBLE);
         }
+        updateCardTotal();
     }
 
     public void stand() {
