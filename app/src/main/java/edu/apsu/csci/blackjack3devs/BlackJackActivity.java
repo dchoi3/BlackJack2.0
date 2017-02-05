@@ -25,6 +25,7 @@ import java.util.Random;
 
 public class BlackJackActivity extends AppCompatActivity
         implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
+
     // Variable to hold bet amount
     int CurrentBetAmt = 0;
     int walletAmt = 2000;
@@ -40,6 +41,9 @@ public class BlackJackActivity extends AppCompatActivity
 
     //Remembering facedown card
     int faceDownIndex;
+
+    //Check shuffle boolean
+    boolean shuffleCheck = true;
 
     // How many cards have been dealt
     int numHouseCardsDealt = 0;
@@ -174,7 +178,6 @@ public class BlackJackActivity extends AppCompatActivity
             hit();
         }
         if (v.getId() == R.id.standButton) {
-            //Toast.makeText(getApplicationContext(), "STAND!", Toast.LENGTH_SHORT).show();
             stand();
         }
         if (v.getId() == R.id.doubleButton) {
@@ -231,6 +234,7 @@ public class BlackJackActivity extends AppCompatActivity
         int[] allCardsID = {R.id.houseC1, R.id.houseC2, R.id.houseC3, R.id.houseC4, R.id.houseC5, R.id.houseC6,
                 R.id.houseC7, R.id.houseC8, R.id.houseC9, R.id.playerC1, R.id.playerC2, R.id.playerC3,
                 R.id.playerC4, R.id.playerC5, R.id.playerC6, R.id.playerC7, R.id.playerC8, R.id.playerC9,};
+
         int[] buttonsID = {R.id.doubleButton, R.id.hitButton, R.id.standButton};
         int[] textID = {R.id.houseScore, R.id.playerScore};
         TextView betTv = (TextView) findViewById(R.id.betTextView);
@@ -249,7 +253,10 @@ public class BlackJackActivity extends AppCompatActivity
         }
         findViewById(R.id.dealButton).setVisibility(View.VISIBLE);
 
-        shuffleCards();
+        if(shuffleCheck){
+            shuffleCards();
+            shuffleCheck = false;
+        }
         betTv.setText("$0");
         CurrentBetAmt = 0;
         playerStands = false;
@@ -278,7 +285,10 @@ public class BlackJackActivity extends AppCompatActivity
      */
     public void shuffleCards() {
 
-        //Log.i("=========","Inside shuffle");
+        Toast toast = Toast.makeText(getApplicationContext(), "Shuffling Cards", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.TOP, 0, 0);
+        toast.show();
+        
         Random randCard = new Random();
         for(int x = cardsArray.length - 1; x > 0; x--){
 
@@ -292,13 +302,11 @@ public class BlackJackActivity extends AppCompatActivity
             //Store random number location to last card location so it is stored.
             cardsArray[x][0] = a;
             cardsArray[x][1] = b;
-
-
-
         }
 
+
         //Random randomCardGenerator = new Random();
-       // return randomCardGenerator.nextInt(cardsArray.length-1);
+        //return randomCardGenerator.nextInt(cardsArray.length-1);
     }//Shuffle Cards
 
     /**
@@ -334,8 +342,8 @@ public class BlackJackActivity extends AppCompatActivity
         numPlayerCardsDealt++;
         playerCardImgId[numPlayerCardsDealt][0] = cardsArray[playerCardIndex][0];
 
-        Log.i("=====", "playercdID =    " + cardsArray[playerCardIndex][0]);
-        Log.i("=====", "PlayercdImgId = " + playerCardImgId[numPlayerCardsDealt][0]);
+        //Log.i("=====", "playercdID =    " + cardsArray[playerCardIndex][0]);
+        //Log.i("=====", "PlayercdImgId = " + playerCardImgId[numPlayerCardsDealt][0]);
         */
 
         ImageView playerCard = (ImageView) findViewById(playerCardsID[i]);
@@ -352,7 +360,7 @@ public class BlackJackActivity extends AppCompatActivity
     }
 
     public void dealHouseCard(int i) {
-    /*
+        /*
         int houseCardIndex = shuffleCards();
         //removed to correct house value on facedown card setHouseCardValue(cardsArray[houseCardIndex][1]);
         ImageView houseCard = (ImageView) findViewById(houseCardsID[i]);
@@ -371,8 +379,9 @@ public class BlackJackActivity extends AppCompatActivity
             houseCardImgId[numHouseCardsDealt][0] = cardsArray[houseCardIndex][0];
         }
         houseCardPosition++;
-    */
+        */
 
+        Log.i("--------","In deal house card");
         ImageView houseCard = (ImageView) findViewById(houseCardsID[i]);
         if(i==0){
             houseCard.setImageResource(R.drawable.facedown);
@@ -380,12 +389,12 @@ public class BlackJackActivity extends AppCompatActivity
         }else{
             houseCard.setImageResource(cardsArray[deckCardPosition][0]);
             setHouseCardValue(cardsArray[deckCardPosition][1]);
-
+            numHouseCardsDealt++;
             houseCardImgId[numHouseCardsDealt][0] = cardsArray[deckCardPosition][0];
         }
 
         deckCardPosition++;
-        numHouseCardsDealt++;
+        houseCardPosition++;
         houseCard.setVisibility(View.VISIBLE);
 
 
@@ -574,8 +583,13 @@ public class BlackJackActivity extends AppCompatActivity
 
     public void stand() {
         playerStands = true;
-        ImageButton ib1 = (ImageButton) findViewById(R.id.standButton);
-        ib1.setVisibility(View.INVISIBLE);
+        findViewById(R.id.standButton).setVisibility(View.INVISIBLE);
+    }
+
+    public void checkForShuffle(){
+        if(deckCardPosition < 22){
+            shuffleCheck = true;
+        }
     }
 
     public void doubleBet() {}
@@ -599,10 +613,6 @@ public class BlackJackActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        //This shouldn't clear the board. It should go back to home screen but save the data first to a file.
-        //cardsDealt = false;
-        //playerStands = false;
-        //clearBoard();
         super.onBackPressed();
     }//On back pressed
 
