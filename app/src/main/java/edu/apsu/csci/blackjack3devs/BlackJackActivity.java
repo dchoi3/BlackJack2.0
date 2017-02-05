@@ -8,6 +8,7 @@ package edu.apsu.csci.blackjack3devs;
  */
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
@@ -253,6 +254,7 @@ public class BlackJackActivity extends AppCompatActivity
         }
         findViewById(R.id.dealButton).setVisibility(View.VISIBLE);
 
+        checkForShuffle();
         if(shuffleCheck){
             shuffleCards();
             shuffleCheck = false;
@@ -270,7 +272,7 @@ public class BlackJackActivity extends AppCompatActivity
         playerCardValue = 0;
         houseCardValue = 0;
         numHouseCardsDealt = 0;
-        numPlayerCardsDealt =0;
+        numPlayerCardsDealt = 0;
         clubAcePlayed = false;
         spadeAcePlayed = false;
         diamondAcePlayed = false;
@@ -288,7 +290,7 @@ public class BlackJackActivity extends AppCompatActivity
         Toast toast = Toast.makeText(getApplicationContext(), "Shuffling Cards", Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.TOP, 0, 0);
         toast.show();
-        
+
         Random randCard = new Random();
         for(int x = cardsArray.length - 1; x > 0; x--){
 
@@ -314,24 +316,26 @@ public class BlackJackActivity extends AppCompatActivity
      */
     public void deal() {
         ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
-        dealClear.setVisibility(View.INVISIBLE);
-
+            dealClear.setVisibility(View.INVISIBLE);
         ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
-        hitShow.setVisibility(View.VISIBLE);
-
+            hitShow.setVisibility(View.VISIBLE);
         ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
-        standShow.setVisibility(View.VISIBLE);
-
+            standShow.setVisibility(View.VISIBLE);
+        Log.i("--------","playercardvalue 1: "+getPlayerCardValue());
         // Place two cards for player and dealer.
         for (int i = 0; i < 2; i++) {
             // Deal cards; Pass iterator so method knows what card we are on.
-            dealPlayerCard(i);
-            dealHouseCard(i);
+
+            int x = dealPlayerCard(i);
+            setPlayerCardValue(x);
+            int y = dealHouseCard(i);
+            setHouseCardValue(y);
+            Log.i("--------","playercardvalue3: "+getPlayerCardValue());
         }
         updateCardTotal(); // Update display of card values.
     }//Deal cards
 
-    public void dealPlayerCard(int i) {
+    public int dealPlayerCard(int i) {
         /*
         int playerCardIndex = shuffleCards();
         setPlayerCardValue(cardsArray[playerCardIndex][1]);
@@ -346,20 +350,22 @@ public class BlackJackActivity extends AppCompatActivity
         //Log.i("=====", "PlayercdImgId = " + playerCardImgId[numPlayerCardsDealt][0]);
         */
 
+
         ImageView playerCard = (ImageView) findViewById(playerCardsID[i]);
         playerCard.setImageResource(cardsArray[deckCardPosition][0]);
         playerCard.setVisibility(View.VISIBLE);
-        setPlayerCardValue(cardsArray[deckCardPosition][1]);
         playerCardImgId[numPlayerCardsDealt][0] = cardsArray[deckCardPosition][0];
+        int x = cardsArray[deckCardPosition][1];
+        Log.i("--------","playercardvalue2: "+ x);
         playerCardPosition++;
         numPlayerCardsDealt++;
         deckCardPosition++;
-        //check for reshuffle
+        return x;
 
 
     }
 
-    public void dealHouseCard(int i) {
+    public int dealHouseCard(int i) {
         /*
         int houseCardIndex = shuffleCards();
         //removed to correct house value on facedown card setHouseCardValue(cardsArray[houseCardIndex][1]);
@@ -381,22 +387,26 @@ public class BlackJackActivity extends AppCompatActivity
         houseCardPosition++;
         */
 
-        Log.i("--------","In deal house card");
+
         ImageView houseCard = (ImageView) findViewById(houseCardsID[i]);
         if(i==0){
             houseCard.setImageResource(R.drawable.facedown);
             faceDownIndex = deckCardPosition;
+            deckCardPosition++;
+            houseCardPosition++;
+            houseCard.setVisibility(View.VISIBLE);
+            return 0;
         }else{
             houseCard.setImageResource(cardsArray[deckCardPosition][0]);
-            setHouseCardValue(cardsArray[deckCardPosition][1]);
             numHouseCardsDealt++;
             houseCardImgId[numHouseCardsDealt][0] = cardsArray[deckCardPosition][0];
-        }
+            int score = deckCardPosition;
+            deckCardPosition++;
+            houseCardPosition++;
+            houseCard.setVisibility(View.VISIBLE);
+            return cardsArray[score][1];
 
-        deckCardPosition++;
-        houseCardPosition++;
-        houseCard.setVisibility(View.VISIBLE);
-
+    }
 
     }//dealHouseCard
 
@@ -493,7 +503,7 @@ public class BlackJackActivity extends AppCompatActivity
         }else{
             playerBust = false;
         }
-        if (playerStands || blackJack || playerBust) {
+        if(playerStands || blackJack || playerBust) {
             Log.i("------", "Player has busted");
             if(playerBust){
                 whoWon = HouseString;
@@ -501,7 +511,9 @@ public class BlackJackActivity extends AppCompatActivity
                 whoWon = CheckForWinner(true);
             }
             if (houseCardPosition < 9) {
-                dealHouseCard(houseCardPosition);
+
+                int x = dealHouseCard(houseCardPosition);
+                setHouseCardValue(x);
                 updateCardTotal();
                 if(houseCardValue > 21) {
                         int[] aces = {R.drawable.ca, R.drawable.ha, R.drawable.da, R.drawable.sa};
@@ -544,13 +556,11 @@ public class BlackJackActivity extends AppCompatActivity
                 walletAmt += (CurrentBetAmt * 2);
                 walletTV2.setText("Wallet: " + walletAmt);
                 buttonID = R.drawable.refresh;
-                clearBoard();
                 message.setText("You Win!");
             } else if (whoWon.equals(HouseString)) {
                 //Toast.makeText(getApplicationContext(),"Dealer won game",Toast.LENGTH_SHORT).show();
                 walletTV2.setText("Wallet: " + walletAmt);
                 buttonID = R.drawable.refresh;
-                clearBoard();
                 message.setText("You Lost!");
             } else {
                 buttonID = R.drawable.deal;
@@ -558,7 +568,8 @@ public class BlackJackActivity extends AppCompatActivity
         } else {
             CheckForWinner(false);
             if (playerCardPosition < 9) {
-                dealPlayerCard(playerCardPosition);
+                int x = dealPlayerCard(playerCardPosition);
+                setPlayerCardValue(x);
                 updateCardTotal();
                 if(playerCardValue > 21) {
 
@@ -587,7 +598,7 @@ public class BlackJackActivity extends AppCompatActivity
     }
 
     public void checkForShuffle(){
-        if(deckCardPosition < 22){
+        if(deckCardPosition > 30){
             shuffleCheck = true;
         }
     }
