@@ -153,8 +153,9 @@ public class BlackJackActivity extends AppCompatActivity
                         toast.setGravity(Gravity.TOP, 0, 0);
                         toast.show();
                     }
-                }else if (buttonID == R.drawable.refresh) {
-                    clearBoard();
+                }else if (buttonID == R.drawable.refresh) {//Round over
+                    if(walletAmt == 0)gameOver();
+                    else clearBoard();
                 }
             }
         }//Chips, clear, & deal
@@ -246,7 +247,6 @@ public class BlackJackActivity extends AppCompatActivity
         houseBust = false;
         faceDownFliped = false;
 
-
         setHouseCardValue(0);
         setPlayerCardValue(0);
     }//Clear Board
@@ -272,6 +272,7 @@ public class BlackJackActivity extends AppCompatActivity
             cardsArray[x][1] = b;
         }
         shuffleCheck = false;
+        deckCardPosition = 0;
     }//Shuffle Cards
 
     public void updateWalletAndBet(int m) {
@@ -294,9 +295,7 @@ public class BlackJackActivity extends AppCompatActivity
             standShow.setVisibility(View.VISIBLE);
 
         for (int i = 0; i < 2; i++) {// Deal cards; Pass iterator so method knows what card we are on.
-
             hit();
-
             int y = dealHouseCard();
             setHouseCardValue(y);
             updateCardTotalDisplay(); // Update display of card values.
@@ -316,8 +315,6 @@ public class BlackJackActivity extends AppCompatActivity
         numPlayerCardsDealt++;
         deckCardPosition++;
         return x;
-
-
     }
 
     public int dealHouseCard() {
@@ -491,7 +488,7 @@ public class BlackJackActivity extends AppCompatActivity
 
     }
 
-    public void gameover(){
+    public void gameOver(){
 
         TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
         betAmtTV.setText("GAMEOVER");
