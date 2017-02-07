@@ -68,33 +68,33 @@ public class BlackJackActivity extends AppCompatActivity
 
     // Initialize Card drawable/value array.
     private int[][] cardsArray = {
-            {R.drawable.c2, 2}, {R.drawable.h2, 2}, {R.drawable.d2, 2}, {R.drawable.s2, 2},
-            {R.drawable.c3, 3}, {R.drawable.h3, 3}, {R.drawable.d3, 3}, {R.drawable.s3, 3},
-            {R.drawable.c4, 4}, {R.drawable.h4, 4}, {R.drawable.d4, 4}, {R.drawable.s4, 4},
-            {R.drawable.c5, 5}, {R.drawable.h5, 5}, {R.drawable.d5, 5}, {R.drawable.s5, 5},
-            {R.drawable.c6, 6}, {R.drawable.h6, 6}, {R.drawable.d6, 6}, {R.drawable.s6, 6},
-            {R.drawable.c7, 7}, {R.drawable.h7, 7}, {R.drawable.d7, 7}, {R.drawable.s7, 7},
-            {R.drawable.c8, 8}, {R.drawable.h8, 8}, {R.drawable.d8, 8}, {R.drawable.s8, 8},
-            {R.drawable.c9, 9}, {R.drawable.h9, 9}, {R.drawable.d9, 9}, {R.drawable.s9, 9},
-            {R.drawable.c10, 10}, {R.drawable.h10, 10}, {R.drawable.d10, 10}, {R.drawable.s10, 10},
-            {R.drawable.cj, 10}, {R.drawable.hj, 10}, {R.drawable.dj, 10}, {R.drawable.sj, 10},
-            {R.drawable.cq, 10}, {R.drawable.hq, 10}, {R.drawable.dq, 10}, {R.drawable.sq, 10},
-            {R.drawable.ck, 10}, {R.drawable.hk, 10}, {R.drawable.dk, 10}, {R.drawable.sk, 10},
-            {R.drawable.ca, 11}, {R.drawable.ha, 11}, {R.drawable.da, 11}, {R.drawable.sa, 11},
+        {R.drawable.c2, 2}, {R.drawable.h2, 2}, {R.drawable.d2, 2}, {R.drawable.s2, 2},
+        {R.drawable.c3, 3}, {R.drawable.h3, 3}, {R.drawable.d3, 3}, {R.drawable.s3, 3},
+        {R.drawable.c4, 4}, {R.drawable.h4, 4}, {R.drawable.d4, 4}, {R.drawable.s4, 4},
+        {R.drawable.c5, 5}, {R.drawable.h5, 5}, {R.drawable.d5, 5}, {R.drawable.s5, 5},
+        {R.drawable.c6, 6}, {R.drawable.h6, 6}, {R.drawable.d6, 6}, {R.drawable.s6, 6},
+        {R.drawable.c7, 7}, {R.drawable.h7, 7}, {R.drawable.d7, 7}, {R.drawable.s7, 7},
+        {R.drawable.c8, 8}, {R.drawable.h8, 8}, {R.drawable.d8, 8}, {R.drawable.s8, 8},
+        {R.drawable.c9, 9}, {R.drawable.h9, 9}, {R.drawable.d9, 9}, {R.drawable.s9, 9},
+        {R.drawable.c10, 10}, {R.drawable.h10, 10}, {R.drawable.d10, 10}, {R.drawable.s10, 10},
+        {R.drawable.cj, 10}, {R.drawable.hj, 10}, {R.drawable.dj, 10}, {R.drawable.sj, 10},
+        {R.drawable.cq, 10}, {R.drawable.hq, 10}, {R.drawable.dq, 10}, {R.drawable.sq, 10},
+        {R.drawable.ck, 10}, {R.drawable.hk, 10}, {R.drawable.dk, 10}, {R.drawable.sk, 10},
+        {R.drawable.ca, 11}, {R.drawable.ha, 11}, {R.drawable.da, 11}, {R.drawable.sa, 11},
     };
 
     // Put card view ids in array.
     private int[] houseCardsID = {
-            R.id.houseC1, R.id.houseC2, R.id.houseC3, R.id.houseC4, R.id.houseC5,
-            R.id.houseC6, R.id.houseC7, R.id.houseC8, R.id.houseC9,
+        R.id.houseC1, R.id.houseC2, R.id.houseC3, R.id.houseC4, R.id.houseC5,
+        R.id.houseC6, R.id.houseC7, R.id.houseC8, R.id.houseC9,
     };
     private int[] playerCardsID = {
-            R.id.playerC1, R.id.playerC2, R.id.playerC3, R.id.playerC4, R.id.playerC5,
-            R.id.playerC6, R.id.playerC7, R.id.playerC8, R.id.playerC9,
+        R.id.playerC1, R.id.playerC2, R.id.playerC3, R.id.playerC4, R.id.playerC5,
+        R.id.playerC6, R.id.playerC7, R.id.playerC8, R.id.playerC9,
     };
 
-    private int[] buttonsID = {R.id.chip5, R.id.chip10, R.id.chip25, R.id.chip50, R.id.chip75, R.id.chip100, R.id.clearBet,
-            R.id.hitButton, R.id.standButton, R.id.doubleButton, R.id.dealButton};
+    private int[] buttonsID = {R.id.chip5, R.id.chip10, R.id.chip25, R.id.chip50, R.id.chip75, R.id.chip100,
+        R.id.clearBet, R.id.hitButton, R.id.standButton, R.id.doubleButton, R.id.dealButton};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -243,7 +243,6 @@ public class BlackJackActivity extends AppCompatActivity
 
         int[] buttonsID = {R.id.doubleButton, R.id.hitButton, R.id.standButton};
         int[] textID = {R.id.houseScore, R.id.playerScore};
-
 
         for (int id : playerCardsID) {
             ImageView iv = (ImageView) findViewById(id);
@@ -415,7 +414,7 @@ public class BlackJackActivity extends AppCompatActivity
                 winnerString = "Bust!\nHouse wins!";
                 showResult();
             }else if(houseCardValue == 21 && playerBlackJack){
-                winnerString = "Tie\n Bet returned";//At the moment just made it so he made his money back
+                winnerString = "Push\n Bet returned";
                 walletAmt += (CurrentBetAmt);
             }else if (playerBlackJack){
                 winnerString = "BLACKJACK!\nYou won: $"+(CurrentBetAmt*2)+"!";
