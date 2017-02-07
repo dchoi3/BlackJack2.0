@@ -7,6 +7,8 @@ package edu.apsu.csci.blackjack3devs;
  * Developers: John Schmitt, Daniel Choi, Charles Fannin
  */
 
+import com.google.android.gms.common.server.converter.StringToIntConverter;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Vibrator;
@@ -112,7 +114,6 @@ public class BlackJackActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_black_jack);
-
         clearBoard();
 
         for (int id : buttonsID) {
@@ -570,7 +571,7 @@ public class BlackJackActivity extends AppCompatActivity
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        Log.i("onPause: ", "" + walletAmt);
+        Log.i("write data: ", "" + walletAmt);
     }
 
     public void onResume(){
@@ -583,11 +584,12 @@ public class BlackJackActivity extends AppCompatActivity
                 amount = scanner.next();
                 TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
                 WalletAmtTV.setText("Wallet: $" + amount);
+                walletAmt = Integer.parseInt(amount);
             }
         } catch (FileNotFoundException e) {
             // OK if file doesn't exist.
         }
-        Log.i("onResume: ", "" + amount);
+        Log.i("read data: ", "" + amount);
     }
 
 }//BlackJackActivity
