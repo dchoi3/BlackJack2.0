@@ -409,32 +409,31 @@ public class BlackJackActivity extends AppCompatActivity
                 playerBlackJack = true;
                 playerTurn = false;
             }
-        }else {
+        }
+
+       if(!playerTurn){
 
             if(playerBust){
                 winnerString = "Bust!\nHouse wins!";
                 showResult();
-            }else if(houseCardValue == 21 && playerBlackJack){
-                winnerString = "Tie\n Bet returned";//At the moment just made it so he made his money back
+            }else if(houseCardValue == playerCardValue){
+                winnerString = "Push";//At the moment just made it so he made his money back
                 walletAmt += (CurrentBetAmt);
+                showResult();
             }else if (playerBlackJack){
                 winnerString = "BLACKJACK!\nYou won: $"+(CurrentBetAmt*2)+"!";
                 walletAmt += (CurrentBetAmt * 2);
                 showResult();
             }else if(!playerBust && houseBust) {
-                winnerString = "Player\nYou won: $"+(CurrentBetAmt*2)+"!";
+                winnerString = "You won: $"+(CurrentBetAmt*2)+"!";
                 walletAmt += (CurrentBetAmt * 2);
                 showResult();
             }else if(houseCardValue > playerCardValue){
                 winnerString = "House wins!";
                 showResult();
             }else if(houseCardValue < playerCardValue){
-                winnerString = "Player\nYou won: $"+(CurrentBetAmt*2)+"!";
+                winnerString = "You won: $"+(CurrentBetAmt*2)+"!";
                 walletAmt += (CurrentBetAmt * 2);
-                showResult();
-            }else if(houseCardValue == playerCardValue){
-                winnerString = "Tie\n Bet returned";//At the moment just made it so he made his money back
-                walletAmt += (CurrentBetAmt);
                 showResult();
             }
 
