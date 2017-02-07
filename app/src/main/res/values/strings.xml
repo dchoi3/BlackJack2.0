@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">Blackjack3Devs</string>
+    <string name="app_name">Blackjacks</string>
     <string name="aboutString">About</string>
+    <string name="aboutUsString"><u>Developers</u></string>
 </resources>
