@@ -412,8 +412,13 @@ public class BlackJackActivity extends AppCompatActivity
     public void checkIfWinner(){
         if(playerTurn) {
             if (playerCardValue > 21) {
-                if (playerAceCount > 0) handlePlayerAces();
-                else {
+                if (playerAceCount > 0){
+                    handlePlayerAces();
+                    if(playerCardValue == 21){
+                        playerBlackJack = true;
+                        playerTurn = false;
+                    }
+                }else {
                     playerBust = true;
                     playerTurn = false;
                 }
