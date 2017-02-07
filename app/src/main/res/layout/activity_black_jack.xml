@@ -299,12 +299,15 @@
         android:layout_centerHorizontal="true" />
 
     <TextView
-        android:text="$0"
+        android:text="Place Bet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/betTextView"
         android:textSize="50sp"
         android:textColor="#FF0"
+        android:textAlignment="center"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
         android:layout_marginBottom="15dp"
         android:layout_above="@id/playerC3"
         android:layout_centerHorizontal="true"
