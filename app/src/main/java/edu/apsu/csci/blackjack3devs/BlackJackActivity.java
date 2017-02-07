@@ -381,7 +381,7 @@ public class BlackJackActivity extends AppCompatActivity
                 winnerString = "Bust!\nHouse wins!";
                 showResult();
             }else if(houseCardValue == 21 && playerBlackJack){
-                winnerString = "Tie\n Bet returned";//At the moment just made it so he made his money back
+                winnerString = "Push\n Bet returned";
                 walletAmt += (CurrentBetAmt);
             }else if (playerBlackJack){
                 winnerString = "BLACKJACK!\nYou won: $"+(CurrentBetAmt*2)+"!";
