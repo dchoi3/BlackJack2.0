@@ -7,7 +7,9 @@ package edu.apsu.csci.blackjack3devs;
  * Developers: John Schmitt, Daniel Choi, Charles Fannin
  */
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
@@ -105,37 +107,57 @@ public class BlackJackActivity extends AppCompatActivity
             ImageButton ib = (ImageButton) findViewById(id);
             ib.setOnClickListener(this);
         }
+
+        ImageButton betAll = (ImageButton) findViewById(R.id.chip100);
+        betAll.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(!cardsDealt && walletAmt > 0){
+                    updateWalletAndBet(walletAmt);
+                    return true;
+                }else
+                    return false;
+            }
+        });
     }//OnCreate
 
     @Override
     public void onClick(View v) {
+        Vibrator vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         // Allow betting only before Cards are dealt.
         if (!cardsDealt) {
             if (v.getId() == R.id.chip5) {
                 if (walletAmt >= 5) {
+                    vb.vibrate(10);
                     updateWalletAndBet(5);
                 }
             } else if (v.getId() == R.id.chip10) {
                 if (walletAmt >= 10) {
+                    vb.vibrate(10);
                     updateWalletAndBet(10);
                 }
             } else if (v.getId() == R.id.chip25) {
                 if (walletAmt >= 25) {
+                    vb.vibrate(10);
                     updateWalletAndBet(25);
                 }
             } else if (v.getId() == R.id.chip50) {
                 if (walletAmt >= 50) {
+                    vb.vibrate(10);
                     updateWalletAndBet(50);
                 }
             } else if (v.getId() == R.id.chip75) {
                 if (walletAmt >= 75) {
+                    vb.vibrate(10);
                     updateWalletAndBet(75);
                 }
             } else if (v.getId() == R.id.chip100) {
                 if (walletAmt >= 100) {
+                    vb.vibrate(10);
                     updateWalletAndBet(100);
                 }
             } else if (v.getId() == R.id.clearBet) {
+                vb.vibrate(10);
                 TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
                 TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
                 walletAmt += CurrentBetAmt;
@@ -144,6 +166,7 @@ public class BlackJackActivity extends AppCompatActivity
                 WalletAmtTV.setText("Wallet: $" + walletAmt);
             }
             if (v.getId() == R.id.dealButton) {
+                vb.vibrate(10);
                 if (buttonID == R.drawable.deal) {
                     if (CurrentBetAmt > 0) {
                         cardsDealt = true;
@@ -153,27 +176,39 @@ public class BlackJackActivity extends AppCompatActivity
                         toast.setGravity(Gravity.TOP, 0, 0);
                         toast.show();
                     }
-                }else if (buttonID == R.drawable.refresh) {
-                    clearBoard();
                 }
             }
         }//Chips, clear, & deal
 
-        if (v.getId() == R.id.hitButton)hit();
+        if (v.getId() == R.id.hitButton){
+            vb.vibrate(10);
+            hit();}
         if (v.getId() == R.id.standButton){
+            vb.vibrate(100);
             playerTurn = false;
             endTurn();}
-        if (v.getId() == R.id.doubleButton)doubleBet();
-        if(v.getId() == R.id.dealButton && buttonID == R.drawable.refresh)clearBoard();// Has to be here so you cant bet until refresh button clicked this is 1 of 2 requirements
+        if (v.getId() == R.id.doubleButton){
+            vb.vibrate(10);
+            doubleBet();}
+        if(v.getId() == R.id.dealButton && buttonID == R.drawable.refresh){
+            vb.vibrate(10);
+            if(walletAmt == 0){
+                gameOver();
+            }
+            else clearBoard();
+        }
+    // Has to be here so you cant bet until refresh button clicked this is 1 of 2 requirements
     }//OnClick
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-
+        Vibrator vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if(item.getItemId() == R.id.actionRestart){
+            vb.vibrate(10);
             restartGame();
             return true;
         }else if(item.getItemId() == R.id.actionQuit){
+            vb.vibrate(10);
             Intent aboutIntent = new Intent(this, HomeActivity.class);
             startActivity(aboutIntent);
             return true;
@@ -187,6 +222,8 @@ public class BlackJackActivity extends AppCompatActivity
     }//On back pressed
 
     public void popupMenu(View v) {
+        Vibrator vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vb.vibrate(10);
         PopupMenu popup = new PopupMenu(this, v);
         popup.setOnMenuItemClickListener(BlackJackActivity.this);
         MenuInflater inflater = popup.getMenuInflater();
@@ -201,7 +238,7 @@ public class BlackJackActivity extends AppCompatActivity
         ib.setVisibility(View.VISIBLE);
 
         TextView betTv = (TextView) findViewById(R.id.betTextView);
-        betTv.setText("Set Bet");
+        betTv.setText("Set bet");
         betTv.setBackgroundColor(0x00000000);
 
         int[] buttonsID = {R.id.doubleButton, R.id.hitButton, R.id.standButton};
@@ -245,7 +282,6 @@ public class BlackJackActivity extends AppCompatActivity
         houseBust = false;
         faceDownFliped = false;
 
-
         setHouseCardValue(0);
         setPlayerCardValue(0);
     }//Clear Board
@@ -271,6 +307,7 @@ public class BlackJackActivity extends AppCompatActivity
             cardsArray[x][1] = b;
         }
         shuffleCheck = false;
+        deckCardPosition = 0;
     }//Shuffle Cards
 
     public void updateWalletAndBet(int m) {
@@ -293,9 +330,7 @@ public class BlackJackActivity extends AppCompatActivity
             standShow.setVisibility(View.VISIBLE);
 
         for (int i = 0; i < 2; i++) {// Deal cards; Pass iterator so method knows what card we are on.
-
             hit();
-
             int y = dealHouseCard();
             setHouseCardValue(y);
             updateCardTotalDisplay(); // Update display of card values.
@@ -315,8 +350,6 @@ public class BlackJackActivity extends AppCompatActivity
         numPlayerCardsDealt++;
         deckCardPosition++;
         return x;
-
-
     }
 
     public int dealHouseCard() {
@@ -477,6 +510,8 @@ public class BlackJackActivity extends AppCompatActivity
     public void showResult(){
         cardsDealt = true;// Has to be here so you cant bet until refresh button clicked this is 2 of 2 requirements
 
+        Vibrator vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vb.vibrate(200);
         TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
         TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
         betAmtTV.setText(winnerString);
@@ -490,12 +525,18 @@ public class BlackJackActivity extends AppCompatActivity
 
     }
 
-    public void gameover(){
-
+    public void gameOver(){
+        Vibrator vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vb.vibrate(500);
+        Log.i("===", "In gameover");
         TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
         betAmtTV.setText("GAMEOVER");
+        betAmtTV.setBackgroundColor(BLACK);
         TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
-        WalletAmtTV.setText("Play again!");
+        WalletAmtTV.setText("Hit restart in menu");
+
+        ImageButton ib = (ImageButton) findViewById(R.id.dealButton);
+        ib.setVisibility(View.INVISIBLE);
     }//To be called when wallet = 0
 
     public void restartGame(){
