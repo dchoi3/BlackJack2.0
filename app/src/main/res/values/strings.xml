@@ -2,4 +2,7 @@
     <string name="app_name">Blackjacks</string>
     <string name="aboutString">About</string>
     <string name="aboutUsString"><u>Developers</u></string>
+    <string name="SetBet">set Bet</string>
+    <string name="GameOver">GAMEOVER</string>
+    <string name="RestartGame">Hit restart in menu</string>
 </resources>
