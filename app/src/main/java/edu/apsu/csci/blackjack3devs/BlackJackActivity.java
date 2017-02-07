@@ -530,7 +530,7 @@ public class BlackJackActivity extends AppCompatActivity
         betAmtTV.setText(winnerString);
         betAmtTV.setBackgroundColor(BLACK);
 
-        WalletAmtTV.setText("Wallet $"+walletAmt);
+        WalletAmtTV.setText("Wallet: $"+walletAmt);
         buttonID = R.drawable.refresh;
         ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
         dealClear.setVisibility(View.VISIBLE);
