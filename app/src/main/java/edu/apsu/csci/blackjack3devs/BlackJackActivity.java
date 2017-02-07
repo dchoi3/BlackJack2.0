@@ -22,13 +22,25 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.Random;
+import java.util.Scanner;
 
 import static android.graphics.Color.BLACK;
 
 
 public class BlackJackActivity extends AppCompatActivity
         implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
+
+    // Constant for data file.
+    private final String fn = "blackjack_data.txt";
 
     // Variable to hold bet amount
     int CurrentBetAmt = 0;
@@ -545,5 +557,37 @@ public class BlackJackActivity extends AppCompatActivity
         WalletAmtTV.setText("Wallet: $"+walletAmt);
         clearBoard();
     }//MenuClickRestart
+
+    public void onPause(){
+        super.onPause();
+        try {
+            FileOutputStream fos = openFileOutput(fn, Context.MODE_PRIVATE);
+            OutputStreamWriter osw = new OutputStreamWriter(fos);
+            BufferedWriter bw = new BufferedWriter(osw);
+            PrintWriter pw = new PrintWriter(bw);
+            pw.println(walletAmt);
+            pw.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Log.i("onPause: ", "" + walletAmt);
+    }
+
+    public void onResume(){
+        super.onResume();
+        String amount = "";
+        try {
+            FileInputStream fis = openFileInput(fn);
+            Scanner scanner = new Scanner(fis);
+            if(scanner.hasNext()){
+                amount = scanner.next();
+                TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
+                WalletAmtTV.setText("Wallet: $" + amount);
+            }
+        } catch (FileNotFoundException e) {
+            // OK if file doesn't exist.
+        }
+        Log.i("onResume: ", "" + amount);
+    }
 
 }//BlackJackActivity
