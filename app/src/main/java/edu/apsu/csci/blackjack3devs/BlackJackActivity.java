@@ -34,7 +34,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.Random;
 import java.util.Scanner;
-
+//
 import static android.graphics.Color.BLACK;
 
 
@@ -118,10 +118,13 @@ public class BlackJackActivity extends AppCompatActivity
 
         for (int id : buttonsID) {
             ImageButton ib = (ImageButton) findViewById(id);
-            ib.setOnClickListener(this);
+            if(ib != null) {
+                ib.setOnClickListener(this);
+            }
         }
 
         ImageButton betAll = (ImageButton) findViewById(R.id.chip100);
+        if(betAll != null){
         betAll.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -132,6 +135,7 @@ public class BlackJackActivity extends AppCompatActivity
                     return false;
             }
         });
+        }
     }//OnCreate
 
     @Override
@@ -176,8 +180,12 @@ public class BlackJackActivity extends AppCompatActivity
                 walletAmt += CurrentBetAmt;
                 String newWallet = "Wallet: $" + walletAmt;
                 CurrentBetAmt = 0;
-                betAmtTV.setText(R.string.SetBet);
-                WalletAmtTV.setText(newWallet);
+                if(betAmtTV != null) {
+                    betAmtTV.setText(R.string.SetBet);
+                }
+                if(WalletAmtTV != null) {
+                    WalletAmtTV.setText(newWallet);
+                }
             }
             if (v.getId() == R.id.dealButton) {
                 vb.vibrate(10);
@@ -248,31 +256,42 @@ public class BlackJackActivity extends AppCompatActivity
     public void clearBoard() {
 
         ImageButton ib = (ImageButton) findViewById(R.id.dealButton);
-        ib.setImageResource(R.drawable.deal);
-        ib.setVisibility(View.VISIBLE);
-
+        if(ib != null) {
+            ib.setImageResource(R.drawable.deal);
+            ib.setVisibility(View.VISIBLE);
+        }
         TextView betTv = (TextView) findViewById(R.id.betTextView);
-        betTv.setText(R.string.SetBet);
-        betTv.setBackgroundColor(0x00000000);
+        if(betTv != null) {
+            betTv.setText(R.string.SetBet);
+            betTv.setBackgroundColor(0x00000000);
+        }
 
         int[] buttonsID = {R.id.doubleButton, R.id.hitButton, R.id.standButton};
         int[] textID = {R.id.houseScore, R.id.playerScore};
 
         for (int id : playerCardsID) {
             ImageView iv = (ImageView) findViewById(id);
-            iv.setVisibility(View.INVISIBLE);
+            if(iv != null) {
+                iv.setVisibility(View.INVISIBLE);
+            }
         }//Hide all player cards
         for (int id : houseCardsID) {
             ImageView iv = (ImageView) findViewById(id);
-            iv.setVisibility(View.INVISIBLE);
+            if(iv != null) {
+                iv.setVisibility(View.INVISIBLE);
+            }
         }//Hide all house cards
         for (int id : buttonsID) {
             ImageButton iv = (ImageButton) findViewById(id);
-            iv.setVisibility(View.INVISIBLE);
+            if(iv != null) {
+                iv.setVisibility(View.INVISIBLE);
+            }
         }//Hide buttons
         for (int id : textID) {
             TextView tv = (TextView) findViewById(id);
-            tv.setText("");
+            if(tv != null) {
+                tv.setText("");
+            }
         }//Clear scores
 
         checkForShuffle();
@@ -332,19 +351,28 @@ public class BlackJackActivity extends AppCompatActivity
         walletAmt -= m;
         String newBet = "$" + CurrentBetAmt;
         String newWallet = "Wallet: $" + walletAmt;
-        betAmtTV.setText(newBet);
-        WalletAmtTV.setText(newWallet);
+        if(betAmtTV != null) {
+            betAmtTV.setText(newBet);
+        }
+        if(WalletAmtTV != null) {
+            WalletAmtTV.setText(newWallet);
+        }
 
     }//Update Wallet and Bet
 
     public void deal() {
         ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
+        if(dealClear != null) {
             dealClear.setVisibility(View.INVISIBLE);
+        }
         ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
+        if(hitShow != null) {
             hitShow.setVisibility(View.VISIBLE);
+        }
         ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
+        if(standShow != null) {
             standShow.setVisibility(View.VISIBLE);
-
+        }
         for (int i = 0; i < 2; i++) {// Deal cards; Pass iterator so method knows what card we are on.
             hit();
             int y = dealHouseCard();
@@ -356,8 +384,10 @@ public class BlackJackActivity extends AppCompatActivity
 
     public int dealPlayerCard() {
         ImageView playerCard = (ImageView) findViewById(playerCardsID[playerCardPosition]);
-        playerCard.setImageResource(cardsArray[deckCardPosition][0]);
-        playerCard.setVisibility(View.VISIBLE);
+        if(playerCard != null) {
+            playerCard.setImageResource(cardsArray[deckCardPosition][0]);
+            playerCard.setVisibility(View.VISIBLE);
+        }
         playerCardImgId[numPlayerCardsDealt][0] = cardsArray[deckCardPosition][0];
         int x = cardsArray[deckCardPosition][1];
         if(x == 11){//is Ace
@@ -372,28 +402,37 @@ public class BlackJackActivity extends AppCompatActivity
 
         ImageView houseCard = (ImageView) findViewById(houseCardsID[houseCardPosition]);
         if(houseCardPosition==0){
-            houseCard.setImageResource(R.drawable.facedown);
+            if(houseCard != null) {
+                houseCard.setImageResource(R.drawable.facedown);
+            }
             faceDownIndex = deckCardPosition;
             deckCardPosition++;
             houseCardPosition++;
-            houseCard.setVisibility(View.VISIBLE);
+            if(houseCard != null) {
+                houseCard.setVisibility(View.VISIBLE);
+            }
             return 0;
         }else if(houseCardPosition == 2 && !faceDownFliped){
             ImageView fdCard = (ImageView) findViewById(houseCardsID[0]);//Gets first card IV
-            fdCard.setImageResource(cardsArray[faceDownIndex][0]);//Flips the card
+            if(fdCard != null){
+                fdCard.setImageResource(cardsArray[faceDownIndex][0]);//Flips the card
+            }
             faceDownFliped = true;
             return cardsArray[faceDownIndex][1];//return facedown card value
 
         }else{
-            houseCard.setImageResource(cardsArray[deckCardPosition][0]);
-
+            if(houseCard != null){
+                houseCard.setImageResource(cardsArray[deckCardPosition][0]);
+            }
             int x = cardsArray[deckCardPosition][1];
             if(x == 11){//is Ace
                 houseAceCount++;}
             houseCardPosition++;
             numHouseCardsDealt++;
             deckCardPosition++;
-            houseCard.setVisibility(View.VISIBLE);
+            if(houseCard != null) {
+                houseCard.setVisibility(View.VISIBLE);
+            }
             return x;
         }
 
@@ -444,17 +483,23 @@ public class BlackJackActivity extends AppCompatActivity
                 winnerString = "BLACKJACK!\nYou won: $"+(CurrentBetAmt*2)+"!";
                 walletAmt += (CurrentBetAmt * 2);
                 showResult();
-            }else if(!playerBust && houseBust) {
-                winnerString = "You won: $"+(CurrentBetAmt*2)+"!";
-                walletAmt += (CurrentBetAmt * 2);
-                showResult();
-            }else if(houseCardValue > playerCardValue){
-                winnerString = "House wins!";
-                showResult();
-            }else if(houseCardValue < playerCardValue){
-                winnerString = "You won: $"+(CurrentBetAmt*2)+"!";
-                walletAmt += (CurrentBetAmt * 2);
-                showResult();
+            }else {
+                if(playerBust){
+                    Log.i("---------", "Player Busted ");
+                }else {
+                    if (houseBust) {
+                        winnerString = "You won: $" + (CurrentBetAmt * 2) + "!";
+                        walletAmt += (CurrentBetAmt * 2);
+                        showResult();
+                    } else if (houseCardValue > playerCardValue) {
+                        winnerString = "House wins!";
+                        showResult();
+                    } else if (houseCardValue < playerCardValue) {
+                        winnerString = "You won: $" + (CurrentBetAmt * 2) + "!";
+                        walletAmt += (CurrentBetAmt * 2);
+                        showResult();
+                    }
+                }
             }
 
         }
@@ -478,9 +523,14 @@ public class BlackJackActivity extends AppCompatActivity
     }//Handle player Aces
 
     public void endTurn() {
-        findViewById(R.id.standButton).setVisibility(View.INVISIBLE);
-        findViewById(R.id.hitButton).setVisibility(View.INVISIBLE);
-
+        ImageButton stb = (ImageButton) findViewById(R.id.standButton);
+                if(stb != null){
+                    stb.setVisibility(View.INVISIBLE);
+                }
+        ImageButton htb = (ImageButton) findViewById(R.id.hitButton);
+                if(htb != null) {
+                    htb.setVisibility(View.INVISIBLE);
+                }
         if(!faceDownFliped){
             int x = dealHouseCard();
             setHouseCardValue(x);
@@ -521,10 +571,13 @@ public class BlackJackActivity extends AppCompatActivity
     public void updateCardTotalDisplay() {
         // Display player and house card values.
         TextView pScore = (TextView) findViewById(R.id.playerScore);
-        pScore.setText(String.valueOf(playerCardValue));
-
+        if(pScore != null) {
+            pScore.setText(String.valueOf(playerCardValue));
+        }
         TextView hScore = (TextView) findViewById(R.id.houseScore);
-        hScore.setText(String.valueOf(houseCardValue));
+        if(hScore != null) {
+            hScore.setText(String.valueOf(houseCardValue));
+        }
     }//Update card total display
 
     public void showResult(){
@@ -534,15 +587,20 @@ public class BlackJackActivity extends AppCompatActivity
         vb.vibrate(200);
         TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
         TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
-        betAmtTV.setText(winnerString);
-        betAmtTV.setBackgroundColor(BLACK);
+        if(betAmtTV != null) {
+            betAmtTV.setText(winnerString);
+            betAmtTV.setBackgroundColor(BLACK);
+        }
         String newWallet = "Wallet: $"+walletAmt;
-        WalletAmtTV.setText(newWallet);
+        if(WalletAmtTV != null) {
+            WalletAmtTV.setText(newWallet);
+        }
         buttonID = R.drawable.refresh;
         ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
-        dealClear.setVisibility(View.VISIBLE);
-        dealClear.setImageResource(buttonID);
-
+        if(dealClear != null) {
+            dealClear.setVisibility(View.VISIBLE);
+            dealClear.setImageResource(buttonID);
+        }
     }
 
     public void gameOver(){
@@ -550,20 +608,27 @@ public class BlackJackActivity extends AppCompatActivity
         vb.vibrate(500);
         Log.i("===", "In gameover");
         TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
-        betAmtTV.setText(R.string.GameOver);
-        betAmtTV.setBackgroundColor(BLACK);
+        if(betAmtTV != null) {
+            betAmtTV.setText(R.string.GameOver);
+            betAmtTV.setBackgroundColor(BLACK);
+        }
         TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
-        WalletAmtTV.setText(R.string.RestartGame);
-
+        if(WalletAmtTV != null) {
+            WalletAmtTV.setText(R.string.RestartGame);
+        }
         ImageButton ib = (ImageButton) findViewById(R.id.dealButton);
-        ib.setVisibility(View.INVISIBLE);
+        if(ib != null) {
+            ib.setVisibility(View.INVISIBLE);
+        }
     }//To be called when wallet = 0
 
     public void restartGame(){
         walletAmt = 2000;
         String newWallet = "Wallet: $"+walletAmt;
         TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
-        WalletAmtTV.setText(newWallet);
+        if(WalletAmtTV != null) {
+            WalletAmtTV.setText(newWallet);
+        }
         clearBoard();
     }//MenuClickRestart
 
@@ -592,7 +657,9 @@ public class BlackJackActivity extends AppCompatActivity
                 amount = scanner.next();
                 String newWallet = "Wallet: $" + amount;
                 TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
-                WalletAmtTV.setText(newWallet);
+                if(WalletAmtTV != null) {
+                    WalletAmtTV.setText(newWallet);
+                }
                 walletAmt = Integer.parseInt(amount);
             }
         } catch (FileNotFoundException e) {
