@@ -25,26 +25,29 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         ImageButton start = (ImageButton) findViewById(R.id.startButton);
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Vibrator vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                vb.vibrate(10);
-                Intent startIntent = new Intent(getApplicationContext(), BlackJackActivity.class);
-                startActivity(startIntent);
-            }});
-
+        if(start != null) {
+            start.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Vibrator vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    vb.vibrate(10);
+                    Intent startIntent = new Intent(getApplicationContext(), BlackJackActivity.class);
+                    startActivity(startIntent);
+                }
+            });
+        }
         Button about = (Button) findViewById(R.id.aboutButton);
-        about.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Vibrator vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                vb.vibrate(10);
-                Intent aboutIntent = new Intent(getApplicationContext(), AboutActivity.class);
-                startActivity(aboutIntent);
-            }
-        });
+        if(about != null) {
+            about.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Vibrator vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    vb.vibrate(10);
+                    Intent aboutIntent = new Intent(getApplicationContext(), AboutActivity.class);
+                    startActivity(aboutIntent);
+                }
+            });
 
-
+        }
     }
 }
