@@ -174,9 +174,10 @@ public class BlackJackActivity extends AppCompatActivity
                 TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
                 TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
                 walletAmt += CurrentBetAmt;
+                String newWallet = "Wallet: $" + walletAmt;
                 CurrentBetAmt = 0;
-                betAmtTV.setText("Set bet");
-                WalletAmtTV.setText("Wallet: $" + walletAmt);
+                betAmtTV.setText(R.string.SetBet);
+                WalletAmtTV.setText(newWallet);
             }
             if (v.getId() == R.id.dealButton) {
                 vb.vibrate(10);
@@ -251,7 +252,7 @@ public class BlackJackActivity extends AppCompatActivity
         ib.setVisibility(View.VISIBLE);
 
         TextView betTv = (TextView) findViewById(R.id.betTextView);
-        betTv.setText("Set bet");
+        betTv.setText(R.string.SetBet);
         betTv.setBackgroundColor(0x00000000);
 
         int[] buttonsID = {R.id.doubleButton, R.id.hitButton, R.id.standButton};
@@ -329,8 +330,10 @@ public class BlackJackActivity extends AppCompatActivity
         TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
         CurrentBetAmt += m;
         walletAmt -= m;
-        betAmtTV.setText("$" + CurrentBetAmt);
-        WalletAmtTV.setText("Wallet: $" + walletAmt);
+        String newBet = "$" + CurrentBetAmt;
+        String newWallet = "Wallet: $" + walletAmt;
+        betAmtTV.setText(newBet);
+        WalletAmtTV.setText(newWallet);
 
     }//Update Wallet and Bet
 
@@ -364,7 +367,7 @@ public class BlackJackActivity extends AppCompatActivity
         deckCardPosition++;
         return x;
     }
-
+ //Test Comment for fixing warnings
     public int dealHouseCard() {
 
         ImageView houseCard = (ImageView) findViewById(houseCardsID[houseCardPosition]);
@@ -533,8 +536,8 @@ public class BlackJackActivity extends AppCompatActivity
         TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
         betAmtTV.setText(winnerString);
         betAmtTV.setBackgroundColor(BLACK);
-
-        WalletAmtTV.setText("Wallet: $"+walletAmt);
+        String newWallet = "Wallet: $"+walletAmt;
+        WalletAmtTV.setText(newWallet);
         buttonID = R.drawable.refresh;
         ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
         dealClear.setVisibility(View.VISIBLE);
@@ -547,10 +550,10 @@ public class BlackJackActivity extends AppCompatActivity
         vb.vibrate(500);
         Log.i("===", "In gameover");
         TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
-        betAmtTV.setText("GAMEOVER");
+        betAmtTV.setText(R.string.GameOver);
         betAmtTV.setBackgroundColor(BLACK);
         TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
-        WalletAmtTV.setText("Hit restart in menu");
+        WalletAmtTV.setText(R.string.RestartGame);
 
         ImageButton ib = (ImageButton) findViewById(R.id.dealButton);
         ib.setVisibility(View.INVISIBLE);
@@ -558,8 +561,9 @@ public class BlackJackActivity extends AppCompatActivity
 
     public void restartGame(){
         walletAmt = 2000;
+        String newWallet = "Wallet: $"+walletAmt;
         TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
-        WalletAmtTV.setText("Wallet: $"+walletAmt);
+        WalletAmtTV.setText(newWallet);
         clearBoard();
     }//MenuClickRestart
 
@@ -586,8 +590,9 @@ public class BlackJackActivity extends AppCompatActivity
             Scanner scanner = new Scanner(fis);
             if(scanner.hasNext()){
                 amount = scanner.next();
+                String newWallet = "Wallet: $" + amount;
                 TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
-                WalletAmtTV.setText("Wallet: $" + amount);
+                WalletAmtTV.setText(newWallet);
                 walletAmt = Integer.parseInt(amount);
             }
         } catch (FileNotFoundException e) {
