@@ -483,26 +483,22 @@ public class BlackJackActivity extends AppCompatActivity
                 winnerString = "BLACKJACK!\nYou won: $"+(CurrentBetAmt*2)+"!";
                 walletAmt += (CurrentBetAmt * 2);
                 showResult();
-            }else {
-                if(playerBust){
-                    Log.i("---------", "Player Busted ");
-                }else {
-                    if (houseBust) {
-                        winnerString = "You won: $" + (CurrentBetAmt * 2) + "!";
-                        walletAmt += (CurrentBetAmt * 2);
-                        showResult();
-                    } else if (houseCardValue > playerCardValue) {
-                        winnerString = "House wins!";
-                        showResult();
-                    } else if (houseCardValue < playerCardValue) {
-                        winnerString = "You won: $" + (CurrentBetAmt * 2) + "!";
-                        walletAmt += (CurrentBetAmt * 2);
-                        showResult();
-                    }
-                }
+            }else if(houseBust){
+                    winnerString = "You won: $" + (CurrentBetAmt * 2) + "!";
+                    walletAmt += (CurrentBetAmt * 2);
+                    showResult();
+            } else if (houseCardValue > playerCardValue) {
+                winnerString = "House wins!";
+                showResult();
+            } else if (houseCardValue < playerCardValue) {
+                winnerString = "You won: $" + (CurrentBetAmt * 2) + "!";
+                walletAmt += (CurrentBetAmt * 2);
+                showResult();
             }
 
-        }
+            }
+
+
     }
 
     public void handlePlayerAces(){
