@@ -5,4 +5,5 @@
     <string name="SetBet">Set bet</string>
     <string name="GameOver">GAMEOVER</string>
     <string name="RestartGame">Hit restart in menu</string>
+    <string name="HomePageStartButton">HomePageStartButton</string>
 </resources>
