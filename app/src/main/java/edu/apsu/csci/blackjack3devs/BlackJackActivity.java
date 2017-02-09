@@ -130,6 +130,9 @@ public class BlackJackActivity extends AppCompatActivity
             public boolean onLongClick(View v) {
                 if(!cardsDealt && walletAmt > 0){
                     updateWalletAndBet(walletAmt);
+                    Toast toast = Toast.makeText(getApplicationContext(), "All in!", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, -260);
+                    toast.show();
                     return true;
                 }else
                     return false;
@@ -505,7 +508,7 @@ public class BlackJackActivity extends AppCompatActivity
         Log.i("====","Removing 10");
         playerCardValue = playerCardValue - 10;
         Log.i("====", "# of Ace: "+ playerAceCount);
-        playerAceCount = playerAceCount - 1;//for some reason not removing
+        playerAceCount = playerAceCount - 1;
         Log.i("====", "# of Ace: "+ playerAceCount);
         updateCardTotalDisplay();
 
