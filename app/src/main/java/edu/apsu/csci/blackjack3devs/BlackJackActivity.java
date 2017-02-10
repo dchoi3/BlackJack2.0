@@ -637,14 +637,18 @@ public class BlackJackActivity extends AppCompatActivity
             PrintWriter pw = new PrintWriter(bw);
             pw.println(walletAmt);
             pw.println(currentBetAmt);
+            pw.println(playerCardValue);
 
             pw.close();
         } catch (FileNotFoundException e) {
             Log.e("WRITE_ERR", "Cannot save data: " + e.getMessage());
             e.printStackTrace();
         }
-        Log.i("wallet: ", "" + walletAmt);
-        Log.i("bet: ", "" + currentBetAmt);
+
+        // TODO: Remove after done testing.
+        Log.i("write wallet ", "" + walletAmt);
+        Log.i("write bet ", "" + currentBetAmt);
+        Log.i("write pCardVal ", "" + playerCardValue);
     }
 
     public void onResume(){
@@ -655,6 +659,7 @@ public class BlackJackActivity extends AppCompatActivity
             if(scanner.hasNext()){
                 String wallet = scanner.next();
                 String bet = scanner.next();
+                String pCardVal = scanner.next();
 
                 TextView walletTV = (TextView) findViewById(R.id.walletTextView);
                 walletAmt = Integer.parseInt(wallet);
@@ -662,16 +667,20 @@ public class BlackJackActivity extends AppCompatActivity
 
                 TextView betTV = (TextView) findViewById(R.id.betTextView);
                 currentBetAmt = Integer.parseInt(bet);
-                if (currentBetAmt == 0) {
+                if (currentBetAmt == 0) { // TODO Figure out why this is not working. Always sets "0".
                     betTV.setText("Set bet");
                 } else {
                     betTV.setText(bet);
                 }
 
+                TextView pCardValTV = (TextView) findViewById(R.id.playerScore);
+                playerCardValue = Integer.parseInt(pCardVal);
+                pCardValTV.setText(pCardVal);
 
                 // TODO: Remove after done testing.
-                Log.i("wallet: ", "" + wallet);
-                Log.i("bet: ", "" + bet);
+                Log.i("read wallet ", "" + wallet);
+                Log.i("read bet ", "" + bet);
+                Log.i("read pCardVal ", "" + pCardVal);
             }
         } catch (FileNotFoundException e) {
             // OK if file doesn't exist.
