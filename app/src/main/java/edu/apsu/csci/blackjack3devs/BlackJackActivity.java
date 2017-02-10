@@ -42,7 +42,7 @@ public class BlackJackActivity extends AppCompatActivity
     private final String fn = "blackjack_data.txt";
 
     // Variable to hold bet amount
-    int CurrentBetAmt = 0;
+    int currentBetAmt = 0;
     int walletAmt = 2000;
 
     // Vars for card values dealt to player and house.
@@ -177,9 +177,9 @@ public class BlackJackActivity extends AppCompatActivity
                 vb.vibrate(10);
                 TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
                 TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
-                walletAmt += CurrentBetAmt;
+                walletAmt += currentBetAmt;
                 String newWallet = "Wallet: $" + walletAmt;
-                CurrentBetAmt = 0;
+                currentBetAmt = 0;
                 if(betAmtTV != null) {
                     betAmtTV.setText(R.string.SetBet);
                 }
@@ -190,7 +190,7 @@ public class BlackJackActivity extends AppCompatActivity
             if (v.getId() == R.id.dealButton) {
                 vb.vibrate(10);
                 if (buttonID == R.drawable.deal) {
-                    if (CurrentBetAmt > 0) {
+                    if (currentBetAmt > 0) {
                         cardsDealt = true;
                         deal();
                     } else {
@@ -299,7 +299,7 @@ public class BlackJackActivity extends AppCompatActivity
             shuffleCards();
 
         buttonID = R.drawable.deal;
-        CurrentBetAmt = 0;
+        currentBetAmt = 0;
         playerCardPosition = 0;
         houseCardPosition = 0;
         playerCardValue = 0;
@@ -347,9 +347,9 @@ public class BlackJackActivity extends AppCompatActivity
         //Updates the wallet and bet textviews. Just to reduce the code a little bit.
         TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
         TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
-        CurrentBetAmt += m;
+        currentBetAmt += m;
         walletAmt -= m;
-        String newBet = "$" + CurrentBetAmt;
+        String newBet = "$" + currentBetAmt;
         String newWallet = "Wallet: $" + walletAmt;
         if(betAmtTV != null) {
             betAmtTV.setText(newBet);
@@ -477,22 +477,22 @@ public class BlackJackActivity extends AppCompatActivity
                 showResult();
             }else if(houseCardValue == playerCardValue){
                 winnerString = "Push";//At the moment just made it so he made his money back
-                walletAmt += (CurrentBetAmt);
+                walletAmt += (currentBetAmt);
                 showResult();
             }else if (playerBlackJack){
-                winnerString = "BLACKJACK!\nYou won: $"+(CurrentBetAmt*2)+"!";
-                walletAmt += (CurrentBetAmt * 2);
+                winnerString = "BLACKJACK!\nYou won: $"+(currentBetAmt *2)+"!";
+                walletAmt += (currentBetAmt * 2);
                 showResult();
             }else if(houseBust){
-                    winnerString = "You won: $" + (CurrentBetAmt * 2) + "!";
-                    walletAmt += (CurrentBetAmt * 2);
+                    winnerString = "You won: $" + (currentBetAmt * 2) + "!";
+                    walletAmt += (currentBetAmt * 2);
                     showResult();
             } else if (houseCardValue > playerCardValue) {
                 winnerString = "House wins!";
                 showResult();
             } else if (houseCardValue < playerCardValue) {
-                winnerString = "You won: $" + (CurrentBetAmt * 2) + "!";
-                walletAmt += (CurrentBetAmt * 2);
+                winnerString = "You won: $" + (currentBetAmt * 2) + "!";
+                walletAmt += (currentBetAmt * 2);
                 showResult();
             }
 
@@ -636,32 +636,46 @@ public class BlackJackActivity extends AppCompatActivity
             BufferedWriter bw = new BufferedWriter(osw);
             PrintWriter pw = new PrintWriter(bw);
             pw.println(walletAmt);
+            pw.println(currentBetAmt);
+
             pw.close();
         } catch (FileNotFoundException e) {
+            Log.e("WRITE_ERR", "Cannot save data: " + e.getMessage());
             e.printStackTrace();
         }
-        Log.i("write data: ", "" + walletAmt);
+        Log.i("wallet: ", "" + walletAmt);
+        Log.i("bet: ", "" + currentBetAmt);
     }
 
     public void onResume(){
         super.onResume();
-        String amount = "";
         try {
             FileInputStream fis = openFileInput(fn);
             Scanner scanner = new Scanner(fis);
             if(scanner.hasNext()){
-                amount = scanner.next();
-                String newWallet = "Wallet: $" + amount;
-                TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
-                if(WalletAmtTV != null) {
-                    WalletAmtTV.setText(newWallet);
+                String wallet = scanner.next();
+                String bet = scanner.next();
+
+                TextView walletTV = (TextView) findViewById(R.id.walletTextView);
+                walletAmt = Integer.parseInt(wallet);
+                walletTV.setText(wallet);
+
+                TextView betTV = (TextView) findViewById(R.id.betTextView);
+                currentBetAmt = Integer.parseInt(bet);
+                if (currentBetAmt == 0) {
+                    betTV.setText("Set bet");
+                } else {
+                    betTV.setText(bet);
                 }
-                walletAmt = Integer.parseInt(amount);
+
+
+                // TODO: Remove after done testing.
+                Log.i("wallet: ", "" + wallet);
+                Log.i("bet: ", "" + bet);
             }
         } catch (FileNotFoundException e) {
             // OK if file doesn't exist.
         }
-        Log.i("read data: ", "" + amount);
     }
 
 }//BlackJackActivity
