@@ -648,7 +648,7 @@ public class BlackJackActivity extends AppCompatActivity
             pw.println(shuffleCheck);
             pw.println(playerBlackJack);
             pw.println(playerBust);
-
+            pw.println(houseBust);
 
             pw.close();
         } catch (FileNotFoundException e) {
@@ -668,6 +668,7 @@ public class BlackJackActivity extends AppCompatActivity
         Log.i("write shuffleCheck ", "" + shuffleCheck);
         Log.i("write playerBlackJack ", "" + playerBlackJack);
         Log.i("write playerBust ", "" + playerBust);
+        Log.i("write houseBust ", "" + houseBust);
     }
 
     public void onResume(){
@@ -687,6 +688,7 @@ public class BlackJackActivity extends AppCompatActivity
                 String shuffleBool = scanner.next();
                 String playerBJ = scanner.next();
                 String playerB = scanner.next();
+                String houseB = scanner.next();
 
                 TextView walletTV = (TextView) findViewById(R.id.walletTextView);
                 walletAmt = Integer.parseInt(wallet);
@@ -715,6 +717,7 @@ public class BlackJackActivity extends AppCompatActivity
                 shuffleCheck = Boolean.parseBoolean(shuffleBool);
                 playerBlackJack = Boolean.parseBoolean(playerBJ);
                 playerBust = Boolean.parseBoolean(playerB);
+                houseBust = Boolean.parseBoolean(houseB);
 
                 // TODO: Remove after done testing.
                 Log.i("read wallet ", "" + wallet);
@@ -728,6 +731,7 @@ public class BlackJackActivity extends AppCompatActivity
                 Log.i("read shuffleBool ", "" + shuffleBool);
                 Log.i("read playerBJ ", "" + playerBJ);
                 Log.i("read playerB ", "" + playerB);
+                Log.i("read houseB ", "" + houseB);
             }
         } catch (FileNotFoundException e) {
             // OK if file doesn't exist.
