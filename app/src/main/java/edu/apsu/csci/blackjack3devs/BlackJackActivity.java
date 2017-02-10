@@ -7,8 +7,6 @@ package edu.apsu.csci.blackjack3devs;
  * Developers: John Schmitt, Daniel Choi, Charles Fannin
  */
 
-import com.google.android.gms.common.server.converter.StringToIntConverter;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Vibrator;
@@ -29,7 +27,6 @@ import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.Random;
@@ -66,7 +63,7 @@ public class BlackJackActivity extends AppCompatActivity
     boolean playerBlackJack = false;
     boolean playerBust = false;
     boolean houseBust = false;
-    boolean faceDownFliped = false;
+    boolean faceDownFlipped = false;
 
     // How many cards have been dealt
     int numHouseCardsDealt = 0;
@@ -316,7 +313,7 @@ public class BlackJackActivity extends AppCompatActivity
         playerTurn = true;
         playerBust = false;
         houseBust = false;
-        faceDownFliped = false;
+        faceDownFlipped = false;
 
         setHouseCardValue(0);
         setPlayerCardValue(0);
@@ -415,12 +412,12 @@ public class BlackJackActivity extends AppCompatActivity
                 houseCard.setVisibility(View.VISIBLE);
             }
             return 0;
-        }else if(houseCardPosition == 2 && !faceDownFliped){
+        }else if(houseCardPosition == 2 && !faceDownFlipped){
             ImageView fdCard = (ImageView) findViewById(houseCardsID[0]);//Gets first card IV
             if(fdCard != null){
                 fdCard.setImageResource(cardsArray[faceDownIndex][0]);//Flips the card
             }
-            faceDownFliped = true;
+            faceDownFlipped = true;
             return cardsArray[faceDownIndex][1];//return facedown card value
 
         }else{
@@ -530,7 +527,7 @@ public class BlackJackActivity extends AppCompatActivity
                 if(htb != null) {
                     htb.setVisibility(View.INVISIBLE);
                 }
-        if(!faceDownFliped){
+        if(!faceDownFlipped){
             int x = dealHouseCard();
             setHouseCardValue(x);
 
