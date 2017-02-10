@@ -646,6 +646,7 @@ public class BlackJackActivity extends AppCompatActivity
             pw.println(deckCardPosition);
             pw.println(faceDownIndex); // TODO Do we need this?
             pw.println(shuffleCheck);
+            pw.println(playerBlackJack);
 
             pw.close();
         } catch (FileNotFoundException e) {
@@ -663,6 +664,7 @@ public class BlackJackActivity extends AppCompatActivity
         Log.i("write dCardPos ", "" + deckCardPosition);
         Log.i("write faceDownI ", "" + faceDownIndex);
         Log.i("write shuffleCheck ", "" + shuffleCheck);
+        Log.i("write playerBlackJack ", "" + playerBlackJack);
     }
 
     public void onResume(){
@@ -680,6 +682,7 @@ public class BlackJackActivity extends AppCompatActivity
                 String dCardPos = scanner.next();
                 String faceDownI = scanner.next();
                 String shuffleBool = scanner.next();
+                String playerBJ = scanner.next();
 
                 TextView walletTV = (TextView) findViewById(R.id.walletTextView);
                 walletAmt = Integer.parseInt(wallet);
@@ -706,6 +709,7 @@ public class BlackJackActivity extends AppCompatActivity
                 deckCardPosition = Integer.parseInt(dCardPos);
                 faceDownIndex = Integer.parseInt(faceDownI);
                 shuffleCheck = Boolean.parseBoolean(shuffleBool);
+                playerBlackJack = Boolean.parseBoolean(playerBJ);
 
                 // TODO: Remove after done testing.
                 Log.i("read wallet ", "" + wallet);
@@ -717,6 +721,7 @@ public class BlackJackActivity extends AppCompatActivity
                 Log.i("read dCardPos ", "" + dCardPos);
                 Log.i("read faceDownI ", "" + faceDownI);
                 Log.i("read shuffleBool ", "" + shuffleBool);
+                Log.i("read playerBJ ", "" + playerBJ);
             }
         } catch (FileNotFoundException e) {
             // OK if file doesn't exist.
