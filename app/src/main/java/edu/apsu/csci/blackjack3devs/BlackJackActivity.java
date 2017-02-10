@@ -638,6 +638,7 @@ public class BlackJackActivity extends AppCompatActivity
             pw.println(walletAmt);
             pw.println(currentBetAmt);
             pw.println(playerCardValue);
+            pw.println(houseCardValue);
 
             pw.close();
         } catch (FileNotFoundException e) {
@@ -649,6 +650,7 @@ public class BlackJackActivity extends AppCompatActivity
         Log.i("write wallet ", "" + walletAmt);
         Log.i("write bet ", "" + currentBetAmt);
         Log.i("write pCardVal ", "" + playerCardValue);
+        Log.i("write pCardVal ", "" + houseCardValue);
     }
 
     public void onResume(){
@@ -660,6 +662,7 @@ public class BlackJackActivity extends AppCompatActivity
                 String wallet = scanner.next();
                 String bet = scanner.next();
                 String pCardVal = scanner.next();
+                String hCardVal = scanner.next();
 
                 TextView walletTV = (TextView) findViewById(R.id.walletTextView);
                 walletAmt = Integer.parseInt(wallet);
@@ -677,10 +680,15 @@ public class BlackJackActivity extends AppCompatActivity
                 playerCardValue = Integer.parseInt(pCardVal);
                 pCardValTV.setText(pCardVal);
 
+                TextView hCardValTV = (TextView) findViewById(R.id.houseScore);
+                houseCardValue = Integer.parseInt(hCardVal);
+                hCardValTV.setText(hCardVal);
+
                 // TODO: Remove after done testing.
                 Log.i("read wallet ", "" + wallet);
                 Log.i("read bet ", "" + bet);
                 Log.i("read pCardVal ", "" + pCardVal);
+                Log.i("read hCardVal ", "" + hCardVal);
             }
         } catch (FileNotFoundException e) {
             // OK if file doesn't exist.
