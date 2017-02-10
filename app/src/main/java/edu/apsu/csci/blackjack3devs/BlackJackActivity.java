@@ -55,7 +55,7 @@ public class BlackJackActivity extends AppCompatActivity
     int deckCardPosition = 0;
 
     //Remembering facedown card
-    int faceDownIndex;
+    int faceDownIndex; // Isn't face down index always the same? Maybe i don't understand what this is for.
 
     //Check shuffle boolean
     boolean shuffleCheck = true;
@@ -642,6 +642,7 @@ public class BlackJackActivity extends AppCompatActivity
             pw.println(playerCardPosition);
             pw.println(houseCardPosition);
             pw.println(deckCardPosition);
+            pw.println(faceDownIndex); // TODO Do we need this?
 
             pw.close();
         } catch (FileNotFoundException e) {
@@ -657,6 +658,7 @@ public class BlackJackActivity extends AppCompatActivity
         Log.i("write pCardPos ", "" + playerCardPosition);
         Log.i("write hCardPos ", "" + houseCardPosition);
         Log.i("write dCardPos ", "" + deckCardPosition);
+        Log.i("write faceDownI ", "" + faceDownIndex);
     }
 
     public void onResume(){
@@ -672,6 +674,7 @@ public class BlackJackActivity extends AppCompatActivity
                 String pCardPos = scanner.next();
                 String hCardPos = scanner.next();
                 String dCardPos = scanner.next();
+                String faceDownI = scanner.next();
 
                 TextView walletTV = (TextView) findViewById(R.id.walletTextView);
                 walletAmt = Integer.parseInt(wallet);
@@ -696,6 +699,7 @@ public class BlackJackActivity extends AppCompatActivity
                 playerCardPosition = Integer.parseInt(pCardPos);
                 houseCardPosition = Integer.parseInt(hCardPos);
                 deckCardPosition = Integer.parseInt(dCardPos);
+                faceDownIndex = Integer.parseInt(faceDownI);
 
                 // TODO: Remove after done testing.
                 Log.i("read wallet ", "" + wallet);
@@ -705,6 +709,7 @@ public class BlackJackActivity extends AppCompatActivity
                 Log.i("read pCardPos ", "" + playerCardPosition);
                 Log.i("read hCardPos ", "" + houseCardPosition);
                 Log.i("read dCardPos ", "" + deckCardPosition);
+                Log.i("read faceDownI ", "" + faceDownIndex);
             }
         } catch (FileNotFoundException e) {
             // OK if file doesn't exist.
