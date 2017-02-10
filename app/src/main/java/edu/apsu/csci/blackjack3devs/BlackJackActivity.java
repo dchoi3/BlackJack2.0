@@ -640,6 +640,8 @@ public class BlackJackActivity extends AppCompatActivity
             pw.println(playerCardValue);
             pw.println(houseCardValue);
             pw.println(playerCardPosition);
+            pw.println(houseCardPosition);
+            pw.println(deckCardPosition);
 
             pw.close();
         } catch (FileNotFoundException e) {
@@ -653,6 +655,8 @@ public class BlackJackActivity extends AppCompatActivity
         Log.i("write pCardVal ", "" + playerCardValue);
         Log.i("write pCardVal ", "" + houseCardValue);
         Log.i("write pCardPos ", "" + playerCardPosition);
+        Log.i("write hCardPos ", "" + houseCardPosition);
+        Log.i("write dCardPos ", "" + deckCardPosition);
     }
 
     public void onResume(){
@@ -666,6 +670,8 @@ public class BlackJackActivity extends AppCompatActivity
                 String pCardVal = scanner.next();
                 String hCardVal = scanner.next();
                 String pCardPos = scanner.next();
+                String hCardPos = scanner.next();
+                String dCardPos = scanner.next();
 
                 TextView walletTV = (TextView) findViewById(R.id.walletTextView);
                 walletAmt = Integer.parseInt(wallet);
@@ -688,6 +694,8 @@ public class BlackJackActivity extends AppCompatActivity
                 hCardValTV.setText(hCardVal);
 
                 playerCardPosition = Integer.parseInt(pCardPos);
+                houseCardPosition = Integer.parseInt(hCardPos);
+                deckCardPosition = Integer.parseInt(dCardPos);
 
                 // TODO: Remove after done testing.
                 Log.i("read wallet ", "" + wallet);
@@ -695,6 +703,8 @@ public class BlackJackActivity extends AppCompatActivity
                 Log.i("read pCardVal ", "" + pCardVal);
                 Log.i("read hCardVal ", "" + hCardVal);
                 Log.i("read pCardPos ", "" + playerCardPosition);
+                Log.i("read hCardPos ", "" + houseCardPosition);
+                Log.i("read dCardPos ", "" + deckCardPosition);
             }
         } catch (FileNotFoundException e) {
             // OK if file doesn't exist.
