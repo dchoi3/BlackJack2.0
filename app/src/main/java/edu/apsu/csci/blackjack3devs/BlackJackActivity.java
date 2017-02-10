@@ -257,6 +257,14 @@ public class BlackJackActivity extends AppCompatActivity
     }//PopUpMenu
 
     public void clearBoard() {
+        int[] chipButtonsID = {R.id.chip5, R.id.chip10, R.id.chip25, R.id.chip50, R.id.chip75, R.id.chip100, R.id.clearBet};
+        for(int id : chipButtonsID) {
+            ImageButton ib = (ImageButton) findViewById(id);
+            if (ib != null) {
+                ib.setClickable(true);
+                ib.setLongClickable(true);
+            }
+        }
 
         ImageButton ib = (ImageButton) findViewById(R.id.dealButton);
         if(ib != null) {
@@ -364,6 +372,15 @@ public class BlackJackActivity extends AppCompatActivity
     }//Update Wallet and Bet
 
     public void deal() {
+        //Make Poker chips anc clear bet un clickable after deal
+        int[] chipButtonsID = {R.id.chip5, R.id.chip10, R.id.chip25, R.id.chip50, R.id.chip75, R.id.chip100, R.id.clearBet};
+        for(int id : chipButtonsID) {
+            ImageButton ib = (ImageButton) findViewById(id);
+            if (ib != null) {
+                ib.setClickable(false);
+                ib.setLongClickable(false);
+            }
+        }
         ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
         if(dealClear != null) {
             dealClear.setVisibility(View.INVISIBLE);
