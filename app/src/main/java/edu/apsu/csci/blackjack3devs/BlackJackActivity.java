@@ -7,6 +7,8 @@ package edu.apsu.csci.blackjack3devs;
  * Developers: John Schmitt, Daniel Choi, Charles Fannin
  */
 
+import com.google.android.gms.common.api.BooleanResult;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Vibrator;
@@ -643,6 +645,7 @@ public class BlackJackActivity extends AppCompatActivity
             pw.println(houseCardPosition);
             pw.println(deckCardPosition);
             pw.println(faceDownIndex); // TODO Do we need this?
+            pw.println(shuffleCheck);
 
             pw.close();
         } catch (FileNotFoundException e) {
@@ -659,6 +662,7 @@ public class BlackJackActivity extends AppCompatActivity
         Log.i("write hCardPos ", "" + houseCardPosition);
         Log.i("write dCardPos ", "" + deckCardPosition);
         Log.i("write faceDownI ", "" + faceDownIndex);
+        Log.i("write shuffleCheck ", "" + shuffleCheck);
     }
 
     public void onResume(){
@@ -675,6 +679,7 @@ public class BlackJackActivity extends AppCompatActivity
                 String hCardPos = scanner.next();
                 String dCardPos = scanner.next();
                 String faceDownI = scanner.next();
+                String shuffleBool = scanner.next();
 
                 TextView walletTV = (TextView) findViewById(R.id.walletTextView);
                 walletAmt = Integer.parseInt(wallet);
@@ -700,16 +705,18 @@ public class BlackJackActivity extends AppCompatActivity
                 houseCardPosition = Integer.parseInt(hCardPos);
                 deckCardPosition = Integer.parseInt(dCardPos);
                 faceDownIndex = Integer.parseInt(faceDownI);
+                shuffleCheck = Boolean.parseBoolean(shuffleBool);
 
                 // TODO: Remove after done testing.
                 Log.i("read wallet ", "" + wallet);
                 Log.i("read bet ", "" + bet);
                 Log.i("read pCardVal ", "" + pCardVal);
                 Log.i("read hCardVal ", "" + hCardVal);
-                Log.i("read pCardPos ", "" + playerCardPosition);
-                Log.i("read hCardPos ", "" + houseCardPosition);
-                Log.i("read dCardPos ", "" + deckCardPosition);
-                Log.i("read faceDownI ", "" + faceDownIndex);
+                Log.i("read pCardPos ", "" + pCardPos);
+                Log.i("read hCardPos ", "" + hCardPos);
+                Log.i("read dCardPos ", "" + dCardPos);
+                Log.i("read faceDownI ", "" + faceDownI);
+                Log.i("read shuffleBool ", "" + shuffleBool);
             }
         } catch (FileNotFoundException e) {
             // OK if file doesn't exist.
