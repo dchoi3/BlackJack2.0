@@ -655,9 +655,8 @@ public class BlackJackActivity extends AppCompatActivity
             // pw.println(playerCardImgId);
             pw.println(playerAceCount);
             pw.println(houseAceCount);
+            pw.println(cardsDealt);
 
-//
-//                cardsDealt
 //            winnerString
 
             pw.close();
@@ -685,6 +684,7 @@ public class BlackJackActivity extends AppCompatActivity
 //        Log.i("write playerCardImgId ", "" + playerCardImgId);
         Log.i("write playerAceCount ", "" + playerAceCount);
         Log.i("write houseAceCount ", "" + houseAceCount);
+        Log.i("write cardsDealt ", "" + cardsDealt);
     }
 
     public void onResume(){
@@ -711,6 +711,7 @@ public class BlackJackActivity extends AppCompatActivity
 //                String pCardImgId = scanner.next();
                 String pAceCount = scanner.next();
                 String hAceCount = scanner.next();
+                String cardsDealtBool = scanner.next();
 
                 TextView walletTV = (TextView) findViewById(R.id.walletTextView);
                 walletAmt = Integer.parseInt(wallet);
@@ -746,6 +747,7 @@ public class BlackJackActivity extends AppCompatActivity
 //                playerCardImgId = pCardImgId;
                 playerAceCount = Integer.parseInt(pAceCount);
                 houseAceCount = Integer.parseInt(hAceCount);
+                cardsDealt = Boolean.parseBoolean(cardsDealtBool);
 
                 // TODO: Remove after done testing.
                 Log.i("read wallet ", "" + wallet);
@@ -766,6 +768,8 @@ public class BlackJackActivity extends AppCompatActivity
 //                Log.i("read pCardImgId ", "" + pCardImgId);
                 Log.i("read pAceCount ", "" + pAceCount);
                 Log.i("read hAceCount ", "" + hAceCount);
+                Log.i("read cardsDealtBool ", "" + cardsDealtBool);
+
             }
         } catch (FileNotFoundException e) {
             // OK if file doesn't exist.
