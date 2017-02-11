@@ -653,8 +653,8 @@ public class BlackJackActivity extends AppCompatActivity
             pw.println(numHouseCardsDealt);
             pw.println(numPlayerCardsDealt);
             // pw.println(playerCardImgId);
+            pw.println(playerAceCount);
 
-//                playerAceCount
 //            houseAceCount
 //                cardsDealt
 //            winnerString
@@ -682,6 +682,7 @@ public class BlackJackActivity extends AppCompatActivity
         Log.i("write numHCardsDealt ", "" + numHouseCardsDealt);
         Log.i("write numPCardsDealt ", "" + numPlayerCardsDealt);
 //        Log.i("write playerCardImgId ", "" + playerCardImgId);
+        Log.i("write playerAceCount ", "" + playerAceCount);
     }
 
     public void onResume(){
@@ -706,6 +707,7 @@ public class BlackJackActivity extends AppCompatActivity
                 String numHCardDealt = scanner.next();
                 String numPCardDealt = scanner.next();
 //                String pCardImgId = scanner.next();
+                String pAceCount = scanner.next();
 
                 TextView walletTV = (TextView) findViewById(R.id.walletTextView);
                 walletAmt = Integer.parseInt(wallet);
@@ -739,6 +741,7 @@ public class BlackJackActivity extends AppCompatActivity
                 numHouseCardsDealt = Integer.parseInt(numHCardDealt);
                 numPlayerCardsDealt = Integer.parseInt(numPCardDealt);
 //                playerCardImgId = pCardImgId;
+                playerAceCount = Integer.parseInt(pAceCount);
 
                 // TODO: Remove after done testing.
                 Log.i("read wallet ", "" + wallet);
@@ -757,6 +760,7 @@ public class BlackJackActivity extends AppCompatActivity
                 Log.i("read numHCardDealt ", "" + numHCardDealt);
                 Log.i("read numPCardDealt ", "" + numPCardDealt);
 //                Log.i("read pCardImgId ", "" + pCardImgId);
+                Log.i("read pAceCount ", "" + pAceCount);
             }
         } catch (FileNotFoundException e) {
             // OK if file doesn't exist.
