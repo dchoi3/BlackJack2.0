@@ -714,17 +714,10 @@ public class BlackJackActivity extends AppCompatActivity
                 String cardsDealtBool = scanner.next();
                 String winString = scanner.next();
 
+                // Put stuff back the way it was.
                 TextView walletTV = (TextView) findViewById(R.id.walletTextView);
                 walletAmt = Integer.parseInt(wallet);
                 walletTV.setText(wallet);
-
-                TextView betTV = (TextView) findViewById(R.id.betTextView);
-                currentBetAmt = Integer.parseInt(bet);
-                if (currentBetAmt == 0) { // TODO Figure out why this is not working. Always sets "0".
-                    betTV.setText("Set bet");
-                } else {
-                    betTV.setText(bet);
-                }
 
                 TextView pCardValTV = (TextView) findViewById(R.id.playerScore);
                 playerCardValue = Integer.parseInt(pCardVal);
@@ -750,9 +743,34 @@ public class BlackJackActivity extends AppCompatActivity
                 houseAceCount = Integer.parseInt(hAceCount);
                 cardsDealt = Boolean.parseBoolean(cardsDealtBool);
 
-                TextView winTV = (TextView) findViewById(R.id.betTextView);
-                winnerString = winString;
-                winTV.setText(winnerString);
+                if (winString.equals("None")) {
+                    TextView betTV = (TextView) findViewById(R.id.betTextView);
+                    currentBetAmt = Integer.parseInt(bet);
+                    if (currentBetAmt == 0) { // TODO Figure out why this is not working. Always sets "0".
+                        betTV.setText("Set bet");
+                    } else {
+                        betTV.setText(bet);
+                    }
+                } else {
+                    TextView winTV = (TextView) findViewById(R.id.betTextView);
+                    winnerString = winString;
+                    winTV.setText(winnerString);
+                }
+
+                if (cardsDealt) {
+                    ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
+                    if(dealClear != null) {
+                        dealClear.setVisibility(View.INVISIBLE);
+                    }
+                    ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
+                    if(hitShow != null) {
+                        hitShow.setVisibility(View.VISIBLE);
+                    }
+                    ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
+                    if(standShow != null) {
+                        standShow.setVisibility(View.VISIBLE);
+                    }
+                }
 
                 // TODO: Remove after done testing.
                 Log.i("read wallet ", "" + wallet);
