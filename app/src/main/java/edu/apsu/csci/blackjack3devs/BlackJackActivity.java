@@ -7,7 +7,7 @@ package edu.apsu.csci.blackjack3devs;
  * Developers: John Schmitt, Daniel Choi, Charles Fannin
  */
 
-import com.google.android.gms.common.server.converter.StringToIntConverter;
+import com.google.android.gms.common.api.BooleanResult;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,7 +29,6 @@ import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.Random;
@@ -45,7 +44,7 @@ public class BlackJackActivity extends AppCompatActivity
     private final String fn = "blackjack_data.txt";
 
     // Variable to hold bet amount
-    int CurrentBetAmt = 0;
+    int currentBetAmt = 0;
     int walletAmt = 2000;
 
     // Vars for card values dealt to player and house.
@@ -58,7 +57,7 @@ public class BlackJackActivity extends AppCompatActivity
     int deckCardPosition = 0;
 
     //Remembering facedown card
-    int faceDownIndex;
+    int faceDownIndex; // Isn't face down index always the same? Maybe i don't understand what this is for.
 
     //Check shuffle boolean
     boolean shuffleCheck = true;
@@ -66,7 +65,7 @@ public class BlackJackActivity extends AppCompatActivity
     boolean playerBlackJack = false;
     boolean playerBust = false;
     boolean houseBust = false;
-    boolean faceDownFliped = false;
+    boolean faceDownFlipped = false;
 
     // How many cards have been dealt
     int numHouseCardsDealt = 0;
@@ -180,9 +179,9 @@ public class BlackJackActivity extends AppCompatActivity
                 vb.vibrate(10);
                 TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
                 TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
-                walletAmt += CurrentBetAmt;
+                walletAmt += currentBetAmt;
                 String newWallet = "Wallet: $" + walletAmt;
-                CurrentBetAmt = 0;
+                currentBetAmt = 0;
                 if(betAmtTV != null) {
                     betAmtTV.setText(R.string.SetBet);
                 }
@@ -193,7 +192,7 @@ public class BlackJackActivity extends AppCompatActivity
             if (v.getId() == R.id.dealButton) {
                 vb.vibrate(10);
                 if (buttonID == R.drawable.deal) {
-                    if (CurrentBetAmt > 0) {
+                    if (currentBetAmt > 0) {
                         cardsDealt = true;
                         deal();
                     } else {
@@ -310,7 +309,7 @@ public class BlackJackActivity extends AppCompatActivity
             shuffleCards();
 
         buttonID = R.drawable.deal;
-        CurrentBetAmt = 0;
+        currentBetAmt = 0;
         playerCardPosition = 0;
         houseCardPosition = 0;
         playerCardValue = 0;
@@ -324,7 +323,7 @@ public class BlackJackActivity extends AppCompatActivity
         playerTurn = true;
         playerBust = false;
         houseBust = false;
-        faceDownFliped = false;
+        faceDownFlipped = false;
 
         setHouseCardValue(0);
         setPlayerCardValue(0);
@@ -358,9 +357,9 @@ public class BlackJackActivity extends AppCompatActivity
         //Updates the wallet and bet textviews. Just to reduce the code a little bit.
         TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
         TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
-        CurrentBetAmt += m;
+        currentBetAmt += m;
         walletAmt -= m;
-        String newBet = "$" + CurrentBetAmt;
+        String newBet = "$" + currentBetAmt;
         String newWallet = "Wallet: $" + walletAmt;
         if(betAmtTV != null) {
             betAmtTV.setText(newBet);
@@ -432,12 +431,12 @@ public class BlackJackActivity extends AppCompatActivity
                 houseCard.setVisibility(View.VISIBLE);
             }
             return 0;
-        }else if(houseCardPosition == 2 && !faceDownFliped){
+        }else if(houseCardPosition == 2 && !faceDownFlipped){
             ImageView fdCard = (ImageView) findViewById(houseCardsID[0]);//Gets first card IV
             if(fdCard != null){
                 fdCard.setImageResource(cardsArray[faceDownIndex][0]);//Flips the card
             }
-            faceDownFliped = true;
+            faceDownFlipped = true;
             return cardsArray[faceDownIndex][1];//return facedown card value
 
         }else{
@@ -497,22 +496,22 @@ public class BlackJackActivity extends AppCompatActivity
                 showResult();
             }else if(houseCardValue == playerCardValue){
                 winnerString = "Push";//At the moment just made it so he made his money back
-                walletAmt += (CurrentBetAmt);
+                walletAmt += (currentBetAmt);
                 showResult();
             }else if (playerBlackJack){
-                winnerString = "BLACKJACK!\nYou won: $"+(CurrentBetAmt*2)+"!";
-                walletAmt += (CurrentBetAmt * 2);
+                winnerString = "BLACKJACK!\nYou won: $"+(currentBetAmt *2)+"!";
+                walletAmt += (currentBetAmt * 2);
                 showResult();
             }else if(houseBust){
-                    winnerString = "You won: $" + (CurrentBetAmt * 2) + "!";
-                    walletAmt += (CurrentBetAmt * 2);
+                    winnerString = "You won: $" + (currentBetAmt * 2) + "!";
+                    walletAmt += (currentBetAmt * 2);
                     showResult();
             } else if (houseCardValue > playerCardValue) {
                 winnerString = "House wins!";
                 showResult();
             } else if (houseCardValue < playerCardValue) {
-                winnerString = "You won: $" + (CurrentBetAmt * 2) + "!";
-                walletAmt += (CurrentBetAmt * 2);
+                winnerString = "You won: $" + (currentBetAmt * 2) + "!";
+                walletAmt += (currentBetAmt * 2);
                 showResult();
             }
 
@@ -547,7 +546,7 @@ public class BlackJackActivity extends AppCompatActivity
                 if(htb != null) {
                     htb.setVisibility(View.INVISIBLE);
                 }
-        if(!faceDownFliped){
+        if(!faceDownFlipped){
             int x = dealHouseCard();
             setHouseCardValue(x);
 
@@ -656,32 +655,166 @@ public class BlackJackActivity extends AppCompatActivity
             BufferedWriter bw = new BufferedWriter(osw);
             PrintWriter pw = new PrintWriter(bw);
             pw.println(walletAmt);
+            pw.println(currentBetAmt);
+            pw.println(playerCardValue);
+            pw.println(houseCardValue);
+            pw.println(playerCardPosition);
+            pw.println(houseCardPosition);
+            pw.println(deckCardPosition);
+            pw.println(faceDownIndex); // TODO Do we need this?
+            pw.println(shuffleCheck);
+            pw.println(playerBlackJack);
+            pw.println(playerBust);
+            pw.println(houseBust);
+            pw.println(faceDownFlipped);
+            pw.println(numHouseCardsDealt);
+            pw.println(numPlayerCardsDealt);
+            // pw.println(playerCardImgId);
+            pw.println(playerAceCount);
+            pw.println(houseAceCount);
+            pw.println(cardsDealt);
+            pw.println(winnerString);
+
             pw.close();
         } catch (FileNotFoundException e) {
+            Log.e("WRITE_ERR", "Cannot save data: " + e.getMessage());
             e.printStackTrace();
         }
-        Log.i("write data: ", "" + walletAmt);
+
+        // TODO: Remove after done testing.
+        Log.i("write wallet ", "" + walletAmt);
+        Log.i("write bet ", "" + currentBetAmt);
+        Log.i("write pCardVal ", "" + playerCardValue);
+        Log.i("write pCardVal ", "" + houseCardValue);
+        Log.i("write pCardPos ", "" + playerCardPosition);
+        Log.i("write hCardPos ", "" + houseCardPosition);
+        Log.i("write dCardPos ", "" + deckCardPosition);
+        Log.i("write faceDownI ", "" + faceDownIndex);
+        Log.i("write shuffleCheck ", "" + shuffleCheck);
+        Log.i("write playerBlackJack ", "" + playerBlackJack);
+        Log.i("write playerBust ", "" + playerBust);
+        Log.i("write houseBust ", "" + houseBust);
+        Log.i("write faceDownFlipped ", "" + faceDownFlipped);
+        Log.i("write numHCardsDealt ", "" + numHouseCardsDealt);
+        Log.i("write numPCardsDealt ", "" + numPlayerCardsDealt);
+//        Log.i("write playerCardImgId ", "" + playerCardImgId);
+        Log.i("write playerAceCount ", "" + playerAceCount);
+        Log.i("write houseAceCount ", "" + houseAceCount);
+        Log.i("write cardsDealt ", "" + cardsDealt);
+        Log.i("write winnerString ", "" + winnerString);
     }
 
     public void onResume(){
         super.onResume();
-        String amount = "";
         try {
             FileInputStream fis = openFileInput(fn);
             Scanner scanner = new Scanner(fis);
             if(scanner.hasNext()){
-                amount = scanner.next();
-                String newWallet = "Wallet: $" + amount;
-                TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
-                if(WalletAmtTV != null) {
-                    WalletAmtTV.setText(newWallet);
+                String wallet = scanner.next();
+                String bet = scanner.next();
+                String pCardVal = scanner.next();
+                String hCardVal = scanner.next();
+                String pCardPos = scanner.next();
+                String hCardPos = scanner.next();
+                String dCardPos = scanner.next();
+                String faceDownI = scanner.next();
+                String shuffleBool = scanner.next();
+                String playerBJ = scanner.next();
+                String playerB = scanner.next();
+                String houseB = scanner.next();
+                String faceDownFlip = scanner.next();
+                String numHCardDealt = scanner.next();
+                String numPCardDealt = scanner.next();
+//                String pCardImgId = scanner.next();
+                String pAceCount = scanner.next();
+                String hAceCount = scanner.next();
+                String cardsDealtBool = scanner.next();
+                String winString = scanner.next();
+
+                // Put stuff back the way it was.
+                TextView walletTV = (TextView) findViewById(R.id.walletTextView);
+                walletAmt = Integer.parseInt(wallet);
+                walletTV.setText(wallet);
+
+                TextView pCardValTV = (TextView) findViewById(R.id.playerScore);
+                playerCardValue = Integer.parseInt(pCardVal);
+                pCardValTV.setText(pCardVal);
+
+                TextView hCardValTV = (TextView) findViewById(R.id.houseScore);
+                houseCardValue = Integer.parseInt(hCardVal);
+                hCardValTV.setText(hCardVal);
+
+                playerCardPosition = Integer.parseInt(pCardPos);
+                houseCardPosition = Integer.parseInt(hCardPos);
+                deckCardPosition = Integer.parseInt(dCardPos);
+                faceDownIndex = Integer.parseInt(faceDownI);
+                shuffleCheck = Boolean.parseBoolean(shuffleBool);
+                playerBlackJack = Boolean.parseBoolean(playerBJ);
+                playerBust = Boolean.parseBoolean(playerB);
+                houseBust = Boolean.parseBoolean(houseB);
+                faceDownFlipped = Boolean.parseBoolean(faceDownFlip);
+                numHouseCardsDealt = Integer.parseInt(numHCardDealt);
+                numPlayerCardsDealt = Integer.parseInt(numPCardDealt);
+//                playerCardImgId = pCardImgId;
+                playerAceCount = Integer.parseInt(pAceCount);
+                houseAceCount = Integer.parseInt(hAceCount);
+                cardsDealt = Boolean.parseBoolean(cardsDealtBool);
+
+                if (winString.equals("None")) {
+                    TextView betTV = (TextView) findViewById(R.id.betTextView);
+                    currentBetAmt = Integer.parseInt(bet);
+                    if (currentBetAmt == 0) { // TODO Figure out why this is not working. Always sets "0".
+                        betTV.setText("Set bet");
+                    } else {
+                        betTV.setText(bet);
+                    }
+                } else {
+                    TextView winTV = (TextView) findViewById(R.id.betTextView);
+                    winnerString = winString;
+                    winTV.setText(winnerString);
                 }
-                walletAmt = Integer.parseInt(amount);
+
+                if (cardsDealt) {
+                    ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
+                    if(dealClear != null) {
+                        dealClear.setVisibility(View.INVISIBLE);
+                    }
+                    ImageButton hitShow = (ImageButton) findViewById(R.id.hitButton);
+                    if(hitShow != null) {
+                        hitShow.setVisibility(View.VISIBLE);
+                    }
+                    ImageButton standShow = (ImageButton) findViewById(R.id.standButton);
+                    if(standShow != null) {
+                        standShow.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                // TODO: Remove after done testing.
+                Log.i("read wallet ", "" + wallet);
+                Log.i("read bet ", "" + bet);
+                Log.i("read pCardVal ", "" + pCardVal);
+                Log.i("read hCardVal ", "" + hCardVal);
+                Log.i("read pCardPos ", "" + pCardPos);
+                Log.i("read hCardPos ", "" + hCardPos);
+                Log.i("read dCardPos ", "" + dCardPos);
+                Log.i("read faceDownI ", "" + faceDownI);
+                Log.i("read shuffleBool ", "" + shuffleBool);
+                Log.i("read playerBJ ", "" + playerBJ);
+                Log.i("read playerB ", "" + playerB);
+                Log.i("read houseB ", "" + houseB);
+                Log.i("read faceDownFlip ", "" + faceDownFlip);
+                Log.i("read numHCardDealt ", "" + numHCardDealt);
+                Log.i("read numPCardDealt ", "" + numPCardDealt);
+//                Log.i("read pCardImgId ", "" + pCardImgId);
+                Log.i("read pAceCount ", "" + pAceCount);
+                Log.i("read hAceCount ", "" + hAceCount);
+                Log.i("read cardsDealtBool ", "" + cardsDealtBool);
+                Log.i("read winString ", "" + winString);
+
             }
         } catch (FileNotFoundException e) {
             // OK if file doesn't exist.
         }
-        Log.i("read data: ", "" + amount);
     }
 
 }//BlackJackActivity
