@@ -141,6 +141,7 @@ public class BlackJackActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
+        //Log.i("Button Pressed", "In onClick");
         Vibrator vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         // Allow betting only before Cards are dealt.
         if (!cardsDealt) {
@@ -181,10 +182,10 @@ public class BlackJackActivity extends AppCompatActivity
                 walletAmt += currentBetAmt;
                 String newWallet = "Wallet: $" + walletAmt;
                 currentBetAmt = 0;
-                if(betAmtTV != null) {
+                if (betAmtTV != null) {
                     betAmtTV.setText(R.string.SetBet);
                 }
-                if(WalletAmtTV != null) {
+                if (WalletAmtTV != null) {
                     WalletAmtTV.setText(newWallet);
                 }
             }
@@ -201,28 +202,31 @@ public class BlackJackActivity extends AppCompatActivity
                     }
                 }
             }
-        }//Chips, clear, & deal
+        } else {
 
-        if (v.getId() == R.id.hitButton){
-            vb.vibrate(10);
-            hit();}
-        if (v.getId() == R.id.standButton){
-            vb.vibrate(100);
-            playerTurn = false;
-            endTurn();}
-        if (v.getId() == R.id.doubleButton){
-            vb.vibrate(10);
-            doubleBet();}
-        if(v.getId() == R.id.dealButton && buttonID == R.drawable.refresh){
-            vb.vibrate(10);
-            if(walletAmt == 0){
-                gameOver();
+            if (v.getId() == R.id.hitButton) {
+                vb.vibrate(10);
+                hit();
             }
-            else clearBoard(true);
-        }
-    // Has to be here so you cant bet until refresh button clicked this is 1 of 2 requirements
-    }//OnClick
-
+            if (v.getId() == R.id.standButton) {
+                vb.vibrate(100);
+                playerTurn = false;
+                endTurn();
+                checkIfWinner();
+            }
+            if (v.getId() == R.id.doubleButton) {
+                vb.vibrate(10);
+                doubleBet();
+            }
+            if (v.getId() == R.id.dealButton && buttonID == R.drawable.refresh) {
+                vb.vibrate(10);
+                if (walletAmt == 0) {
+                    gameOver();
+                } else clearBoard(true);
+            }
+            // Has to be here so you cant bet until refresh button clicked this is 1 of 2 requirements
+        }//OnClick
+    }
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         Vibrator vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -327,7 +331,7 @@ public class BlackJackActivity extends AppCompatActivity
 
             setHouseCardValue(0);
             setPlayerCardValue(0);
-        }else{
+        }else{ // this is on file reload
             int[] buttonsID = {R.id.doubleButton, R.id.hitButton, R.id.standButton};
             for (int id : buttonsID) {
                 ImageButton iv = (ImageButton) findViewById(id);
@@ -392,17 +396,6 @@ public class BlackJackActivity extends AppCompatActivity
             //Log.i("INDEX", index+"  C:"+x);
             //Log.i("Card value chosen", " "+b);
         }
-
-        int[] tempId = new int[52];
-        int[] tempValue = new int[52];
-        for(int x=0; x<52; x++){
-            tempId[x]= cardsArray[x][0];
-            tempValue[x]= cardsArray[x][1];
-        }//This splits up the 2D array to be rebuilt on write.
-        String test = Arrays.toString(tempId).replace("[", "").replace("]", "").replace(" ", "");
-        String tesv = Arrays.toString(tempValue).replace("[", "").replace("]", "").replace(" ", "");
-        Log.i("Shuffle ID:",test);
-        Log.i("Shuffle VU:", tesv);
 
         shuffleCheck = false;
         deckCardPosition = 0;
@@ -494,7 +487,7 @@ public class BlackJackActivity extends AppCompatActivity
         if (playerCardPosition < 9) {
             int x = dealPlayerCard();//deal player card and return card value
             setPlayerCardValue(x);
-            Log.i("Player card Value",": "+x);
+            //Log.i("Player card Value",": "+x);
             checkIfWinner();
             updateCardTotalDisplay();
             }
@@ -527,7 +520,7 @@ public class BlackJackActivity extends AppCompatActivity
            if(playerBust){
                 winnerString = "Bust!";
                 vb.vibrate(200);
-                Log.i("In ", "Bust");
+                //Log.i("In ", "Bust");
                 showResult();
             }else if(houseCardValue == playerCardValue){
                 winnerString = "Push";//At the moment just made it so he made his money back
@@ -537,39 +530,37 @@ public class BlackJackActivity extends AppCompatActivity
             }else if (playerBlackJack){
                 winnerString = "BLACKJACK!";
                 walletAmt += (currentBetAmt * 2);
-                Log.i("In ", "Blackjack");
+                //Log.i("In ", "Blackjack");
                 vb.vibrate(200);
                 showResult();
             }else if(houseBust){
-                    winnerString = "You won: $" + (currentBetAmt * 2) + "!";
-                    walletAmt += (currentBetAmt * 2);
-                    vb.vibrate(200);
-                Log.i("In ", "House Bust");
-                    showResult();
+                winnerString = "You won: $" + (currentBetAmt * 2) + "!";
+                walletAmt += (currentBetAmt * 2);
+                vb.vibrate(200);
+                //Log.i("In ", "House Bust");
+                showResult();
             }else if (houseCardValue > playerCardValue) {
                 winnerString = "House wins!";
-                Log.i("In ", "House wins");
+                //Log.i("In ", "House wins");
                 vb.vibrate(200);
                 showResult();
             }else if (houseCardValue < playerCardValue) {
                 winnerString = "You won: $" + (currentBetAmt * 2) + "!";
                 walletAmt += (currentBetAmt * 2);
                 vb.vibrate(200);
-                Log.i("In ", "Player won");
+                //Log.i("In ", "Player won");
                 showResult();
             }
-
         }
-
 
     }//Called by hit and endTurn
 
     public void handlePlayerAces(){
-        Log.i("====","Removing 10");
+        //Log.i("====","Removing 10");
         playerCardValue = playerCardValue - 10;
-        Log.i("====", "# of Ace: "+ playerAceCount);
-        playerAceCount = playerAceCount - 1;
-        Log.i("====", "# of Ace: "+ playerAceCount);
+        //Log.i("====", "# of Ace: "+ playerAceCount);
+        playerAceCount--;
+        //Log.i("====", "# of Ace: "+ playerAceCount);
         updateCardTotalDisplay();
 
     }//Handle player Aces
@@ -611,8 +602,7 @@ public class BlackJackActivity extends AppCompatActivity
             }
             updateCardTotalDisplay();
         }
-        updateCardTotalDisplay(); // Update display of card values.
-        checkIfWinner();
+
 
     }
 
@@ -633,15 +623,18 @@ public class BlackJackActivity extends AppCompatActivity
         TextView pScore = (TextView) findViewById(R.id.playerScore);
         if(pScore != null) {
             pScore.setText(String.valueOf(playerCardValue));
+            //Log.i("Player total:", " "+playerCardValue);
         }
         TextView hScore = (TextView) findViewById(R.id.houseScore);
         if(hScore != null) {
             hScore.setText(String.valueOf(houseCardValue));
+            //Log.i("House total:", " "+houseCardValue);
         }
     }//Update card total display
 
     public void showResult(){
 
+        cardsDealt = true;
         TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
         TextView WalletAmtTV = (TextView) findViewById(R.id.walletTextView);
         if(betAmtTV != null) {
@@ -652,19 +645,20 @@ public class BlackJackActivity extends AppCompatActivity
         if(WalletAmtTV != null) {
             WalletAmtTV.setText(newWallet);
         }
-        buttonID = R.drawable.refresh;
         ImageButton dealClear = (ImageButton) findViewById(R.id.dealButton);
         if(dealClear != null) {
+
+            buttonID = R.drawable.refresh;
             dealClear.setVisibility(View.VISIBLE);
             dealClear.setImageResource(buttonID);
         }
-        Log.i("==============","In show result");
+        //Log.i("==============","In show result");
     }
 
     public void gameOver(){
         Vibrator vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         vb.vibrate(500);
-        Log.i("===", "In gameover");
+        //Log.i("===", "In gameover");
         TextView betAmtTV = (TextView) findViewById(R.id.betTextView);
         if(betAmtTV != null) {
             winnerString = "GAMEOVER";
@@ -727,8 +721,8 @@ public class BlackJackActivity extends AppCompatActivity
 
     public void setDeckBack(String id, String value){
 
-        Log.i("===ID: ", id);
-        Log.i("===Value: ", value);
+        //Log.i("===ID: ", id);
+        //Log.i("===Value: ", value);
         String[] idArray = id.split(",");
         String[] valueArray = value.split(",");
         for(int x=0; x<51; x++){
@@ -741,7 +735,7 @@ public class BlackJackActivity extends AppCompatActivity
 
     public void setCardViewsBack(){
 
-        Log.i("In ", "setCardsViewBack");
+        //Log.i("In ", "setCardsViewBack");
 
         ImageButton stb = (ImageButton) findViewById(R.id.standButton);
         if(stb != null){
@@ -752,24 +746,28 @@ public class BlackJackActivity extends AppCompatActivity
             htb.setVisibility(View.INVISIBLE);
         }
 
-        if(faceDownFlipped){//If player
-            Log.i("In ", "faceDownTrue");
+        if(faceDownFlipped){//If player turn
+            //Log.i("In ", "faceDownTrue");
 
             int x = previousRoundCardCount;
             int y = 0;
             while(x<deckCardPosition) {
-                ImageView pIV = (ImageView) findViewById(playerCardsID[y]);
-                if(pIV != null){
-                pIV.setImageResource(cardsArray[x][0]);
-                pIV.setVisibility(View.VISIBLE);}
-
+                if(y<playerCardPosition) {
+                    ImageView pIV = (ImageView) findViewById(playerCardsID[y]);
+                    if (pIV != null) {
+                        pIV.setImageResource(cardsArray[x][0]);
+                        pIV.setVisibility(View.VISIBLE);
+                    }
+                }else x--;
                 if (y == 0) {
                     x++;
                     ImageView hIV = (ImageView) findViewById(houseCardsID[y]);
                     if(hIV != null){
                         hIV.setImageResource(cardsArray[faceDownIndex][0]);
-                        hIV.setVisibility(View.VISIBLE);}
-                } else if (y == 1) {
+                        hIV.setVisibility(View.VISIBLE);
+
+                    }
+                } else if (y < houseCardPosition) {
                     x++;
                     ImageView hIV = (ImageView) findViewById(houseCardsID[y]);
                     if(hIV != null) {
@@ -785,14 +783,15 @@ public class BlackJackActivity extends AppCompatActivity
         }else{
 
             if(cardsDealt) {
-                Log.i("In else", "cardView");
+                //Log.i("In else", "cardView");
                 int x = previousRoundCardCount;
                 int y = 0;
                 while (x < deckCardPosition) {
                     ImageView pIV = (ImageView) findViewById(playerCardsID[y]);
-                    if(pIV != null) {
+                    if (pIV != null) {
                         pIV.setImageResource(cardsArray[x][0]);
                         pIV.setVisibility(View.VISIBLE);
+
                     }
                     if (y == 0) {
                         x++;
@@ -800,6 +799,7 @@ public class BlackJackActivity extends AppCompatActivity
                         if(hIV != null){
                             hIV.setImageResource(R.drawable.facedown);
                             hIV.setVisibility(View.VISIBLE);
+
                         }
                     } else if (y == 1) {
                         x++;
@@ -873,32 +873,7 @@ public class BlackJackActivity extends AppCompatActivity
             Log.e("WRITE_ERR", "Cannot save data: " + e.getMessage());
             e.printStackTrace();
         }
-        /*
-        // TODO: Remove after done testing.
-        Log.i("write wallet ", "" + walletAmt);
-        Log.i("write bet ", "" + currentBetAmt);
-        Log.i("write pCardVal ", "" + playerCardValue);
-        Log.i("write hCardVal ", "" + houseCardValue);
-        Log.i("write pCardPos ", "" + playerCardPosition);
-        Log.i("write hCardPos ", "" + houseCardPosition);
-        Log.i("write dCardPos ", "" + deckCardPosition);
-        Log.i("write prevCount ", "" + previousRoundCardCount);
-        Log.i("write faceDownI ", "" + faceDownIndex);
-        Log.i("write shuffleCheck ", "" + shuffleCheck);
-        Log.i("write playerBlackJack ", "" + playerBlackJack);
-        Log.i("write playerBust ", "" + playerBust);
-        Log.i("write houseBust ", "" + houseBust);
-        Log.i("write playerTurn ", "" + playerTurn);
-        Log.i("write faceDownFlipped ", "" + faceDownFlipped);
-        Log.i("write numHCardsDealt ", "" + numHouseCardsDealt);
-        Log.i("write numPCardsDealt ", "" + numPlayerCardsDealt);
-        Log.i("write playerAceCount ", "" + playerAceCount);
-        Log.i("write houseAceCount ", "" + houseAceCount);
-        Log.i("write cardsDealt ", "" + cardsDealt);
-        Log.i("write buttonID ", "" + cardsDealt);
-        Log.i("write winnerString ", "" + winnerString);
 
-        */
     } //Called by on pause
 
     public void reloadData() {//Called by on resume
@@ -931,33 +906,6 @@ public class BlackJackActivity extends AppCompatActivity
                 String winString = scanner.nextLine();
                 String cardsIdString = scanner.nextLine();
                 String cardsValueString = scanner.nextLine();
-
-                // TODO: Remove after done testing.
-                Log.i("Loading ID", cardsIdString);
-                Log.i("Loading Value", cardsValueString);
-                /*
-                Log.i("read wallet ", "" + wallet);
-                Log.i("read bet ", "" + bet);
-                Log.i("read pCardVal ", "" + pCardVal);
-                Log.i("read hCardVal ", "" + hCardVal);
-                Log.i("read pCardPos ", "" + pCardPos);
-                Log.i("read hCardPos ", "" + hCardPos);
-                Log.i("read dCardPos ", "" + dCardPos);
-                Log.i("read previous ", "" + previousCount);
-                Log.i("read faceDownI ", "" + faceDownI);
-                Log.i("read shuffleBool ", "" + shuffleBool);
-                Log.i("read playerBJ ", "" + playerBJ);
-                Log.i("read playerB ", "" + playerB);
-                Log.i("read houseB ", "" + houseB);
-                Log.i("read playerTurn ", "" + playerTurnString);
-                Log.i("read faceDownFlip ", "" + faceDownFlip);
-                Log.i("read numHCardDealt ", "" + numHCardDealt);
-                Log.i("read numPCardDealt ", "" + numPCardDealt);
-                Log.i("read pAceCount ", "" + pAceCount);
-                Log.i("read hAceCount ", "" + hAceCount);
-                Log.i("read cardsDealtBool ", "" + cardsDealtBool);
-                Log.i("read winString ", "" + winString);
-                */
 
                 walletAmt = Integer.parseInt(wallet);
                 currentBetAmt = Integer.parseInt(bet);
@@ -1000,7 +948,7 @@ public class BlackJackActivity extends AppCompatActivity
                             String st = "$" + currentBetAmt;
                             bV.setText(st);
                             setDealtView();
-                            Log.i("In:", "playerTurn true");
+                            //Log.i("In:", "playerTurn true");
 
                         } else {//House Turn (Should display winner/loser)
                             showResult();
